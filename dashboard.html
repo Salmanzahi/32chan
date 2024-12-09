@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anonymous Forum Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
+
+    <!-- Main JavaScript file -->
+    <script src="main.js" defer></script>
+
+    <div class="container">
+        <header>
+            <h1>4chan Forum</h1>
+            <p>Selamat datang di forum anonim! Kirim dan lihat pesan anonim dari semua orang.</p>
+        </header>
+        
+        <!-- Button Options -->
+        <div class="buttons">
+            <button id="sendMessageBtn" onclick="toggleForm()">Send Message</button>
+            <button id="viewMessageBtn" onclick="showMessages()">View Messages</button>
+        </div>
+
+        <!-- Send Message Form -->
+        <div id="formContainer" class="form-container">
+            <h2>Send Anonymous Message</h2>
+            <label for="messageInput">Message:</label>
+            <textarea id="messageInput" placeholder="Tulis pesan anonim Anda di sini..."></textarea>
+
+            <label for="imageInput">Upload Image (optional):</label>
+            <input type="file" id="imageInput" accept="image/*" aria-label="Upload image" title="Upload an optional image">
+            
+            <button onclick="sendMessage()">Submit</button>
+        </div>
+
+        <!-- View Messages Section -->
+        <div id="messagesContainer" class="messages-container">
+            <h2>All Messages</h2>
+            <ul id="messagesList">
+                <!-- Pesan akan tampil di sini dari Firebase -->
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

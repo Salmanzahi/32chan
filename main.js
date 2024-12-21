@@ -22,7 +22,7 @@ function toggleForm() {
 }
 
 // Function to send a message with an optional image
-function sendMessage() {
+/*function sendMessage() {
     const messageInput = document.getElementById('messageInput').value;
     const imageInput = document.getElementById('imageInput').files[0];
 
@@ -70,7 +70,79 @@ function sendMessage() {
             });
     }
 }
+*/
 
+// ...existing code...
+
+// Function to send a message with an optional image
+function sendMessage() {
+    const messageInput = document.getElementById('messageInput').value;
+    const imageInput = document.getElementById('imageInput').files[0];
+
+    if (messageInput.trim() === '' && !imageInput) {
+        alert("Message or image cannot be empty.");
+        return;
+    }
+
+    // Create a new message reference
+    const newMessageRef = db.ref('messages').push();
+    const messageData = {
+        text: messageInput || null,
+        timestamp: Date.now(),
+        likes: 0,
+        replies: []
+    };
+
+    if (imageInput) {
+        // Upload image to Firebase Storage
+        const storageRef = storage.ref('images/' + newMessageRef.key + '_' + imageInput.name);
+        const uploadTask = storageRef.put(imageInput);
+
+        uploadTask.on('state_changed', 
+            (snapshot) => {
+                // Observe state change events such as progress, pause, and resume
+                // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Upload is ' + progress + '% done');
+            }, 
+            (error) => {
+                // Handle unsuccessful uploads
+                console.error('Upload failed:', error);
+                alert('Failed to upload image.');
+            }, 
+            () => {
+                // Handle successful uploads on complete
+                uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                    messageData.imageUrl = downloadURL;
+                    newMessageRef.set(messageData, (error) => {
+                        if (error) {
+                            console.error('Failed to save message:', error);
+                            alert('Failed to save message.');
+                        } else {
+                            alert('Message sent successfully!');
+                            document.getElementById('messageInput').value = '';
+                            document.getElementById('imageInput').value = '';
+                        }
+                    });
+                });
+            }
+        );
+    } else {
+        // Save message without image
+        newMessageRef.set(messageData, (error) => {
+            if (error) {
+                console.error('Failed to save message:', error);
+                alert('Failed to save message.');
+            } else {
+                alert('Message sent successfully!');
+                document.getElementById('messageInput').value = '';
+                document.getElementById('imageInput').value = '';
+            }
+        });
+    }
+}
+
+// ...existing code...
 // Function to reset form fields
 function resetForm() {
     document.getElementById('messageInput').value = '';

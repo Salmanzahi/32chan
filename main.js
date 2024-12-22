@@ -214,7 +214,7 @@ function loadMessages() {
         });
 
         // Sort messages by timestamp in descending order
-        messages.sort((a, b) => b.timestamp - a.timestamp);
+        messages.sort((a, b) => a.timestamp - b.timestamp);
 
         messages.forEach((message) => {
             const messageId = message.id;

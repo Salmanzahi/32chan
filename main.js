@@ -232,7 +232,7 @@ function showMessages() {
                 <button onclick="replyToMessage('${message.id}')">Reply</button>
                 <ul class="replies" id="replies-${message.id}"></ul>
             `;
-            messagesList.appendChild(li); // Use appendChild after sorting
+            messagesList.prepend(li); // Use appendChild after sorting
             loadReplies(message.id);
         });
     });

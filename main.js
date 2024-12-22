@@ -274,6 +274,6 @@ function loadReplies(messageId) {
 }
 
 // Load messages on page load
-document.addEventListener('DOMContentLoaded', (event) => {
+/*document.addEventListener('DOMContentLoaded', (event) => {
     loadMessages();
-});
+});*/

@@ -102,6 +102,7 @@ function sendMessage() {
         text: messageInput || null,
         timestamp: Date.now(),
         likes: 0,
+        likedBy: {},
         replies: []
     };
 

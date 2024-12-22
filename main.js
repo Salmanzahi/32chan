@@ -210,7 +210,7 @@ function showMessages() {
         });
 
         // Sort messages by timestamp in descending order
-        messages.sort((a, b) => a.timestamp - b.timestamp);
+        messages.sort((a, b) => b.timestamp - a.timestamp);
 
         messages.forEach((message) => {
             const messageText = message.text || 'No text provided';

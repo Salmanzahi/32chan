@@ -200,7 +200,7 @@ function showMessages() {
     document.getElementById('messagesContainer').style.display = 'block';
 
     const messagesList = document.getElementById('messagesList');
-    messagesList.innerHTML = ''; // Clear existing messages before appending new ones
+    messagesList.innerHTML = ''; // Clear existing messages
 
     db.ref('messages').orderByChild('timestamp').on('value', (snapshot) => {
         const messages = [];
@@ -209,14 +209,8 @@ function showMessages() {
             messages.push({ id: childSnapshot.key, ...messageData });
         });
 
-        // Sort messages by timestamp in descending order (most recent first)
-        messages.sort((b, a) => b.timestamp - a.timestamp);
-
-        // Clear the list again to prevent duplicate renders
         messagesList.innerHTML = '';
-
-        // Append sorted messages to the DOM
-        messages.forEach((message) => {
+        messages.reverse().forEach((message) => {
             const messageText = message.text || 'No text provided';
             const timestamp = message.timestamp;
             const likes = message.likes || 0;
@@ -232,7 +226,8 @@ function showMessages() {
                 <button onclick="replyToMessage('${message.id}')">Reply</button>
                 <ul class="replies" id="replies-${message.id}"></ul>
             `;
-            //messagesList.appendChild(li); // Use appendChild after sorting
+            messagesList.appendChild(li);
+
             loadReplies(message.id);
         });
     });

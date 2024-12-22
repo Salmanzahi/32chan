@@ -11,10 +11,70 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
+const auth = firebase.auth();
 // References to Firebase services
 const db = firebase.database();
 const storage = firebase.storage();
+function googleSignIn() {
+    console.log('Google Sign-In button clicked');
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider)
+        .then((result) => {
+            // The signed-in user info.
+            const user = result.user;
+            console.log('User signed in:', user);
+            displayUserProfile(user);
+        })
+        .catch((error) => {
+            console.error('Error during sign-in:', error);
+            alert('Failed to sign in: ' + error.message);
+        });
+}
 
+// Function to handle Sign-Out
+function signOut() {
+    auth.signOut().then(() => {
+        console.log('User signed out');
+        hideUserProfile();
+    }).catch((error) => {
+        console.error('Error during sign-out:', error);
+        alert('Failed to sign out: ' + error.message);
+    });
+}
+
+// Function to display user profile
+function displayUserProfile(user) {
+    console.log('Displaying user profile');
+    document.getElementById('userProfile').style.display = 'block';
+    document.getElementById('googleSignInBtn').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'block';
+    document.getElementById('userPhoto').src = user.photoURL;
+    document.getElementById('userName').textContent = user.displayName;
+}
+
+// Function to hide user profile
+function hideUserProfile() {
+    console.log('Hiding user profile');
+    document.getElementById('userProfile').style.display = 'none';
+    document.getElementById('googleSignInBtn').style.display = 'block';
+    document.getElementById('mainContent').style.display = 'none';
+}
+
+// Add event listeners to your sign-in and sign-out buttons
+document.addEventListener('DOMContentLoaded', (event) => {
+    console.log('DOM fully loaded and parsed');
+    document.getElementById('googleSignInBtn').addEventListener('click', googleSignIn);
+    document.getElementById('signOutBtn').addEventListener('click', signOut);
+});
+
+// Check authentication state on page load
+auth.onAuthStateChanged((user) => {
+    if (user) {
+        displayUserProfile(user);
+    } else {
+        hideUserProfile();
+    }
+});
 // Function to toggle the send message form
 function toggleForm() {
     document.getElementById('formContainer').style.display = 'block';

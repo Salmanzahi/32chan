@@ -44,6 +44,7 @@ function signOut() {
 
 // Function to display user profile
 function displayUserProfile(user) {
+    console.log('Displaying user profile');
     document.getElementById('userProfile').style.display = 'block';
     document.getElementById('googleSignInBtn').style.display = 'none';
     document.getElementById('mainContent').style.display = 'block';
@@ -53,14 +54,18 @@ function displayUserProfile(user) {
 
 // Function to hide user profile
 function hideUserProfile() {
+    console.log('Hiding user profile');
     document.getElementById('userProfile').style.display = 'none';
     document.getElementById('googleSignInBtn').style.display = 'block';
     document.getElementById('mainContent').style.display = 'none';
 }
 
 // Add event listeners to your sign-in and sign-out buttons
-document.getElementById('googleSignInBtn').addEventListener('click', googleSignIn);
-document.getElementById('signOutBtn').addEventListener('click', signOut);
+document.addEventListener('DOMContentLoaded', (event) => {
+    console.log('DOM fully loaded and parsed');
+    document.getElementById('googleSignInBtn').addEventListener('click', googleSignIn);
+    document.getElementById('signOutBtn').addEventListener('click', signOut);
+});
 
 // Check authentication state on page load
 auth.onAuthStateChanged((user) => {

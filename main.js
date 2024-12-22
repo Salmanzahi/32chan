@@ -86,6 +86,12 @@ function toggleForm() {
     document.getElementById('messagesContainer').style.display = 'none';
 }
 
+// Function to show messages
+function showMessages() {
+    document.getElementById('formContainer').style.display = 'none';
+    document.getElementById('messagesContainer').style.display = 'block';
+}
+
 // Function to send a message with an optional image
 function sendMessage() {
     const messageInput = document.getElementById('messageInput').value;

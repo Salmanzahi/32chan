@@ -11,10 +11,10 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
+// Initialize Firebase Authentication and get a reference to the service
 const auth = firebase.auth();
-// References to Firebase services
-const db = firebase.database();
-const storage = firebase.storage();
+
+// Function to handle Google Sign-In
 function googleSignIn() {
     console.log('Google Sign-In button clicked');
     const provider = new firebase.auth.GoogleAuthProvider();
@@ -28,6 +28,19 @@ function googleSignIn() {
         .catch((error) => {
             console.error('Error during sign-in:', error);
             alert('Failed to sign in: ' + error.message);
+        });
+}
+
+// Function to handle Anonymous Sign-In
+function anonymousSignIn() {
+    console.log('Anonymous Sign-In button clicked');
+    auth.signInAnonymously()
+        .then(() => {
+            console.log('User signed in anonymously');
+        })
+        .catch((error) => {
+            console.error('Error during anonymous sign-in:', error);
+            alert('Failed to sign in anonymously: ' + error.message);
         });
 }
 
@@ -47,9 +60,12 @@ function displayUserProfile(user) {
     console.log('Displaying user profile');
     document.getElementById('userProfile').style.display = 'block';
     document.getElementById('googleSignInBtn').style.display = 'none';
+    document.getElementById('anonymousSignInBtn').style.display = 'none';
     document.getElementById('mainContent').style.display = 'block';
-    document.getElementById('userPhoto').src = user.photoURL;
-    document.getElementById('userName').textContent = user.displayName;
+    if (user.photoURL) {
+        document.getElementById('userPhoto').src = user.photoURL;
+    }
+    document.getElementById('userName').textContent = user.displayName || 'Anonymous User';
 }
 
 // Function to hide user profile
@@ -57,6 +73,7 @@ function hideUserProfile() {
     console.log('Hiding user profile');
     document.getElementById('userProfile').style.display = 'none';
     document.getElementById('googleSignInBtn').style.display = 'block';
+    document.getElementById('anonymousSignInBtn').style.display = 'block';
     document.getElementById('mainContent').style.display = 'none';
 }
 
@@ -64,6 +81,7 @@ function hideUserProfile() {
 document.addEventListener('DOMContentLoaded', (event) => {
     console.log('DOM fully loaded and parsed');
     document.getElementById('googleSignInBtn').addEventListener('click', googleSignIn);
+    document.getElementById('anonymousSignInBtn').addEventListener('click', anonymousSignIn);
     document.getElementById('signOutBtn').addEventListener('click', signOut);
 });
 
@@ -75,64 +93,16 @@ auth.onAuthStateChanged((user) => {
         hideUserProfile();
     }
 });
+
+// References to Firebase services
+const db = firebase.database();
+const storage = firebase.storage();
+
 // Function to toggle the send message form
 function toggleForm() {
     document.getElementById('formContainer').style.display = 'block';
     document.getElementById('messagesContainer').style.display = 'none';
 }
-
-// Function to send a message with an optional image
-/*function sendMessage() {
-    const messageInput = document.getElementById('messageInput').value;
-    const imageInput = document.getElementById('imageInput').files[0];
-
-    if (messageInput.trim() === '' && !imageInput) {
-        alert("Message or image cannot be empty.");
-        return;
-    }
-
-    // Create a new message reference
-    const newMessageRef = db.ref('messages').push();
-    const messageData = {
-        text: messageInput || null,
-        timestamp: Date.now(),
-        likes: 0,
-        replies: []
-    };
-
-    if (imageInput) {
-        // Upload image to Firebase Storage
-        const storageRef = storage.ref('images/' + newMessageRef.key + '_' + imageInput.name);
-        storageRef.put(imageInput)
-            .then((snapshot) => snapshot.ref.getDownloadURL())
-            .then((url) => {
-                messageData.imageUrl = url; // Add image URL to message data
-                return newMessageRef.set(messageData);
-            })
-            .then(() => {
-                alert("Message with image sent!");
-                resetForm();
-            })
-            .catch((error) => {
-                console.error("Error uploading image: ", error);
-                alert("Failed to upload image. Please try again.");
-            });
-    } else {
-        // No image, just send the message
-        newMessageRef.set(messageData)
-            .then(() => {
-                alert("Message sent!");
-                resetForm();
-            })
-            .catch((error) => {
-                console.error("Error sending message: ", error);
-                alert("Failed to send message. Please try again.");
-            });
-    }
-}
-*/
-
-// ...existing code...
 
 // Function to send a message with an optional image
 function sendMessage() {
@@ -149,7 +119,6 @@ function sendMessage() {
     const messageData = {
         text: messageInput || null,
         timestamp: Date.now(),
-        likes: 0,
         replies: []
     };
 
@@ -202,20 +171,13 @@ function sendMessage() {
     }
 }
 
-// ...existing code...
-// Function to reset form fields
-function resetForm() {
-    document.getElementById('messageInput').value = '';
-    document.getElementById('imageInput').value = '';
-}
-
-// Function to show messages
+// Function to show and load messages
 function showMessages() {
     document.getElementById('formContainer').style.display = 'none';
     document.getElementById('messagesContainer').style.display = 'block';
 
     const messagesList = document.getElementById('messagesList');
-    messagesList.innerHTML = ''; // Clear existing messages
+    messagesList.innerHTML = ''; // Clear existing messages before appending new ones
 
     db.ref('messages').orderByChild('timestamp').on('value', (snapshot) => {
         const messages = [];
@@ -224,11 +186,13 @@ function showMessages() {
             messages.push({ id: childSnapshot.key, ...messageData });
         });
 
-        messagesList.innerHTML = '';
-        messages.reverse().forEach((message) => {
+        // Sort messages by timestamp in descending order (most recent first)
+        messages.sort((a, b) => b.timestamp - a.timestamp);
+
+        // Append sorted messages to the DOM
+        messages.forEach((message) => {
             const messageText = message.text || 'No text provided';
             const timestamp = message.timestamp;
-            const likes = message.likes || 0;
             const imageUrl = message.imageUrl || null;
 
             // Create message list item
@@ -237,25 +201,13 @@ function showMessages() {
                 <p>${messageText}</p>
                 ${imageUrl ? `<img src="${imageUrl}" alt="Message Image" style="max-width: 100%; height: auto;">` : ''}
                 <span class="timestamp">${new Date(timestamp).toLocaleString()}</span>
-                <button onclick="likeMessage('${message.id}')">Like (${likes})</button>
                 <button onclick="replyToMessage('${message.id}')">Reply</button>
                 <ul class="replies" id="replies-${message.id}"></ul>
             `;
-            messagesList.appendChild(li);
+            messagesList.prepend(li); // Use prepend to add the latest message at the top
 
             loadReplies(message.id);
         });
-    });
-}
-
-// Function to like a message
-function likeMessage(messageId) {
-    const messageRef = db.ref('messages/' + messageId);
-    messageRef.transaction((message) => {
-        if (message) {
-            message.likes = (message.likes || 0) + 1;
-        }
-        return message;
     });
 }
 
@@ -274,6 +226,10 @@ function replyToMessage(messageId) {
 // Function to load replies for a specific message
 function loadReplies(messageId) {
     const repliesList = document.getElementById(`replies-${messageId}`);
+    if (!repliesList) {
+        console.error(`Element with id replies-${messageId} not found.`);
+        return;
+    }
     repliesList.innerHTML = '';
 
     const repliesRef = db.ref(`messages/${messageId}/replies`);
@@ -292,3 +248,8 @@ function loadReplies(messageId) {
         });
     });
 }
+
+// Load messages on page load
+document.addEventListener('DOMContentLoaded', (event) => {
+    showMessages();
+});

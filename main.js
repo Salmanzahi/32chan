@@ -202,13 +202,22 @@ function likeMessage(messageId) {
 
 // Function to load messages and display them
 function loadMessages() {
-    const messagesRef = db.ref('messages');
+    const messagesRef = db.ref('messages').orderByChild('timestamp');
     messagesRef.on('value', (snapshot) => {
         const messagesList = document.getElementById('messagesList');
         messagesList.innerHTML = ''; // Clear the list before adding new messages
+        const messages = [];
         snapshot.forEach((childSnapshot) => {
             const message = childSnapshot.val();
-            const messageId = childSnapshot.key;
+            message.id = childSnapshot.key;
+            messages.push(message);
+        });
+
+        // Sort messages by timestamp in descending order
+        messages.sort((a, b) => b.timestamp - a.timestamp);
+
+        messages.forEach((message) => {
+            const messageId = message.id;
             const messageText = message.text;
             const imageUrl = message.imageUrl;
             const timestamp = message.timestamp;

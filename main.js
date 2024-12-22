@@ -232,7 +232,7 @@ function loadMessages() {
                 <button onclick="replyToMessage('${messageId}')">Reply</button>
                 <ul class="replies" id="replies-${messageId}"></ul>
             `;
-            messagesList.append(li); // Append instead of prepend to maintain ascending order
+            messagesList.appendChild(li); // Append to maintain ascending order
 
             loadReplies(messageId);
         });

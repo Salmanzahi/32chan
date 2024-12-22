@@ -87,59 +87,6 @@ function toggleForm() {
 }
 
 // Function to send a message with an optional image
-/*function sendMessage() {
-    const messageInput = document.getElementById('messageInput').value;
-    const imageInput = document.getElementById('imageInput').files[0];
-
-    if (messageInput.trim() === '' && !imageInput) {
-        alert("Message or image cannot be empty.");
-        return;
-    }
-
-    // Create a new message reference
-    const newMessageRef = db.ref('messages').push();
-    const messageData = {
-        text: messageInput || null,
-        timestamp: Date.now(),
-        likes: 0,
-        replies: []
-    };
-
-    if (imageInput) {
-        // Upload image to Firebase Storage
-        const storageRef = storage.ref('images/' + newMessageRef.key + '_' + imageInput.name);
-        storageRef.put(imageInput)
-            .then((snapshot) => snapshot.ref.getDownloadURL())
-            .then((url) => {
-                messageData.imageUrl = url; // Add image URL to message data
-                return newMessageRef.set(messageData);
-            })
-            .then(() => {
-                alert("Message with image sent!");
-                resetForm();
-            })
-            .catch((error) => {
-                console.error("Error uploading image: ", error);
-                alert("Failed to upload image. Please try again.");
-            });
-    } else {
-        // No image, just send the message
-        newMessageRef.set(messageData)
-            .then(() => {
-                alert("Message sent!");
-                resetForm();
-            })
-            .catch((error) => {
-                console.error("Error sending message: ", error);
-                alert("Failed to send message. Please try again.");
-            });
-    }
-}
-*/
-
-// ...existing code...
-
-// Function to send a message with an optional image
 function sendMessage() {
     const messageInput = document.getElementById('messageInput').value;
     const imageInput = document.getElementById('imageInput').files[0];
@@ -207,7 +154,6 @@ function sendMessage() {
     }
 }
 
-// ...existing code...
 // Function to reset form fields
 function resetForm() {
     document.getElementById('messageInput').value = '';
@@ -261,6 +207,9 @@ function likeMessage(messageId) {
         return;
     }
 
+    const likeButton = document.querySelector(`button[onclick="likeMessage('${messageId}')"]`);
+    likeButton.disabled = true; // Disable the button to prevent spamming
+
     const messageRef = db.ref('messages/' + messageId);
     messageRef.transaction((message) => {
         if (message) {
@@ -281,6 +230,11 @@ function likeMessage(messageId) {
             }
         }
         return message;
+    }).then(() => {
+        likeButton.disabled = false; // Re-enable the button after the transaction
+    }).catch((error) => {
+        console.error('Error updating likes:', error);
+        likeButton.disabled = false; // Re-enable the button in case of error
     });
 }
 
@@ -317,3 +271,8 @@ function loadReplies(messageId) {
         });
     });
 }
+
+// Load messages on page load
+document.addEventListener('DOMContentLoaded', (event) => {
+    loadMessages();
+});

@@ -156,7 +156,7 @@ function sendMessage() {
 }
 
 // Function to like or dislike a message
-function likeMessage(messageId) {
+/*function likeMessage(messageId) {
     const user = auth.currentUser;
     if (!user) {
         alert('You must be signed in to like a message.');
@@ -192,7 +192,7 @@ function likeMessage(messageId) {
         console.error('Error updating likes:', error);
         likeButton.disabled = false; // Re-enable the button in case of error
     });
-}
+}*/
 
 // Function to show and load messages
 function showMessages() {

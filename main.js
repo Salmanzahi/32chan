@@ -202,40 +202,39 @@ function likeMessage(messageId) {
 
 // Function to load messages and display them
 function loadMessages() {
-    const messagesRef = db.ref('messages').orderByChild('timestamp');
-    messagesRef.on('value', (snapshot) => {
-        const messagesList = document.getElementById('messagesList');
-        messagesList.innerHTML = ''; // Clear the list before adding new messages
+    document.getElementById('formContainer').style.display = 'none';
+    document.getElementById('messagesContainer').style.display = 'block';
+
+    const messagesList = document.getElementById('messagesList');
+    messagesList.innerHTML = ''; // Clear existing messages
+
+    db.ref('messages').orderByChild('timestamp').on('value', (snapshot) => {
         const messages = [];
         snapshot.forEach((childSnapshot) => {
-            const message = childSnapshot.val();
-            message.id = childSnapshot.key;
-            messages.push(message);
+            const messageData = childSnapshot.val();
+            messages.push({ id: childSnapshot.key, ...messageData });
         });
 
-        // Sort messages by timestamp in descending order
-        messages.sort((a, b) => a.timestamp - b.timestamp);
-
-
-        messages.forEach((message) => {
-            const messageId = message.id;
-            const messageText = message.text;
-            const imageUrl = message.imageUrl;
+        messagesList.innerHTML = '';
+        messages.reverse().forEach((message) => {
+            const messageText = message.text || 'No text provided';
             const timestamp = message.timestamp;
             const likes = message.likes || 0;
+            const imageUrl = message.imageUrl || null;
 
+            // Create message list item
             const li = document.createElement('li');
             li.innerHTML = `
                 <p>${messageText}</p>
                 ${imageUrl ? `<img src="${imageUrl}" alt="Message Image" style="max-width: 100%; height: auto;">` : ''}
                 <span class="timestamp">${new Date(timestamp).toLocaleString()}</span>
-                <button onclick="likeMessage('${messageId}')">Like (${likes})</button>
-                <button onclick="replyToMessage('${messageId}')">Reply</button>
-                <ul class="replies" id="replies-${messageId}"></ul>
+                <button onclick="likeMessage('${message.id}')">Like (${likes})</button>
+                <button onclick="replyToMessage('${message.id}')">Reply</button>
+                <ul class="replies" id="replies-${message.id}"></ul>
             `;
             messagesList.appendChild(li);
 
-            loadReplies(messageId);
+            loadReplies(message.id);
         });
     });
 }

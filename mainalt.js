@@ -11,10 +11,10 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
-// Initialize Firebase Authentication and get a reference to the service
 const auth = firebase.auth();
-
-// Function to handle Google Sign-In
+// References to Firebase services
+const db = firebase.database();
+const storage = firebase.storage();
 function googleSignIn() {
     console.log('Google Sign-In button clicked');
     const provider = new firebase.auth.GoogleAuthProvider();
@@ -28,19 +28,6 @@ function googleSignIn() {
         .catch((error) => {
             console.error('Error during sign-in:', error);
             alert('Failed to sign in: ' + error.message);
-        });
-}
-
-// Function to handle Anonymous Sign-In
-function anonymousSignIn() {
-    console.log('Anonymous Sign-In button clicked');
-    auth.signInAnonymously()
-        .then(() => {
-            console.log('User signed in anonymously');
-        })
-        .catch((error) => {
-            console.error('Error during anonymous sign-in:', error);
-            alert('Failed to sign in anonymously: ' + error.message);
         });
 }
 
@@ -60,12 +47,9 @@ function displayUserProfile(user) {
     console.log('Displaying user profile');
     document.getElementById('userProfile').style.display = 'block';
     document.getElementById('googleSignInBtn').style.display = 'none';
-    document.getElementById('anonymousSignInBtn').style.display = 'none';
     document.getElementById('mainContent').style.display = 'block';
-    if (user.photoURL) {
-        document.getElementById('userPhoto').src = user.photoURL;
-    }
-    document.getElementById('userName').textContent = user.displayName || 'Anonymous User';
+    document.getElementById('userPhoto').src = user.photoURL;
+    document.getElementById('userName').textContent = user.displayName;
 }
 
 // Function to hide user profile
@@ -73,7 +57,6 @@ function hideUserProfile() {
     console.log('Hiding user profile');
     document.getElementById('userProfile').style.display = 'none';
     document.getElementById('googleSignInBtn').style.display = 'block';
-    document.getElementById('anonymousSignInBtn').style.display = 'block';
     document.getElementById('mainContent').style.display = 'none';
 }
 
@@ -81,7 +64,6 @@ function hideUserProfile() {
 document.addEventListener('DOMContentLoaded', (event) => {
     console.log('DOM fully loaded and parsed');
     document.getElementById('googleSignInBtn').addEventListener('click', googleSignIn);
-    document.getElementById('anonymousSignInBtn').addEventListener('click', anonymousSignIn);
     document.getElementById('signOutBtn').addEventListener('click', signOut);
 });
 
@@ -93,11 +75,6 @@ auth.onAuthStateChanged((user) => {
         hideUserProfile();
     }
 });
-
-// References to Firebase services
-const db = firebase.database();
-const storage = firebase.storage();
-
 // Function to toggle the send message form
 function toggleForm() {
     document.getElementById('formContainer').style.display = 'block';
@@ -119,7 +96,9 @@ function sendMessage() {
     const messageData = {
         text: messageInput || null,
         timestamp: Date.now(),
-        replies: []
+        likes: 0,
+        replies: [],
+        anonymous: true // Mark the message as anonymous
     };
 
     if (imageInput) {
@@ -130,17 +109,14 @@ function sendMessage() {
         uploadTask.on('state_changed', 
             (snapshot) => {
                 // Observe state change events such as progress, pause, and resume
-                // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
                 const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                 console.log('Upload is ' + progress + '% done');
             }, 
             (error) => {
-                // Handle unsuccessful uploads
                 console.error('Upload failed:', error);
                 alert('Failed to upload image.');
             }, 
             () => {
-                // Handle successful uploads on complete
                 uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
                     messageData.imageUrl = downloadURL;
                     newMessageRef.set(messageData, (error) => {
@@ -149,35 +125,38 @@ function sendMessage() {
                             alert('Failed to save message.');
                         } else {
                             alert('Message sent successfully!');
-                            document.getElementById('messageInput').value = '';
-                            document.getElementById('imageInput').value = '';
+                            resetForm();
                         }
                     });
                 });
             }
         );
     } else {
-        // Save message without image
         newMessageRef.set(messageData, (error) => {
             if (error) {
                 console.error('Failed to save message:', error);
                 alert('Failed to save message.');
             } else {
                 alert('Message sent successfully!');
-                document.getElementById('messageInput').value = '';
-                document.getElementById('imageInput').value = '';
+                resetForm();
             }
         });
     }
 }
 
-// Function to show and load messages
+// Function to reset form fields
+function resetForm() {
+    document.getElementById('messageInput').value = '';
+    document.getElementById('imageInput').value = '';
+}
+
+// Function to show messages
 function showMessages() {
     document.getElementById('formContainer').style.display = 'none';
     document.getElementById('messagesContainer').style.display = 'block';
 
     const messagesList = document.getElementById('messagesList');
-    messagesList.innerHTML = ''; // Clear existing messages before appending new ones
+    messagesList.innerHTML = ''; // Clear existing messages
 
     db.ref('messages').orderByChild('timestamp').on('value', (snapshot) => {
         const messages = [];
@@ -186,13 +165,11 @@ function showMessages() {
             messages.push({ id: childSnapshot.key, ...messageData });
         });
 
-        // Sort messages by timestamp in descending order (most recent first)
-        messages.sort((a, b) => b.timestamp - a.timestamp);
-
-        // Append sorted messages to the DOM
-        messages.forEach((message) => {
+        messagesList.innerHTML = '';
+        messages.reverse().forEach((message) => {
             const messageText = message.text || 'No text provided';
             const timestamp = message.timestamp;
+            const likes = message.likes || 0;
             const imageUrl = message.imageUrl || null;
 
             // Create message list item
@@ -201,13 +178,25 @@ function showMessages() {
                 <p>${messageText}</p>
                 ${imageUrl ? `<img src="${imageUrl}" alt="Message Image" style="max-width: 100%; height: auto;">` : ''}
                 <span class="timestamp">${new Date(timestamp).toLocaleString()}</span>
+                <button onclick="likeMessage('${message.id}')">Like (${likes})</button>
                 <button onclick="replyToMessage('${message.id}')">Reply</button>
                 <ul class="replies" id="replies-${message.id}"></ul>
             `;
-            messagesList.prepend(li); // Use prepend to add the latest message at the top
+            messagesList.appendChild(li);
 
             loadReplies(message.id);
         });
+    });
+}
+
+// Function to like a message
+function likeMessage(messageId) {
+    const messageRef = db.ref('messages/' + messageId);
+    messageRef.transaction((message) => {
+        if (message) {
+            message.likes = (message.likes || 0) + 1;
+        }
+        return message;
     });
 }
 
@@ -226,10 +215,6 @@ function replyToMessage(messageId) {
 // Function to load replies for a specific message
 function loadReplies(messageId) {
     const repliesList = document.getElementById(`replies-${messageId}`);
-    if (!repliesList) {
-        console.error(`Element with id replies-${messageId} not found.`);
-        return;
-    }
     repliesList.innerHTML = '';
 
     const repliesRef = db.ref(`messages/${messageId}/replies`);
@@ -248,8 +233,3 @@ function loadReplies(messageId) {
         });
     });
 }
-
-// Load messages on page load
-document.addEventListener('DOMContentLoaded', (event) => {
-    showMessages();
-});

@@ -19,21 +19,14 @@ function googleSignIn() {
     const provider = new firebase.auth.GoogleAuthProvider();
     auth.signInWithPopup(provider)
         .then((result) => {
-            // This gives you a Google Access Token. You can use it to access the Google API.
-            const token = result.credential.accessToken;
             // The signed-in user info.
             const user = result.user;
             console.log('User signed in:', user);
-            alert('User signed in successfully!');
+            displayUserProfile(user);
         })
         .catch((error) => {
-            // Handle Errors here.
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            const email = error.email;
-            const credential = error.credential;
             console.error('Error during sign-in:', error);
-            alert('Failed to sign in: ' + errorMessage);
+            alert('Failed to sign in: ' + error.message);
         });
 }
 
@@ -41,16 +34,41 @@ function googleSignIn() {
 function signOut() {
     auth.signOut().then(() => {
         console.log('User signed out');
-        alert('User signed out successfully!');
+        hideUserProfile();
     }).catch((error) => {
         console.error('Error during sign-out:', error);
         alert('Failed to sign out: ' + error.message);
     });
 }
 
+// Function to display user profile
+function displayUserProfile(user) {
+    document.getElementById('userProfile').style.display = 'block';
+    document.getElementById('googleSignInBtn').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'block';
+    document.getElementById('userPhoto').src = user.photoURL;
+    document.getElementById('userName').textContent = user.displayName;
+}
+
+// Function to hide user profile
+function hideUserProfile() {
+    document.getElementById('userProfile').style.display = 'none';
+    document.getElementById('googleSignInBtn').style.display = 'block';
+    document.getElementById('mainContent').style.display = 'none';
+}
+
 // Add event listeners to your sign-in and sign-out buttons
 document.getElementById('googleSignInBtn').addEventListener('click', googleSignIn);
 document.getElementById('signOutBtn').addEventListener('click', signOut);
+
+// Check authentication state on page load
+auth.onAuthStateChanged((user) => {
+    if (user) {
+        displayUserProfile(user);
+    } else {
+        hideUserProfile();
+    }
+});
 
 // References to Firebase services
 const db = firebase.database();

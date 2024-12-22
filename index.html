@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>32Chan</title>
     <link rel="stylesheet" href="dashboard.css">
-    <link rel="stylesheet" href="styles.css"> <!-- Link to the new CSS file -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <!-- Firebase SDKs -->
@@ -22,31 +22,44 @@
             <h1>32Chan Forums For Sixteen</h1>
             <p>Express infinitely</p>
         </header>
-        
-        <!-- Button Options -->
-        <div class="buttons">
-            <button id="sendMessageBtn" onclick="toggleForm()">Send Message</button>
-            <button id="viewMessageBtn" onclick="showMessages()">View Messages</button>
+
+        <!-- User Profile and Authentication Buttons -->
+        <div class="auth-container">
+            <div id="userProfile" class="user-profile" style="display: none;">
+                <img id="userPhoto" src="" alt="User Photo">
+                <span id="userName"></span>
+                <button id="signOutBtn">Sign Out</button>
+            </div>
+            <button id="googleSignInBtn">Sign in with Google</button>
         </div>
 
-        <!-- Send Message Form -->
-        <div id="formContainer" class="form-container">
-            <h2>Send Anonymous Message</h2>
-            <label for="messageInput">Message:</label>
-            <textarea id="messageInput" placeholder="Tulis pesan anonim Anda di sini..."></textarea>
+        <!-- Main Content -->
+        <div id="mainContent" style="display: none;">
+            <!-- Button Options -->
+            <div class="buttons">
+                <button id="sendMessageBtn" onclick="toggleForm()">Send Message</button>
+                <button id="viewMessageBtn" onclick="showMessages()">View Messages</button>
+            </div>
 
-            <label for="imageInput">Upload Image (optional):</label>
-            <input type="file" id="imageInput" accept="image/*" aria-label="Upload image" title="Upload an optional image">
-            
-            <button onclick="sendMessage()">Submit</button>
-        </div>
+            <!-- Send Message Form -->
+            <div id="formContainer" class="form-container">
+                <h2>Send Anonymous Message</h2>
+                <label for="messageInput">Message:</label>
+                <textarea id="messageInput" placeholder="Tulis pesan anonim Anda di sini..."></textarea>
 
-        <!-- View Messages Section -->
-        <div id="messagesContainer" class="messages-container">
-            <h2>All Messages</h2>
-            <ul id="messagesList">
-                <!-- Pesan akan tampil di sini dari Firebase -->
-            </ul>
+                <label for="imageInput">Upload Image (optional):</label>
+                <input type="file" id="imageInput" accept="image/*" aria-label="Upload image" title="Upload an optional image">
+                
+                <button onclick="sendMessage()">Submit</button>
+            </div>
+
+            <!-- View Messages Section -->
+            <div id="messagesContainer" class="messages-container">
+                <h2>All Messages</h2>
+                <ul id="messagesList">
+                    <!-- Messages will be dynamically added here -->
+                </ul>
+            </div>
         </div>
     </div>
 </body>

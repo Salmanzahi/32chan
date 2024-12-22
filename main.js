@@ -210,7 +210,7 @@ function showMessages() {
         });
 
         // Sort messages by timestamp in descending order (most recent first)
-        messages.sort((a, b) => b.timestamp - a.timestamp);
+        messages.sort((a, b) => a.timestamp - b.timestamp);
 
         // Append sorted messages to the DOM
         messages.forEach((message) => {

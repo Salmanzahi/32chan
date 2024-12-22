@@ -213,8 +213,8 @@ function loadMessages() {
             messages.push(message);
         });
 
-        // Sort messages by timestamp in descending order
-        messages.sort((a, b) => b.timestamp - a.timestamp);
+        // Sort messages by timestamp in ascending order
+        messages.sort((a, b) => a.timestamp - b.timestamp);
 
         messages.forEach((message) => {
             const messageId = message.id;
@@ -232,7 +232,7 @@ function loadMessages() {
                 <button onclick="replyToMessage('${messageId}')">Reply</button>
                 <ul class="replies" id="replies-${messageId}"></ul>
             `;
-            messagesList.prepend(li);
+            messagesList.append(li); // Append instead of prepend to maintain ascending order
 
             loadReplies(messageId);
         });

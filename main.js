@@ -251,6 +251,10 @@ function replyToMessage(messageId) {
 // Function to load replies for a specific message
 function loadReplies(messageId) {
     const repliesList = document.getElementById(`replies-${messageId}`);
+    if (!repliesList) {
+        console.error(`Element with id replies-${messageId} not found.`);
+        return;
+    }
     repliesList.innerHTML = '';
 
     const repliesRef = db.ref(`messages/${messageId}/replies`);

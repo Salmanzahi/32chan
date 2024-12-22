@@ -86,12 +86,6 @@ function toggleForm() {
     document.getElementById('messagesContainer').style.display = 'none';
 }
 
-// Function to show messages
-function showMessages() {
-    document.getElementById('formContainer').style.display = 'none';
-    document.getElementById('messagesContainer').style.display = 'block';
-}
-
 // Function to send a message with an optional image
 function sendMessage() {
     const messageInput = document.getElementById('messageInput').value;
@@ -200,8 +194,8 @@ function likeMessage(messageId) {
     });
 }
 
-// Function to load messages and display them
-function loadMessages() {
+// Function to show and load messages
+function showMessages() {
     document.getElementById('formContainer').style.display = 'none';
     document.getElementById('messagesContainer').style.display = 'block';
 
@@ -215,8 +209,10 @@ function loadMessages() {
             messages.push({ id: childSnapshot.key, ...messageData });
         });
 
-        messagesList.innerHTML = '';
-        messages.reverse().forEach((message) => {
+        // Sort messages by timestamp in descending order
+        messages.sort((a, b) => b.timestamp - a.timestamp);
+
+        messages.forEach((message) => {
             const messageText = message.text || 'No text provided';
             const timestamp = message.timestamp;
             const likes = message.likes || 0;
@@ -232,7 +228,7 @@ function loadMessages() {
                 <button onclick="replyToMessage('${message.id}')">Reply</button>
                 <ul class="replies" id="replies-${message.id}"></ul>
             `;
-            messagesList.appendChild(li);
+            messagesList.prepend(li); // Use prepend to add the latest message at the top
 
             loadReplies(message.id);
         });
@@ -274,6 +270,6 @@ function loadReplies(messageId) {
 }
 
 // Load messages on page load
-/*document.addEventListener('DOMContentLoaded', (event) => {
-    loadMessages();
-});*/
+document.addEventListener('DOMContentLoaded', (event) => {
+    showMessages();
+});

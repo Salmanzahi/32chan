@@ -11,6 +11,47 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
+// Initialize Firebase Authentication and get a reference to the service
+const auth = firebase.auth();
+
+// Function to handle Google Sign-In
+function googleSignIn() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider)
+        .then((result) => {
+            // This gives you a Google Access Token. You can use it to access the Google API.
+            const token = result.credential.accessToken;
+            // The signed-in user info.
+            const user = result.user;
+            console.log('User signed in:', user);
+            alert('User signed in successfully!');
+        })
+        .catch((error) => {
+            // Handle Errors here.
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            const email = error.email;
+            const credential = error.credential;
+            console.error('Error during sign-in:', error);
+            alert('Failed to sign in: ' + errorMessage);
+        });
+}
+
+// Function to handle Sign-Out
+function signOut() {
+    auth.signOut().then(() => {
+        console.log('User signed out');
+        alert('User signed out successfully!');
+    }).catch((error) => {
+        console.error('Error during sign-out:', error);
+        alert('Failed to sign out: ' + error.message);
+    });
+}
+
+// Add event listeners to your sign-in and sign-out buttons
+document.getElementById('googleSignInBtn').addEventListener('click', googleSignIn);
+document.getElementById('signOutBtn').addEventListener('click', signOut);
+
 // References to Firebase services
 const db = firebase.database();
 const storage = firebase.storage();

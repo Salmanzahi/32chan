@@ -255,10 +255,30 @@ function showMessages() {
 
 // Function to like a message
 function likeMessage(messageId) {
+    const user = auth.currentUser;
+    if (!user) {
+        alert('You must be signed in to like a message.');
+        return;
+    }
+
     const messageRef = db.ref('messages/' + messageId);
     messageRef.transaction((message) => {
         if (message) {
-            message.likes = (message.likes || 0) + 1;
+            if (!message.likes) {
+                message.likes = 0;
+            }
+            if (!message.likedBy) {
+                message.likedBy = {};
+            }
+            if (message.likedBy[user.uid]) {
+                // User has already liked the message, so remove the like
+                message.likes--;
+                delete message.likedBy[user.uid];
+            } else {
+                // User has not liked the message, so add the like
+                message.likes++;
+                message.likedBy[user.uid] = true;
+            }
         }
         return message;
     });

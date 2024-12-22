@@ -155,52 +155,7 @@ function sendMessage() {
     }
 }
 
-// Function to reset form fields
-function resetForm() {
-    document.getElementById('messageInput').value = '';
-    document.getElementById('imageInput').value = '';
-}
-
-// Function to show messages
-function showMessages() {
-    document.getElementById('formContainer').style.display = 'none';
-    document.getElementById('messagesContainer').style.display = 'block';
-
-    const messagesList = document.getElementById('messagesList');
-    messagesList.innerHTML = ''; // Clear existing messages
-
-    db.ref('messages').orderByChild('timestamp').on('value', (snapshot) => {
-        const messages = [];
-        snapshot.forEach((childSnapshot) => {
-            const messageData = childSnapshot.val();
-            messages.push({ id: childSnapshot.key, ...messageData });
-        });
-
-        messagesList.innerHTML = '';
-        messages.reverse().forEach((message) => {
-            const messageText = message.text || 'No text provided';
-            const timestamp = message.timestamp;
-            const likes = message.likes || 0;
-            const imageUrl = message.imageUrl || null;
-
-            // Create message list item
-            const li = document.createElement('li');
-            li.innerHTML = `
-                <p>${messageText}</p>
-                ${imageUrl ? `<img src="${imageUrl}" alt="Message Image" style="max-width: 100%; height: auto;">` : ''}
-                <span class="timestamp">${new Date(timestamp).toLocaleString()}</span>
-                <button onclick="likeMessage('${message.id}')">Like (${likes})</button>
-                <button onclick="replyToMessage('${message.id}')">Reply</button>
-                <ul class="replies" id="replies-${message.id}"></ul>
-            `;
-            messagesList.appendChild(li);
-
-            loadReplies(message.id);
-        });
-    });
-}
-
-// Function to like a message
+// Function to like or dislike a message
 function likeMessage(messageId) {
     const user = auth.currentUser;
     if (!user) {
@@ -236,6 +191,36 @@ function likeMessage(messageId) {
     }).catch((error) => {
         console.error('Error updating likes:', error);
         likeButton.disabled = false; // Re-enable the button in case of error
+    });
+}
+
+// Function to load messages and display them
+function loadMessages() {
+    const messagesRef = db.ref('messages');
+    messagesRef.on('value', (snapshot) => {
+        const messagesList = document.getElementById('messagesList');
+        messagesList.innerHTML = ''; // Clear the list before adding new messages
+        snapshot.forEach((childSnapshot) => {
+            const message = childSnapshot.val();
+            const messageId = childSnapshot.key;
+            const messageText = message.text;
+            const imageUrl = message.imageUrl;
+            const timestamp = message.timestamp;
+            const likes = message.likes || 0;
+
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <p>${messageText}</p>
+                ${imageUrl ? `<img src="${imageUrl}" alt="Message Image" style="max-width: 100%; height: auto;">` : ''}
+                <span class="timestamp">${new Date(timestamp).toLocaleString()}</span>
+                <button onclick="likeMessage('${messageId}')">Like (${likes})</button>
+                <button onclick="replyToMessage('${messageId}')">Reply</button>
+                <ul class="replies" id="replies-${messageId}"></ul>
+            `;
+            messagesList.appendChild(li);
+
+            loadReplies(messageId);
+        });
     });
 }
 

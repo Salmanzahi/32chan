@@ -46,7 +46,7 @@ function anonymousSignIn() {
 }
 
 // Function to handle Sign-Out
-function signOut() {
+/*function signOut() {
     auth.signOut().then(() => {
         console.log('User signed out');
         hideUserProfile();
@@ -54,8 +54,33 @@ function signOut() {
         console.error('Error during sign-out:', error);
         alert('Failed to sign out: ' + error.message);
     });
+}*/
+// Function to handle Sign-Out
+function signOut() {
+    auth.signOut().then(() => {
+        console.log('User signed out');
+        hideUserProfile();
+        hideAllSections(); // Hide all sections when the user signs out
+    }).catch((error) => {
+        console.error('Error during sign-out:', error);
+        alert('Failed to sign out: ' + error.message);
+    });
 }
 
+// Function to hide all sections
+function hideAllSections() {
+    const formContainer = document.getElementById('formContainer');
+    const messagesContainer = document.getElementById('messagesContainer');
+    const sortAscBtn = document.getElementById('sortAscBtn');
+    const sortDescBtn = document.getElementById('sortDescBtn');
+    const sortMostLikedBtn = document.getElementById('sortMostLikedBtn');
+
+    formContainer.style.display = 'none';
+    messagesContainer.style.display = 'none';
+    sortAscBtn.style.display = 'none';
+    sortDescBtn.style.display = 'none';
+    sortMostLikedBtn.style.display = 'none';
+}
 // Function to display user profile
 function displayUserProfile(user) {
     console.log('Displaying user profile');

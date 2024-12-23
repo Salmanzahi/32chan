@@ -1,5 +1,7 @@
 // Firebase configuration
-
+const script = document.createElement('script');
+script.src = "./role.js"
+document.head.appendChild(script);
 const firebaseConfig = {
     apiKey: "AIzaSyAYRcDk0UkOh9w7o1umQ_cDkPVxVOQojAw",
     authDomain: "db-test-6a570.firebaseapp.com",

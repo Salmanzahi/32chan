@@ -57,6 +57,12 @@
                 <input type="file" id="imageInput" accept="image/*" aria-label="Upload image" title="Upload an optional image">
                 
                 <button onclick="sendMessage()">Submit</button>
+
+                <!-- User's Post History -->
+                <h2>Your Post History</h2>
+                <ul id="userMessagesList">
+                    <!-- User's messages will be dynamically added here -->
+                </ul>
             </div>
 
             <!-- View Messages Section -->
@@ -64,14 +70,6 @@
                 <h2>All Messages</h2>
                 <ul id="messagesList">
                     <!-- Messages will be dynamically added here -->
-                </ul>
-            </div>
-
-            <!-- View Sent Messages Section -->
-            <div id="sentMessagesContainer" class="messages-container" style="display: none;">
-                <h2>Your Post History</h2>
-                <ul id="sentMessagesList">
-                    <!-- Sent messages will be dynamically added here -->
                 </ul>
             </div>
         </div>

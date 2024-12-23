@@ -161,6 +161,12 @@ function toggleMessages() {
 function sendMessage() {
     const messageInput = document.getElementById('messageInput').value;
     const imageInput = document.getElementById('imageInput').files[0];
+    const user = firebase.auth().currentUser;
+
+    if (!user) {
+        alert("User not authenticated.");
+        return;
+    }
 
     if (messageInput.trim() === '' && !imageInput) {
         alert("Message or image cannot be empty.");
@@ -172,7 +178,7 @@ function sendMessage() {
     const messageData = {
         text: messageInput || null,
         timestamp: Date.now(),
-        userId: firebase.auth().currentUser.uid,
+        userId: user.uid,
         replies: []
     };
 
@@ -201,6 +207,7 @@ function sendMessage() {
                         } else {
                             alert('Message sent successfully!');
                             resetForm();
+                            loadUserMessages(); // Load user messages after sending a new one
                         }
                     });
                 });
@@ -214,6 +221,7 @@ function sendMessage() {
             } else {
                 alert('Message sent successfully!');
                 resetForm();
+                loadUserMessages(); // Load user messages after sending a new one
             }
         });
     }

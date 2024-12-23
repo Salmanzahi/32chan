@@ -16,7 +16,7 @@
 
     <!-- Main JavaScript files -->
     <script src="./mainalt.js" defer></script>
-   
+    <script src="./userMsg.js" defer></script>
     <div class="container">
         <header>
             <h1>32Chan Forums For Sixteen</h1>
@@ -56,6 +56,12 @@
                 <input type="file" id="imageInput" accept="image/*" aria-label="Upload image" title="Upload an optional image">
                 
                 <button onclick="sendMessage()">Submit</button>
+                <!-- User's Post History -->
+                <h2>Your Post History</h2>
+                <ul id="userMessagesList">
+                    <!-- User's messages will be dynamically added here -->
+                </ul>
+            </div>
             </div>
 
             <!-- View Messages Section -->

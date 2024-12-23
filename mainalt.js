@@ -135,7 +135,8 @@ function toggleForm() {
 
     if (formContainer && messagesContainer) {
         formContainer.style.display = 'block';
-        messagesContainer.style.display = 'none';
+        messagesContainer.style.display = 'block';
+        loadUserMessages(); // Load user messages when toggling the form
     } else {
         console.error('One or more elements not found in the DOM.');
     }
@@ -156,6 +157,7 @@ function sendMessage() {
     const messageData = {
         text: messageInput || null,
         timestamp: Date.now(),
+        userId: firebase.auth().currentUser.uid,
         replies: []
     };
 
@@ -184,6 +186,7 @@ function sendMessage() {
                         } else {
                             alert('Message sent successfully!');
                             resetForm();
+                            loadUserMessages(); // Load user messages after sending a new one
                         }
                     });
                 });
@@ -197,6 +200,7 @@ function sendMessage() {
             } else {
                 alert('Message sent successfully!');
                 resetForm();
+                loadUserMessages(); // Load user messages after sending a new one
             }
         });
     }

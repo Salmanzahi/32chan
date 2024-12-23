@@ -40,14 +40,14 @@
             <!-- Button Options -->
             <div class="buttons">
                 <button id="sendMessageBtn" onclick="toggleForm()">Send Message</button>
-                <button id="viewMessageBtn" onclick="showMessages()">View Messages</button>
+                <button id="viewMessageBtn" onclick="toggleMessages()">View Messages</button>
                 <button id="sortAscBtn" onclick="showMessages('asc')">Sort Ascending</button>
                 <button id="sortDescBtn" onclick="showMessages('desc')">Sort Descending</button>
                 <button id="sortMostLikedBtn" onclick="showMessages('mostLiked')">Most Liked</button>
             </div>
 
             <!-- Send Message Form -->
-            <div id="formContainer" class="form-container">
+            <div id="formContainer" class="form-container" style="display: none;">
                 <h2>Send Anonymous Message</h2>
                 <label for="messageInput">Message:</label>
                 <textarea id="messageInput" placeholder="Tulis pesan anonim Anda di sini..."></textarea>

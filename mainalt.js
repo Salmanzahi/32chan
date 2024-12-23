@@ -134,11 +134,26 @@ function toggleForm() {
     const formContainer = document.getElementById('formContainer');
     const messagesContainer = document.getElementById('messagesContainer');
 
-    if (formContainer && messagesContainer) {
+    if (formContainer.style.display === 'none') {
         formContainer.style.display = 'block';
-        messagesContainer.style.display = 'block';
+        messagesContainer.style.display = 'none';
     } else {
-        console.error('One or more elements not found in the DOM.');
+        formContainer.style.display = 'none';
+        messagesContainer.style.display = 'block';
+    }
+}
+
+// Function to toggle the view messages section
+function toggleMessages() {
+    const formContainer = document.getElementById('formContainer');
+    const messagesContainer = document.getElementById('messagesContainer');
+
+    if (messagesContainer.style.display === 'none') {
+        messagesContainer.style.display = 'block';
+        formContainer.style.display = 'none';
+    } else {
+        messagesContainer.style.display = 'none';
+        formContainer.style.display = 'block';
     }
 }
 
@@ -219,14 +234,10 @@ function resetForm() {
 
 // Function to show and load messages
 function showMessages(sortOrder = 'desc') {
-    const formContainer = document.getElementById('formContainer');
-    const messagesContainer = document.getElementById('messagesContainer');
     const messagesList = document.getElementById('messagesList');
     const sortButtons = document.querySelectorAll('.buttons button');
 
-    if (formContainer && messagesContainer && messagesList) {
-        formContainer.style.display = 'none';
-        messagesContainer.style.display = 'block';
+    if (messagesList) {
         messagesList.innerHTML = ''; // Clear existing messages before appending new ones
 
         // Highlight the selected sort button
@@ -276,7 +287,7 @@ function showMessages(sortOrder = 'desc') {
             });
         });
     } else {
-        console.error('One or more elements not found in the DOM.');
+        console.error('Messages list element not found in the DOM.');
     }
 }
 

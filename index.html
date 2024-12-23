@@ -14,8 +14,9 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
 
-    <!-- Main JavaScript file -->
+    <!-- Main JavaScript files -->
     <script src="./mainalt.js" defer></script>
+    <script src="./managePosts.js" defer></script>
 
     <div class="container">
         <header>
@@ -44,6 +45,7 @@
                 <button id="sortAscBtn" onclick="showMessages('asc')">Sort Ascending</button>
                 <button id="sortDescBtn" onclick="showMessages('desc')">Sort Descending</button>
                 <button id="sortMostLikedBtn" onclick="showMessages('mostLiked')">Most Liked</button>
+                <button id="viewSentMessagesBtn" onclick="viewSentMessages()">View Sent Messages</button>
             </div>
 
             <!-- Send Message Form -->
@@ -63,6 +65,14 @@
                 <h2>All Messages</h2>
                 <ul id="messagesList">
                     <!-- Messages will be dynamically added here -->
+                </ul>
+            </div>
+
+            <!-- View Sent Messages Section -->
+            <div id="sentMessagesContainer" class="messages-container" style="display: none;">
+                <h2>Sent Messages</h2>
+                <ul id="sentMessagesList">
+                    <!-- Sent messages will be dynamically added here -->
                 </ul>
             </div>
         </div>

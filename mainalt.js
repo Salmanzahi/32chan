@@ -341,7 +341,6 @@ function showMessages(sortOrder = 'desc') {
                 messagesList.appendChild(li);
 
                 loadReplies(message.id);
-                loadUserMessages(); // Load user messages after showing all messagesfix
             });
         });
     } else {

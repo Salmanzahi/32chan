@@ -327,13 +327,14 @@ function showMessages(sortOrder = 'desc') {
                 const messageText = message.text || 'No text provided';
                 const timestamp = message.timestamp;
                 const imageUrl = message.imageUrl || null;
-
+                const likes = message.likes || 0;
                 // Create message list item
                 const li = document.createElement('li');
                 li.innerHTML = `
                     <p>${messageText}</p>
                     ${imageUrl ? `<img src="${imageUrl}" alt="Message Image" style="max-width: 100%; height: auto;">` : ''}
                     <span class="timestamp">${new Date(timestamp).toLocaleString()}</span>
+                    <button onclick="toggleLike('${message.id}')">Like (${likes})</button>
                     <button onclick="replyToMessage('${message.id}')">Reply</button>
                     <ul class="replies" id="replies-${message.id}"></ul>
                 `;
@@ -346,7 +347,20 @@ function showMessages(sortOrder = 'desc') {
         console.error('Messages list element not found in the DOM.');
     }
 }
-
+function toggleLike(messageId) {
+    const messageRef = db.ref(`messages/${messageId}`);
+    messageRef.transaction((message) => {
+        if (message) {
+            if (message.likes && message.likes.includes(auth.currentUser.uid)) {
+                message.likes = message.likes.filter(uid => uid !== auth.currentUser.uid);
+            } else {
+                message.likes = message.likes || [];
+                message.likes.push(auth.currentUser.uid);
+            }
+        }
+        return message;
+    });
+}
 // Function to reply to a message
 function replyToMessage(messageId) {
     const replyText = prompt("Enter your reply:");

@@ -224,7 +224,7 @@ function showMessages(sortOrder = 'desc') {
         messagesContainer.style.display = 'block';
         messagesList.innerHTML = ''; // Clear existing messages before appending new ones
 
-        db.ref('messages').orderByChild('timestamp').on('value', (snapshot) => {
+        db.ref('messages').on('value', (snapshot) => {
             const messages = [];
             snapshot.forEach((childSnapshot) => {
                 const messageData = childSnapshot.val();
@@ -255,7 +255,7 @@ function showMessages(sortOrder = 'desc') {
                     <button onclick="replyToMessage('${message.id}')">Reply</button>
                     <ul class="replies" id="replies-${message.id}"></ul>
                 `;
-                messagesList.prepend(li); // Use prepend to add the latest message at the top
+                messagesList.appendChild(li);
 
                 loadReplies(message.id);
             });

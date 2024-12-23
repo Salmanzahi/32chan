@@ -22,6 +22,21 @@
             <h1>32Chan Forums For Sixteen</h1>
             <p>Express infinitely</p>
             <button id="themeToggleBtn">Toggle Dark/Light Mode</button>
+            <p id="lastUpdated" style="color: gray; position: absolute; top: 10px; left: 10px;"></p>
+            <script>
+                document.addEventListener('DOMContentLoaded', (event) => {
+    // Update the last updated timestamp
+    const lastUpdatedElement = document.getElementById('lastUpdated');
+    const now = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta', timeZoneName: 'short' };
+    const formattedDate = now.toLocaleDateString('en-GB', options);
+    lastUpdatedElement.textContent = `Last updated code: ${formattedDate}`;
+
+    // Existing code to load user messages
+    loadUserMessages();
+});
+            </script>
+        </header>
         </header>
 
         <!-- User Profile and Authentication Buttons -->

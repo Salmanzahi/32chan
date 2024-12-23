@@ -103,11 +103,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const googleSignInBtn = document.getElementById('googleSignInBtn');
     const anonymousSignInBtn = document.getElementById('anonymousSignInBtn');
     const signOutBtn = document.getElementById('signOutBtn');
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
 
-    if (googleSignInBtn && anonymousSignInBtn && signOutBtn) {
+    if (googleSignInBtn && anonymousSignInBtn && signOutBtn && themeToggleBtn) {
         googleSignInBtn.addEventListener('click', googleSignIn);
         anonymousSignInBtn.addEventListener('click', anonymousSignIn);
         signOutBtn.addEventListener('click', signOut);
+        themeToggleBtn.addEventListener('click', toggleTheme);
     } else {
         console.error('One or more buttons not found in the DOM.');
     }
@@ -312,6 +314,12 @@ function loadReplies(messageId) {
             repliesList.appendChild(li);
         });
     });
+}
+
+// Function to toggle dark/light mode
+function toggleTheme() {
+    const body = document.body;
+    body.classList.toggle('dark-mode');
 }
 
 // Load messages on page load

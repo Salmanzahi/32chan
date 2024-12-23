@@ -4,6 +4,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
+    color: #333;
 }
 
 .container {
@@ -164,6 +165,26 @@ li {
     display: block;
     margin-top: 10px;
     color: #888;
+}
+
+/* Dark mode styles */
+body.dark-mode {
+    background-color: #333;
+    color: #f4f4f4;
+}
+
+body.dark-mode .form-container, body.dark-mode .messages-container {
+    background-color: #444;
+    color: #f4f4f4;
+}
+
+body.dark-mode li {
+    background-color: #555;
+    color: #f4f4f4;
+}
+
+body.dark-mode .timestamp {
+    color: #bbb;
 }
 
 /* Responsive styles */

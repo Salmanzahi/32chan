@@ -90,7 +90,7 @@ function displayUserProfile(user) {
     const mainContent = document.getElementById('mainContent');
     const userPhoto = document.getElementById('userPhoto');
     const userName = document.getElementById('userName');
-
+    const adminNotification = document.getElementById('adminNotification');
     if (userProfile && googleSignInBtn && anonymousSignInBtn && mainContent && userPhoto && userName) {
         userProfile.style.display = 'block';
         googleSignInBtn.style.display = 'none';
@@ -100,6 +100,13 @@ function displayUserProfile(user) {
             userPhoto.src = user.photoURL;
         }
         userName.textContent = user.displayName || 'Anonymous User';
+
+         // Check if user is an admin
+         if (adminRoles.admins.includes(user.uid)) {
+            adminNotification.style.display = 'block';
+        } else {
+            adminNotification.style.display = 'none';
+        }
     } else {
         console.error('One or more elements not found in the DOM.');
     }

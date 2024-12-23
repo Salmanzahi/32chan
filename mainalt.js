@@ -11,10 +11,10 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
+// Initialize Firebase Authentication and get a reference to the service
 const auth = firebase.auth();
-// References to Firebase services
-const db = firebase.database();
-const storage = firebase.storage();
+
+// Function to handle Google Sign-In
 function googleSignIn() {
     console.log('Google Sign-In button clicked');
     const provider = new firebase.auth.GoogleAuthProvider();
@@ -28,6 +28,19 @@ function googleSignIn() {
         .catch((error) => {
             console.error('Error during sign-in:', error);
             alert('Failed to sign in: ' + error.message);
+        });
+}
+
+// Function to handle Anonymous Sign-In
+function anonymousSignIn() {
+    console.log('Anonymous Sign-In button clicked');
+    auth.signInAnonymously()
+        .then(() => {
+            console.log('User signed in anonymously');
+        })
+        .catch((error) => {
+            console.error('Error during anonymous sign-in:', error);
+            alert('Failed to sign in anonymously: ' + error.message);
         });
 }
 
@@ -45,26 +58,59 @@ function signOut() {
 // Function to display user profile
 function displayUserProfile(user) {
     console.log('Displaying user profile');
-    document.getElementById('userProfile').style.display = 'block';
-    document.getElementById('googleSignInBtn').style.display = 'none';
-    document.getElementById('mainContent').style.display = 'block';
-    document.getElementById('userPhoto').src = user.photoURL;
-    document.getElementById('userName').textContent = user.displayName;
+    const userProfile = document.getElementById('userProfile');
+    const googleSignInBtn = document.getElementById('googleSignInBtn');
+    const anonymousSignInBtn = document.getElementById('anonymousSignInBtn');
+    const mainContent = document.getElementById('mainContent');
+    const userPhoto = document.getElementById('userPhoto');
+    const userName = document.getElementById('userName');
+
+    if (userProfile && googleSignInBtn && anonymousSignInBtn && mainContent && userPhoto && userName) {
+        userProfile.style.display = 'block';
+        googleSignInBtn.style.display = 'none';
+        anonymousSignInBtn.style.display = 'none';
+        mainContent.style.display = 'block';
+        if (user.photoURL) {
+            userPhoto.src = user.photoURL;
+        }
+        userName.textContent = user.displayName || 'Anonymous User';
+    } else {
+        console.error('One or more elements not found in the DOM.');
+    }
 }
 
 // Function to hide user profile
 function hideUserProfile() {
     console.log('Hiding user profile');
-    document.getElementById('userProfile').style.display = 'none';
-    document.getElementById('googleSignInBtn').style.display = 'block';
-    document.getElementById('mainContent').style.display = 'none';
+    const userProfile = document.getElementById('userProfile');
+    const googleSignInBtn = document.getElementById('googleSignInBtn');
+    const anonymousSignInBtn = document.getElementById('anonymousSignInBtn');
+    const mainContent = document.getElementById('mainContent');
+
+    if (userProfile && googleSignInBtn && anonymousSignInBtn && mainContent) {
+        userProfile.style.display = 'none';
+        googleSignInBtn.style.display = 'block';
+        anonymousSignInBtn.style.display = 'block';
+        mainContent.style.display = 'none';
+    } else {
+        console.error('One or more elements not found in the DOM.');
+    }
 }
 
 // Add event listeners to your sign-in and sign-out buttons
 document.addEventListener('DOMContentLoaded', (event) => {
     console.log('DOM fully loaded and parsed');
-    document.getElementById('googleSignInBtn').addEventListener('click', googleSignIn);
-    document.getElementById('signOutBtn').addEventListener('click', signOut);
+    const googleSignInBtn = document.getElementById('googleSignInBtn');
+    const anonymousSignInBtn = document.getElementById('anonymousSignInBtn');
+    const signOutBtn = document.getElementById('signOutBtn');
+
+    if (googleSignInBtn && anonymousSignInBtn && signOutBtn) {
+        googleSignInBtn.addEventListener('click', googleSignIn);
+        anonymousSignInBtn.addEventListener('click', anonymousSignIn);
+        signOutBtn.addEventListener('click', signOut);
+    } else {
+        console.error('One or more buttons not found in the DOM.');
+    }
 });
 
 // Check authentication state on page load
@@ -75,10 +121,22 @@ auth.onAuthStateChanged((user) => {
         hideUserProfile();
     }
 });
+
+// References to Firebase services
+const db = firebase.database();
+const storage = firebase.storage();
+
 // Function to toggle the send message form
 function toggleForm() {
-    document.getElementById('formContainer').style.display = 'block';
-    document.getElementById('messagesContainer').style.display = 'none';
+    const formContainer = document.getElementById('formContainer');
+    const messagesContainer = document.getElementById('messagesContainer');
+
+    if (formContainer && messagesContainer) {
+        formContainer.style.display = 'block';
+        messagesContainer.style.display = 'none';
+    } else {
+        console.error('One or more elements not found in the DOM.');
+    }
 }
 
 // Function to send a message with an optional image
@@ -96,9 +154,7 @@ function sendMessage() {
     const messageData = {
         text: messageInput || null,
         timestamp: Date.now(),
-        likes: 0,
-        replies: [],
-        anonymous: true // Mark the message as anonymous
+        replies: []
     };
 
     if (imageInput) {
@@ -146,58 +202,67 @@ function sendMessage() {
 
 // Function to reset form fields
 function resetForm() {
-    document.getElementById('messageInput').value = '';
-    document.getElementById('imageInput').value = '';
+    const messageInput = document.getElementById('messageInput');
+    const imageInput = document.getElementById('imageInput');
+
+    if (messageInput && imageInput) {
+        messageInput.value = '';
+        imageInput.value = '';
+    } else {
+        console.error('One or more form elements not found in the DOM.');
+    }
 }
 
-// Function to show messages
-function showMessages() {
-    document.getElementById('formContainer').style.display = 'none';
-    document.getElementById('messagesContainer').style.display = 'block';
-
+// Function to show and load messages
+function showMessages(sortOrder = 'desc') {
+    const formContainer = document.getElementById('formContainer');
+    const messagesContainer = document.getElementById('messagesContainer');
     const messagesList = document.getElementById('messagesList');
-    messagesList.innerHTML = ''; // Clear existing messages
 
-    db.ref('messages').orderByChild('timestamp').on('value', (snapshot) => {
-        const messages = [];
-        snapshot.forEach((childSnapshot) => {
-            const messageData = childSnapshot.val();
-            messages.push({ id: childSnapshot.key, ...messageData });
+    if (formContainer && messagesContainer && messagesList) {
+        formContainer.style.display = 'none';
+        messagesContainer.style.display = 'block';
+        messagesList.innerHTML = ''; // Clear existing messages before appending new ones
+
+        db.ref('messages').orderByChild('timestamp').on('value', (snapshot) => {
+            const messages = [];
+            snapshot.forEach((childSnapshot) => {
+                const messageData = childSnapshot.val();
+                messages.push({ id: childSnapshot.key, ...messageData });
+            });
+
+            // Sort messages based on the selected sort order
+            if (sortOrder === 'asc') {
+                messages.sort((a, b) => a.timestamp - b.timestamp);
+            } else if (sortOrder === 'desc') {
+                messages.sort((a, b) => b.timestamp - a.timestamp);
+            } else if (sortOrder === 'mostLiked') {
+                messages.sort((a, b) => (b.likes || 0) - (a.likes || 0));
+            }
+
+            // Append sorted messages to the DOM
+            messages.forEach((message) => {
+                const messageText = message.text || 'No text provided';
+                const timestamp = message.timestamp;
+                const imageUrl = message.imageUrl || null;
+
+                // Create message list item
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <p>${messageText}</p>
+                    ${imageUrl ? `<img src="${imageUrl}" alt="Message Image" style="max-width: 100%; height: auto;">` : ''}
+                    <span class="timestamp">${new Date(timestamp).toLocaleString()}</span>
+                    <button onclick="replyToMessage('${message.id}')">Reply</button>
+                    <ul class="replies" id="replies-${message.id}"></ul>
+                `;
+                messagesList.prepend(li); // Use prepend to add the latest message at the top
+
+                loadReplies(message.id);
+            });
         });
-
-        messagesList.innerHTML = '';
-        messages.reverse().forEach((message) => {
-            const messageText = message.text || 'No text provided';
-            const timestamp = message.timestamp;
-            const likes = message.likes || 0;
-            const imageUrl = message.imageUrl || null;
-
-            // Create message list item
-            const li = document.createElement('li');
-            li.innerHTML = `
-                <p>${messageText}</p>
-                ${imageUrl ? `<img src="${imageUrl}" alt="Message Image" style="max-width: 100%; height: auto;">` : ''}
-                <span class="timestamp">${new Date(timestamp).toLocaleString()}</span>
-                <button onclick="likeMessage('${message.id}')">Like (${likes})</button>
-                <button onclick="replyToMessage('${message.id}')">Reply</button>
-                <ul class="replies" id="replies-${message.id}"></ul>
-            `;
-            messagesList.appendChild(li);
-
-            loadReplies(message.id);
-        });
-    });
-}
-
-// Function to like a message
-function likeMessage(messageId) {
-    const messageRef = db.ref('messages/' + messageId);
-    messageRef.transaction((message) => {
-        if (message) {
-            message.likes = (message.likes || 0) + 1;
-        }
-        return message;
-    });
+    } else {
+        console.error('One or more elements not found in the DOM.');
+    }
 }
 
 // Function to reply to a message
@@ -215,6 +280,10 @@ function replyToMessage(messageId) {
 // Function to load replies for a specific message
 function loadReplies(messageId) {
     const repliesList = document.getElementById(`replies-${messageId}`);
+    if (!repliesList) {
+        console.error(`Element with id replies-${messageId} not found.`);
+        return;
+    }
     repliesList.innerHTML = '';
 
     const repliesRef = db.ref(`messages/${messageId}/replies`);
@@ -233,3 +302,8 @@ function loadReplies(messageId) {
         });
     });
 }
+
+// Load messages on page load
+document.addEventListener('DOMContentLoaded', (event) => {
+    showMessages();
+});

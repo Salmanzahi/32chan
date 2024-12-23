@@ -31,6 +31,7 @@
                 <button id="signOutBtn">Sign Out</button>
             </div>
             <button id="googleSignInBtn">Sign in with Google</button>
+            <button id="anonymousSignInBtn">Sign in Anonymously</button>
         </div>
 
         <!-- Main Content -->
@@ -39,6 +40,9 @@
             <div class="buttons">
                 <button id="sendMessageBtn" onclick="toggleForm()">Send Message</button>
                 <button id="viewMessageBtn" onclick="showMessages()">View Messages</button>
+                <button id="sortAscBtn" onclick="showMessages('asc')">Sort Ascending</button>
+                <button id="sortDescBtn" onclick="showMessages('desc')">Sort Descending</button>
+                <button id="sortMostLikedBtn" onclick="showMessages('mostLiked')">Most Liked</button>
             </div>
 
             <!-- Send Message Form -->

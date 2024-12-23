@@ -1,17 +1,15 @@
+/* General styles */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
     margin: 0;
     padding: 0;
+    background-color: #f4f4f4;
 }
 
 .container {
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
 }
 
 header {
@@ -30,21 +28,21 @@ header p {
 }
 
 .auth-container {
-    text-align: center;
+    display: flex;
+    justify-content: center;
     margin-bottom: 20px;
 }
 
 .user-profile {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 10px;
 }
 
 .user-profile img {
     width: 50px;
     height: 50px;
     border-radius: 50%;
+    margin-right: 10px;
 }
 
 .user-profile span {
@@ -69,7 +67,9 @@ header p {
 
 .buttons {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
     margin-bottom: 20px;
 }
 
@@ -88,7 +88,15 @@ header p {
     background-color: #0056b3;
 }
 
+button.active {
+    background-color: #28a745;
+}
+
 .form-container, .messages-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
 }
 
@@ -115,6 +123,10 @@ textarea {
     height: 100px;
 }
 
+input[type="file"] {
+    margin-bottom: 10px;
+}
+
 button {
     padding: 10px 20px;
     font-size: 1em;
@@ -138,4 +150,31 @@ ul {
 ul li {
     padding: 10px;
     border-bottom: 1px solid #ccc;
+}
+
+li {
+    background-color: #f9f9f9;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.timestamp {
+    display: block;
+    margin-top: 10px;
+    color: #888;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .auth-container {
+        flex-direction: column;
+        align-items: center;
+    }
 }

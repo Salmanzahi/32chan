@@ -218,11 +218,22 @@ function showMessages(sortOrder = 'desc') {
     const formContainer = document.getElementById('formContainer');
     const messagesContainer = document.getElementById('messagesContainer');
     const messagesList = document.getElementById('messagesList');
+    const sortButtons = document.querySelectorAll('.buttons button');
 
     if (formContainer && messagesContainer && messagesList) {
         formContainer.style.display = 'none';
         messagesContainer.style.display = 'block';
         messagesList.innerHTML = ''; // Clear existing messages before appending new ones
+
+        // Highlight the selected sort button
+        sortButtons.forEach(button => button.classList.remove('active'));
+        if (sortOrder === 'asc') {
+            document.getElementById('sortAscBtn').classList.add('active');
+        } else if (sortOrder === 'desc') {
+            document.getElementById('sortDescBtn').classList.add('active');
+        } else if (sortOrder === 'mostLiked') {
+            document.getElementById('sortMostLikedBtn').classList.add('active');
+        }
 
         db.ref('messages').on('value', (snapshot) => {
             const messages = [];

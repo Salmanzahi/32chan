@@ -137,6 +137,7 @@ function toggleForm() {
     if (formContainer.style.display === 'none') {
         formContainer.style.display = 'block';
         messagesContainer.style.display = 'none';
+        loadUserMessages();
     } else {
         formContainer.style.display = 'none';
         messagesContainer.style.display = 'block';

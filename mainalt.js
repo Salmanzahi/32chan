@@ -128,7 +128,29 @@ auth.onAuthStateChanged((user) => {
 // References to Firebase services
 const db = firebase.database();
 const storage = firebase.storage();
+function toggleView() {
+    const formContainer = document.getElementById('formContainer');
+    const messagesContainer = document.getElementById('messagesContainer');
+    const sortAscBtn = document.getElementById('sortAscBtn');
+    const sortDescBtn = document.getElementById('sortDescBtn');
+    const sortMostLikedBtn = document.getElementById('sortMostLikedBtn');
 
+    if (formContainer.style.display === 'none') {
+        formContainer.style.display = 'block';
+        messagesContainer.style.display = 'none';
+        sortAscBtn.style.display = 'none';
+        sortDescBtn.style.display = 'none';
+        sortMostLikedBtn.style.display = 'none';
+        loadUserMessages(); // Load user messages when showing the form
+    } else {
+        formContainer.style.display = 'none';
+        messagesContainer.style.display = 'block';
+        sortAscBtn.style.display = 'inline-block';
+        sortDescBtn.style.display = 'inline-block';
+        sortMostLikedBtn.style.display = 'inline-block';
+        showMessages(); // Load all messages when showing the messages container
+    }
+}
 // Function to toggle the send message form
 function toggleForm() {
     const formContainer = document.getElementById('formContainer');

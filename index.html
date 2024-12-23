@@ -39,23 +39,24 @@
         <div id="mainContent" style="display: none;">
             <!-- Button Options -->
             <div class="buttons">
-                <button id="sendMessageBtn" onclick="toggleForm()">Send Message</button>
-                <button id="viewMessageBtn" onclick="toggleMessages()">View Messages</button>
-                <button id="sortAscBtn" onclick="showMessages('asc')">Sort Ascending</button>
-                <button id="sortDescBtn" onclick="showMessages('desc')">Sort Descending</button>
-                <button id="sortMostLikedBtn" onclick="showMessages('mostLiked')">Most Liked</button>
+                <button id="toggleViewBtn" onclick="toggleView()">Send Message / View Messages</button>
+                <button id="sortAscBtn" style="display: none;" onclick="showMessages('asc')">Sort Ascending</button>
+                <button id="sortDescBtn" style="display: none;" onclick="showMessages('desc')">Sort Descending</button>
+                <button id="sortMostLikedBtn" style="display: none;" onclick="showMessages('mostLiked')">Most Liked</button>
             </div>
+            
 
             <!-- Send Message Form -->
             <div id="formContainer" class="form-container" style="display: none;">
                 <h2>Send Anonymous Message</h2>
                 <label for="messageInput">Message:</label>
                 <textarea id="messageInput" placeholder="Tulis pesan anonim Anda di sini..."></textarea>
-
+            
                 <label for="imageInput">Upload Image (optional):</label>
                 <input type="file" id="imageInput" accept="image/*" aria-label="Upload image" title="Upload an optional image">
                 
                 <button onclick="sendMessage()">Submit</button>
+            
                 <!-- User's Post History -->
                 <h2>Your Post History</h2>
                 <ul id="userMessagesList">

@@ -361,6 +361,7 @@ function showMessages(sortOrder = 'desc') {
                 const li = document.createElement('li');
                 li.innerHTML = `
                       <div class="header">
+                        <div class="title" style="font-weight: bold; font-size: 1.2em;">${messageTitle}</div>
                         <div class="timestamp">${new Date(timestamp).toLocaleString()}</div>
                     </div>
                     <div class="content">

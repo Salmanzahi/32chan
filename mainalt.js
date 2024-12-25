@@ -382,7 +382,8 @@ function showMessages(sortOrder = 'desc') {
                 // Create message list item
                 const li = document.createElement('li');
                 li.innerHTML = `
-                 <div class="header">
+                  <div class="header">
+                        ${adminName ? `<div class="admin-badge" style="color: red;">Administrator (${adminName})</div>` : ''}
                         <div class="title" style="font-weight: bold; font-size: 1.2em;">${messageTitle || 'Legacy Post'}</div>
                         <div class="timestamp">${new Date(timestamp).toLocaleString()}</div>
                     </div>

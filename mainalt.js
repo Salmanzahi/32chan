@@ -382,8 +382,8 @@ function showMessages(sortOrder = 'desc') {
                 // Create message list item
                 const li = document.createElement('li');
                 li.innerHTML = `
-                      <div class="header">
-                        <div class="title" style="font-weight: bold; font-size: 1.2em;">${messageTitle}</div>
+                 <div class="header">
+                        <div class="title" style="font-weight: bold; font-size: 1.2em;">${messageTitle || 'Legacy Post'}</div>
                         <div class="timestamp">${new Date(timestamp).toLocaleString()}</div>
                     </div>
                     <div class="content">
@@ -394,6 +394,10 @@ function showMessages(sortOrder = 'desc') {
                         <button onclick="toggleLike('${message.id}')">Like (${likes})</button>
                         <button onclick="replyToMessage('${message.id}')">Reply</button>
                         <div class="like-count">${likes} likes</div>
+                        ${isAdmin() ? `
+                            <button onclick="editPost('${message.id}')">Edit</button>
+                            <button onclick="deletePost('${message.id}')">Delete</button>
+                        ` : ''}
                     </div>
                     <ul class="replies" id="replies-${message.id}"></ul>
                 `;
@@ -406,6 +410,42 @@ function showMessages(sortOrder = 'desc') {
         console.error('Messages list element not found in the DOM.');
     }
 }
+
+function isAdmin() {
+    const user = firebase.auth().currentUser;
+    return user && adminRoles.admins.includes(user.uid);
+}
+
+// Function to edit a post
+function editPost(messageId) {
+    const newText = prompt("Enter the new text for the post:");
+    if (newText === null || newText.trim() === '') return;
+
+    const messageRef = db.ref(`messages/${messageId}`);
+    messageRef.update({
+        text: newText
+    }).then(() => {
+        showAlert('Post updated successfully!', 'success');
+    }).catch((error) => {
+        console.error('Failed to update post:', error);
+        showAlert('Failed to update post.', 'error');
+    });
+}
+
+// Function to delete a post
+function deletePost(messageId) {
+    const confirmDelete = confirm("Are you sure you want to delete this post?");
+    if (!confirmDelete) return;
+
+    const messageRef = db.ref(`messages/${messageId}`);
+    messageRef.remove().then(() => {
+        showAlert('Post deleted successfully!', 'success');
+    }).catch((error) => {
+        console.error('Failed to delete post:', error);
+        showAlert('Failed to delete post.', 'error');
+    });
+}
+
 function toggleLike(messageId) {
     const messageRef = db.ref(`messages/${messageId}`);
     messageRef.transaction((message) => {

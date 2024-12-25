@@ -278,7 +278,7 @@ function sendMessage() {
                             console.error('Failed to save message:', error);
                             alert('Failed to save message.');
                         } else {
-                            showAlert('Message sent successfully!', 'success');
+                            alert('Message sent successfully!');
                             resetForm();
                             loadUserMessages(); // Load user messages after sending a new one
                         }

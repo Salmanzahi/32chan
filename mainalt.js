@@ -511,8 +511,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
     showMessages();
     loadUserMessages();
 
-    // Show admin name input field if the user is an admin
-    if (isAdmin()) {
-        document.getElementById('adminNameContainer').style.display = 'block';
-    }
+    auth.onAuthStateChanged((user) => {
+        if (user && isAdmin()) {
+            document.getElementById('adminNameContainer').style.display = 'block';
+        }
+    });
 });

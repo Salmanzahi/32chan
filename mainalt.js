@@ -359,8 +359,6 @@ function showMessages(sortOrder = 'desc') {
                 const li = document.createElement('li');
                 li.innerHTML = `
                       <div class="header">
-                        <img src="${message.userPhoto || 'default-avatar.png'}" alt="User Photo">
-                        <div class="name">${message.userName || 'Anonymous User'}</div>
                         <div class="timestamp">${new Date(timestamp).toLocaleString()}</div>
                     </div>
                     <div class="content">

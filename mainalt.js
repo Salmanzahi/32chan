@@ -218,6 +218,7 @@ function toggleMessages() {
 
 // Function to send a message with an optional image
 function sendMessage() {
+    const titleInput = document.getElementById('titleInput').value;
     const messageInput = document.getElementById('messageInput').value;
     const imageInput = document.getElementById('imageInput').files[0];
     const user = firebase.auth().currentUser;
@@ -227,14 +228,15 @@ function sendMessage() {
         return;
     }
 
-    if (messageInput.trim() === '' && !imageInput) {
-        alert("Message or image cannot be empty.");
+    if (titleInput.trim() === '' || (messageInput.trim() === '' && !imageInput)) {
+        alert("Title and message or image cannot be empty.");
         return;
     }
 
     // Create a new message reference
     const newMessageRef = db.ref('messages').push();
     const messageData = {
+        title: titleInput || null,
         text: messageInput || null,
         timestamp: Date.now(),
         userId: user.uid,

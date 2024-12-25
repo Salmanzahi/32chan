@@ -353,6 +353,7 @@ function showMessages(sortOrder = 'desc') {
                     <ul class="replies" id="replies-${message.id}"></ul>
             */
             messages.forEach((message) => {
+                const messageTitle = message.title || null;
                 const messageText = message.text || 'No text provided';
                 const timestamp = message.timestamp;
                 const imageUrl = message.imageUrl || null;

@@ -246,7 +246,7 @@ function sendMessage() {
     const user = firebase.auth().currentUser;
 
     if (isAdmin()) {
-        adminNameInput.style.display = 'block';
+        adminNameContainer.style.display = 'block';
     }
 
     if (!user) {

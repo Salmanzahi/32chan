@@ -74,8 +74,12 @@
                 <p></p>
                 <textarea id="messageInput" placeholder="Tulis pesan anonim Anda di sini..." style="margin-bottom: 15px;"></textarea>
                 <p></p>
-                <label for="adminNameInput">Admin Name (optional):</label>
-                <input type="text" id="adminNameInput" placeholder="Enter your admin name" style="margin-bottom: 15px;">
+                
+                <div id="adminNameContainer" class="admin-only" style="display: none;">
+                    <label for="adminNameInput">Admin Name (optional):</label>
+                    <input type="text" id="adminNameInput" placeholder="Enter your admin name" style="margin-bottom: 15px;">
+                </div>
+            
                 <label for="imageInput">Upload Image (optional):</label>
                 <input type="file" id="imageInput" accept="image/*" aria-label="Upload image" title="Upload an optional image">
                 

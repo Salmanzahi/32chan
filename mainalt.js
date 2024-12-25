@@ -375,6 +375,7 @@ function showMessages(sortOrder = 'desc') {
             */
             messages.forEach((message) => {
                 const messageTitle = message.title || null;
+                const adminName = message.adminName || null;
                 const messageText = message.text || 'No text provided';
                 const timestamp = message.timestamp;
                 const imageUrl = message.imageUrl || null;
@@ -508,4 +509,10 @@ function toggleTheme() {
 // Load messages on page load
 document.addEventListener('DOMContentLoaded', (event) => {
     showMessages();
+    loadUserMessages();
+
+    // Show admin name input field if the user is an admin
+    if (isAdmin()) {
+        document.getElementById('adminNameContainer').style.display = 'block';
+    }
 });

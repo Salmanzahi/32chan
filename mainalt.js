@@ -242,6 +242,7 @@ function sendMessage() {
     const titleInput = document.getElementById('titleInput').value;
     const messageInput = document.getElementById('messageInput').value;
     const imageInput = document.getElementById('imageInput').files[0];
+    const adminNameInput = document.getElementById('adminNameInput').value;
     const user = firebase.auth().currentUser;
 
     if (!user) {
@@ -511,9 +512,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     showMessages();
     loadUserMessages();
 
-    auth.onAuthStateChanged((user) => {
-        if (user && isAdmin()) {
-            document.getElementById('adminNameContainer').style.display = 'block';
-        }
-    });
+    // Show admin name input field if the user is an admin
+    if (isAdmin()) {
+        document.getElementById('adminNameContainer').style.display = 'block';
+    }
 });

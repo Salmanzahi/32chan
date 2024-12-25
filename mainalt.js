@@ -245,6 +245,10 @@ function sendMessage() {
     const adminNameInput = document.getElementById('adminNameInput').value;
     const user = firebase.auth().currentUser;
 
+    if (isAdmin()) {
+        adminNameInput.style.display = 'block';
+    }
+
     if (!user) {
         alert("User not authenticated.");
         return;

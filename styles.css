@@ -323,6 +323,7 @@ input[type="file"]:focus {
 }
 
 /* Alert Design */
+/* Alert Design */
 .alert {
     padding: 15px;
     margin-bottom: 20px;
@@ -330,9 +331,20 @@ input[type="file"]:focus {
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     font-size: 16px;
-    transition: border-color 0.3s, box-shadow 0.3s;
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
     background-color: #f9f9f9;
     color: #333;
+    position: fixed;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    opacity: 0;
+}
+
+.alert-show {
+    top: 20px;
+    opacity: 1;
 }
 
 .alert-success {

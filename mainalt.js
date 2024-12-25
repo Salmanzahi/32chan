@@ -54,8 +54,17 @@ function showAlert(message, type = 'info') {
 
     document.body.appendChild(alertContainer);
 
+    // Show the alert with transition
     setTimeout(() => {
-        alertContainer.remove();
+        alertContainer.classList.add('alert-show');
+    }, 100);
+
+    // Hide the alert after 3 seconds
+    setTimeout(() => {
+        alertContainer.classList.remove('alert-show');
+        setTimeout(() => {
+            alertContainer.remove();
+        }, 500);
     }, 3000);
 }
 

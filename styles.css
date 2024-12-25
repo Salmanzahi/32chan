@@ -146,14 +146,83 @@ ul {
     padding: 0;
 }
 
-li {
+/*li {
     background-color: #f9f9f9;
     margin-bottom: 10px;
     padding: 10px;
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}*/
+li {
+    box-sizing: border-box;
+    padding: 12px 12px 0px;
+    position: relative;
+    background-color: #fff;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
 }
 
+li:hover {
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+li .header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+li .header img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+li .header .name {
+    font-weight: bold;
+    color: #333;
+}
+
+li .header .timestamp {
+    font-size: 12px;
+    color: #999;
+    margin-left: auto;
+}
+
+li .content {
+    margin-bottom: 12px;
+    color: #555;
+}
+
+li .actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-top: 1px solid #eee;
+}
+
+li .actions button {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+li .actions button:hover {
+    background-color: #f0f0f0;
+}
+
+li .actions .like-count {
+    font-size: 14px;
+    color: #666;
+}
 .timestamp {
     display: block;
     margin-top: 10px;

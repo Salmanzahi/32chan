@@ -121,12 +121,14 @@ function hideUserProfile() {
     const googleSignInBtn = document.getElementById('googleSignInBtn');
     const anonymousSignInBtn = document.getElementById('anonymousSignInBtn');
     const mainContent = document.getElementById('mainContent');
+    const adminNotification = document.getElementById('adminNotification');
 
-    if (userProfile && googleSignInBtn && anonymousSignInBtn && mainContent) {
+    if (userProfile && googleSignInBtn && anonymousSignInBtn && mainContent && adminNotification) {
         userProfile.style.display = 'none';
         googleSignInBtn.style.display = 'block';
         anonymousSignInBtn.style.display = 'block';
         mainContent.style.display = 'none';
+        adminNotification.style.display = 'none';
     } else {
         console.error('One or more elements not found in the DOM.');
     }
@@ -323,15 +325,31 @@ function showMessages(sortOrder = 'desc') {
             });
 
             // Sort messages based on the selected sort order
-            if (sortOrder === 'asc') {
+            /*if (sortOrder === 'asc') {
                 messages.sort((a, b) => a.timestamp - b.timestamp);
             } else if (sortOrder === 'desc') {
                 messages.sort((a, b) => b.timestamp - a.timestamp);
             } else if (sortOrder === 'mostLiked') {
                 messages.sort((a, b) => (b.likes || 0) - (a.likes || 0));
-            }
+            }*/
+                if (sortOrder === 'asc') {
+                    messages.sort((a, b) => a.timestamp - b.timestamp);
+                } else if (sortOrder === 'desc') {
+                    messages.sort((a, b) => b.timestamp - a.timestamp);
+                } else if (sortOrder === 'mostLiked') {
+                    messages.sort((a, b) => (b.likes ? b.likes.length : 0) - (a.likes ? a.likes.length : 0));
+                }
 
             // Append sorted messages to the DOM
+
+            /*
+            <p>${messageText}</p>
+                    ${imageUrl ? `<img src="${imageUrl}" alt="Message Image" style="max-width: 100%; height: auto;">` : ''}
+                    <span class="timestamp">${new Date(timestamp).toLocaleString()}</span>
+                    <button onclick="toggleLike('${message.id}')">Like (${likes})</button>
+                    <button onclick="replyToMessage('${message.id}')">Reply</button>
+                    <ul class="replies" id="replies-${message.id}"></ul>
+            */
             messages.forEach((message) => {
                 const messageText = message.text || 'No text provided';
                 const timestamp = message.timestamp;
@@ -340,11 +358,20 @@ function showMessages(sortOrder = 'desc') {
                 // Create message list item
                 const li = document.createElement('li');
                 li.innerHTML = `
-                    <p>${messageText}</p>
-                    ${imageUrl ? `<img src="${imageUrl}" alt="Message Image" style="max-width: 100%; height: auto;">` : ''}
-                    <span class="timestamp">${new Date(timestamp).toLocaleString()}</span>
-                    <button onclick="toggleLike('${message.id}')">Like (${likes})</button>
-                    <button onclick="replyToMessage('${message.id}')">Reply</button>
+                      <div class="header">
+                        <img src="${message.userPhoto || 'default-avatar.png'}" alt="User Photo">
+                        <div class="name">${message.userName || 'Anonymous User'}</div>
+                        <div class="timestamp">${new Date(timestamp).toLocaleString()}</div>
+                    </div>
+                    <div class="content">
+                        <p>${messageText}</p>
+                        ${imageUrl ? `<img src="${imageUrl}" alt="Message Image" style="max-width: 100%; height: auto;">` : ''}
+                    </div>
+                    <div class="actions">
+                        <button onclick="toggleLike('${message.id}')">Like (${likes})</button>
+                        <button onclick="replyToMessage('${message.id}')">Reply</button>
+                        <div class="like-count">${likes} likes</div>
+                    </div>
                     <ul class="replies" id="replies-${message.id}"></ul>
                 `;
                 messagesList.appendChild(li);

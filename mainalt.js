@@ -46,6 +46,18 @@ function anonymousSignIn() {
             alert('Failed to sign in anonymously: ' + error.message);
         });
 }
+// Function to show an alert
+function showAlert(message, type = 'info') {
+    const alertContainer = document.createElement('div');
+    alertContainer.className = `alert alert-${type}`;
+    alertContainer.textContent = message;
+
+    document.body.appendChild(alertContainer);
+
+    setTimeout(() => {
+        alertContainer.remove();
+    }, 3000);
+}
 
 // Function to handle Sign-Out
 /*function signOut() {
@@ -266,7 +278,7 @@ function sendMessage() {
                             console.error('Failed to save message:', error);
                             alert('Failed to save message.');
                         } else {
-                            alert('Message sent successfully!');
+                            showAlert('Message sent successfully!', 'success');
                             resetForm();
                             loadUserMessages(); // Load user messages after sending a new one
                         }

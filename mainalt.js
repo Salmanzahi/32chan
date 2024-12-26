@@ -615,6 +615,8 @@ function replyToMessage(messageId) {
             setTimeout(() => {
                 window.location.href = '#messagesContainer';
                 location.reload();
+                messagesContainer.style.display = 'block';
+                formContainer.style.display = 'none';
             }, 1000);
         }
     }).catch((error) => {

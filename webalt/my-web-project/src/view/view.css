@@ -1,0 +1,32 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    color: #333;
+}
+
+.message-container {
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.message {
+    border-bottom: 1px solid #eaeaea;
+    padding: 10px 0;
+}
+
+.message:last-child {
+    border-bottom: none;
+}
+
+.timestamp {
+    font-size: 0.9em;
+    color: #999;
+}

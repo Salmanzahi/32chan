@@ -604,6 +604,9 @@ function replyToMessage(messageId) {
 
     const formContainer = document.getElementById('formContainer');
     const messagesContainer = document.getElementById('messagesContainer');
+    const sortAscBtn = document.getElementById('sortAscBtn');
+    const sortDescBtn = document.getElementById('sortDescBtn');
+    const sortMostLikedBtn = document.getElementById('sortMostLikedBtn');
 
     const replyText = prompt("Enter your reply:");
     if (replyText === null || replyText.trim() === '') return;
@@ -618,12 +621,14 @@ function replyToMessage(messageId) {
         if (isAdmin()) {
             setTimeout(() => {
                 location.reload();
-                messagesContainer.style.display = 'block';
-                formContainer.style.display = 'none';
             }, 1000);
         }
-        messagesContainer.style.display = 'block';
         formContainer.style.display = 'none';
+        messagesContainer.style.display = 'block';
+        sortAscBtn.style.display = 'inline-block';
+        sortDescBtn.style.display = 'inline-block';
+        sortMostLikedBtn.style.display = 'inline-block';
+        showMessages(); // Load all messages when showing the messages container
     }).catch((error) => {
         console.error('Failed to add reply:', error);
         showAlert('Failed to add reply.', 'error');

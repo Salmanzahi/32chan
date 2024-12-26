@@ -365,7 +365,7 @@ function showMessages(sortOrder = 'desc') {
                 } else if (sortOrder === 'desc') {
                     messages.sort((a, b) => b.timestamp - a.timestamp);
                 } else if (sortOrder === 'mostLiked') {
-                    messages.sort((a, b) => (b.likes ? b.likes.length : 0) - (a.likes ? a.likes.length : 0));
+                    messages.sort((a, b) => (b.likes || 0) - (a.likes || 0));
                 }
 
             // Append sorted messages to the DOM
@@ -464,7 +464,7 @@ function deletePost(messageId) {
 }
 
 function toggleLike(messageId) {
-    const messageRef = db.ref(`messages/${messageId}`);
+    /*const messageRef = db.ref(`messages/${messageId}`);
     messageRef.transaction((message) => {
         if (message) {
             if (message.likes && message.likes.includes(auth.currentUser.uid)) {
@@ -489,7 +489,34 @@ function toggleLike(messageId) {
             console.error('Failed to delete post:', error);
             showAlert('Failed to delete post.', 'error');
         });
+    });*/
+    const user = firebase.auth().currentUser;
+    if (!user) {
+        alert("User not authenticated.");
+        return;
+    }
+
+    const messageRef = db.ref(`messages/${messageId}`);
+    messageRef.transaction((message) => {
+        if (message) {
+            if (!message.likes) {
+                message.likes = 0;
+            }
+            if (!message.likedBy) {
+                message.likedBy = {};
+            }
+
+            if (message.likedBy[user.uid]) {
+                message.likes -= 1;
+                delete message.likedBy[user.uid];
+            } else {
+                message.likes += 1;
+                message.likedBy[user.uid] = true;
+            }
+        }
+        return message;
     });
+
 }
 // Function to reply to a message
 function replyToMessage(messageId) {

@@ -435,6 +435,7 @@ function editPost(messageId) {
         showAlert('Post updated successfully!', 'success');
         if (isAdmin()) {
             setTimeout(() => {
+                window.location.href = '#messagesContainer';
                 location.reload();
             }, 1000);
         }
@@ -454,6 +455,7 @@ function deletePost(messageId) {
         showAlert('Post deleted successfully!', 'success');
         if (isAdmin()) {
             setTimeout(() => {
+                window.location.href = '#messagesContainer';
                 location.reload();
             }, 1000);
         }

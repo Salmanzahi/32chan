@@ -601,6 +601,10 @@ function toggleLike(messageId) {
 }
 // Function to reply to a message
 function replyToMessage(messageId) {
+
+    const formContainer = document.getElementById('formContainer');
+    const messagesContainer = document.getElementById('messagesContainer');
+    
     const replyText = prompt("Enter your reply:");
     if (replyText === null || replyText.trim() === '') return;
 
@@ -619,6 +623,8 @@ function replyToMessage(messageId) {
                 formContainer.style.display = 'none';
             }, 1000);
         }
+        messagesContainer.style.display = 'block';
+        formContainer.style.display = 'none';
     }).catch((error) => {
         console.error('Failed to add reply:', error);
         showAlert('Failed to add reply.', 'error');

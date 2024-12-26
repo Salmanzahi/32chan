@@ -384,9 +384,10 @@ function showMessages(sortOrder = 'desc') {
                 const messageText = message.text || 'No text provided';
                 const timestamp = message.timestamp;
                 const imageUrl = message.imageUrl || null;
-                const likes = message.likes ? message.likes.length : 0;
+                const likes = message.likes || 0;
                 // Create message list item
                 const li = document.createElement('li');
+                li.setAttribute('data-id', message.id);
                 li.innerHTML = `
                   <div class="header">
                         ${adminName ? `<div class="admin-badge" style="color: red;">Administrator (${adminName})</div>` : ''}

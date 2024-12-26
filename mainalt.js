@@ -532,10 +532,11 @@ function deletePost(messageId) {
     const messageRef = db.ref(`messages/${messageId}`);
     messageRef.remove().then(() => {
         showAlert('Post deleted successfully!', 'success');
-        // Remove the post in real-time
-        const postElement = document.querySelector(`li[data-id="${messageId}"]`);
-        if (postElement) {
-            postElement.remove();
+        if (isAdmin()) {
+            setTimeout(() => {
+                window.location.href = '#messagesContainer';
+                location.reload();
+            }, 1000);
         }
     }).catch((error) => {
         console.error('Failed to delete post:', error);
@@ -604,9 +605,21 @@ function replyToMessage(messageId) {
     if (replyText === null || replyText.trim() === '') return;
 
     const repliesRef = db.ref(`messages/${messageId}/replies`);
-    repliesRef.push({
+    const newReplyRef = repliesRef.push();
+    newReplyRef.set({
         text: replyText,
         timestamp: Date.now()
+    }).then(() => {
+        showAlert('Reply added successfully!', 'success');
+        if (isAdmin()) {
+            setTimeout(() => {
+                window.location.href = '#messagesContainer';
+                location.reload();
+            }, 1000);
+        }
+    }).catch((error) => {
+        console.error('Failed to add reply:', error);
+        showAlert('Failed to add reply.', 'error');
     });
 }
 

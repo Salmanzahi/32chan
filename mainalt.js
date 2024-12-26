@@ -353,31 +353,15 @@ function showMessages(sortOrder = 'desc') {
             });
 
             // Sort messages based on the selected sort order
-            /*if (sortOrder === 'asc') {
+            if (sortOrder === 'asc') {
                 messages.sort((a, b) => a.timestamp - b.timestamp);
             } else if (sortOrder === 'desc') {
                 messages.sort((a, b) => b.timestamp - a.timestamp);
             } else if (sortOrder === 'mostLiked') {
                 messages.sort((a, b) => (b.likes || 0) - (a.likes || 0));
-            }*/
-                if (sortOrder === 'asc') {
-                    messages.sort((a, b) => a.timestamp - b.timestamp);
-                } else if (sortOrder === 'desc') {
-                    messages.sort((a, b) => b.timestamp - a.timestamp);
-                } else if (sortOrder === 'mostLiked') {
-                    messages.sort((a, b) => (b.likes || 0) - (a.likes || 0));
-                }
+            }
 
             // Append sorted messages to the DOM
-
-            /*
-            <p>${messageText}</p>
-                    ${imageUrl ? `<img src="${imageUrl}" alt="Message Image" style="max-width: 100%; height: auto;">` : ''}
-                    <span class="timestamp">${new Date(timestamp).toLocaleString()}</span>
-                    <button onclick="toggleLike('${message.id}')">Like (${likes})</button>
-                    <button onclick="replyToMessage('${message.id}')">Reply</button>
-                    <ul class="replies" id="replies-${message.id}"></ul>
-            */
             messages.forEach((message) => {
                 const messageTitle = message.title || null;
                 const adminName = message.adminName || null;
@@ -385,11 +369,12 @@ function showMessages(sortOrder = 'desc') {
                 const timestamp = message.timestamp;
                 const imageUrl = message.imageUrl || null;
                 const likes = message.likes || 0;
+
                 // Create message list item
                 const li = document.createElement('li');
                 li.setAttribute('data-id', message.id);
                 li.innerHTML = `
-                  <div class="header">
+                    <div class="header">
                         ${adminName ? `<div class="admin-badge" style="color: red;">Administrator (${adminName})</div>` : ''}
                         <div class="title" style="font-weight: bold; font-size: 1.2em;">${messageTitle || 'Legacy Post'}</div>
                         <div class="timestamp">${new Date(timestamp).toLocaleString()}</div>

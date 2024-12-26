@@ -601,7 +601,7 @@ function toggleLike(messageId) {
 }
 // Function to reply to a message
 function replyToMessage(messageId) {
-
+/*
     const formContainer = document.getElementById('formContainer');
     const messagesContainer = document.getElementById('messagesContainer');
     const sortAscBtn = document.getElementById('sortAscBtn');
@@ -633,6 +633,39 @@ function replyToMessage(messageId) {
         console.error('Failed to add reply:', error);
         showAlert('Failed to add reply.', 'error');
     });
+
+    */
+   
+    const replyText = prompt("Enter your reply:");
+    if (replyText === null || replyText.trim() === '') return;
+
+    const repliesRef = db.ref(`messages/${messageId}/replies`);
+    const newReplyRef = repliesRef.push();
+    newReplyRef.set({
+        text: replyText,
+        timestamp: Date.now()
+    }).then(() => {
+        showAlert('Reply added successfully!', 'success');
+        // Reload messages and set view to messages section
+        showMessages();
+        toggleViewToMessages();
+    }).catch((error) => {
+        console.error('Failed to add reply:', error);
+        showAlert('Failed to add reply.', 'error');
+    });
+}
+function toggleViewToMessages() {
+    const formContainer = document.getElementById('formContainer');
+    const viewMessagesContainer = document.getElementById('viewMessagesContainer');
+    const sortAscBtn = document.getElementById('sortAscBtn');
+    const sortDescBtn = document.getElementById('sortDescBtn');
+    const sortMostLikedBtn = document.getElementById('sortMostLikedBtn');
+
+    formContainer.style.display = 'none';
+    viewMessagesContainer.style.display = 'block';
+    sortAscBtn.style.display = 'block';
+    sortDescBtn.style.display = 'block';
+    sortMostLikedBtn.style.display = 'block';
 }
 
 // Function to load replies for a specific message

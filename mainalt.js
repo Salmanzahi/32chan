@@ -329,7 +329,7 @@ function resetForm() {
 
 // Function to show and load messages
 function showMessages(sortOrder = 'desc') {
-    const messagesList = document.getElementById('messagesList');
+    /*const messagesList = document.getElementById('messagesList');
     const sortButtons = document.querySelectorAll('.buttons button');
 
     if (messagesList) {
@@ -401,7 +401,83 @@ function showMessages(sortOrder = 'desc') {
         });
     } else {
         console.error('Messages list element not found in the DOM.');
-    }
+    }*/
+        const messagesList = document.getElementById('messagesList');
+        const sortButtons = document.querySelectorAll('.buttons button');
+    
+        if (messagesList) {
+            messagesList.innerHTML = ''; // Clear existing messages before appending new ones
+    
+            // Highlight the selected sort button
+            sortButtons.forEach(button => button.classList.remove('active'));
+            if (sortOrder === 'asc') {
+                document.getElementById('sortAscBtn').classList.add('active');
+            } else if (sortOrder === 'desc') {
+                document.getElementById('sortDescBtn').classList.add('active');
+            } else if (sortOrder === 'mostLiked') {
+                document.getElementById('sortMostLikedBtn').classList.add('active');
+            }
+    
+            const messagesRef = db.ref('messages');
+            messagesRef.off('value'); // Detach any existing listener
+    
+            messagesRef.on('value', (snapshot) => {
+                const messages = [];
+                snapshot.forEach((childSnapshot) => {
+                    const messageData = childSnapshot.val();
+                    messages.push({ id: childSnapshot.key, ...messageData });
+                });
+    
+                // Sort messages based on the selected sort order
+                if (sortOrder === 'asc') {
+                    messages.sort((a, b) => a.timestamp - b.timestamp);
+                } else if (sortOrder === 'desc') {
+                    messages.sort((a, b) => b.timestamp - a.timestamp);
+                } else if (sortOrder === 'mostLiked') {
+                    messages.sort((a, b) => (b.likes || 0) - (a.likes || 0));
+                }
+    
+                // Append sorted messages to the DOM
+                messages.forEach((message) => {
+                    const messageTitle = message.title || null;
+                    const adminName = message.adminName || null;
+                    const messageText = message.text || 'No text provided';
+                    const timestamp = message.timestamp;
+                    const imageUrl = message.imageUrl || null;
+                    const likes = message.likes || 0;
+    
+                    // Create message list item
+                    const li = document.createElement('li');
+                    li.setAttribute('data-id', message.id);
+                    li.innerHTML = `
+                        <div class="header">
+                            ${adminName ? `<div class="admin-badge" style="color: red;">Administrator (${adminName})</div>` : ''}
+                            <div class="title" style="font-weight: bold; font-size: 1.2em;">${messageTitle || 'Legacy Post'}</div>
+                            <div class="timestamp">${new Date(timestamp).toLocaleString()}</div>
+                        </div>
+                        <div class="content">
+                            <p>${messageText}</p>
+                            ${imageUrl ? `<img src="${imageUrl}" alt="Message Image" style="max-width: 100%; height: auto;">` : ''}
+                        </div>
+                        <div class="actions">
+                            <button onclick="toggleLike('${message.id}')">Like (${likes})</button>
+                            <button onclick="replyToMessage('${message.id}')">Reply</button>
+                            <div class="like-count">${likes} likes</div>
+                            ${isAdmin() ? `
+                                <button onclick="editPost('${message.id}')">Edit</button>
+                                <button onclick="deletePost('${message.id}')">Delete</button>
+                            ` : ''}
+                        </div>
+                        <ul class="replies" id="replies-${message.id}"></ul>
+                    `;
+                    messagesList.appendChild(li);
+    
+                    loadReplies(message.id);
+                });
+            });
+        } else {
+            console.error('Messages list element not found in the DOM.');
+        }
 }
 
 function isAdmin() {
@@ -411,7 +487,7 @@ function isAdmin() {
 
 // Function to edit a post
 function editPost(messageId) {
-    const newText = prompt("Enter the new text for the post:");
+    /*const newText = prompt("Enter the new text for the post:");
     if (newText === null || newText.trim() === '') return;
 
     const messageRef = db.ref(`messages/${messageId}`);
@@ -423,6 +499,24 @@ function editPost(messageId) {
         const postElement = document.querySelector(`li[data-id="${messageId}"] .content p`);
         if (postElement) {
             postElement.textContent = newText;
+        }
+    }).catch((error) => {
+        console.error('Failed to update post:', error);
+        showAlert('Failed to update post.', 'error');
+    });*/
+    const newText = prompt("Enter the new text for the post:");
+    if (newText === null || newText.trim() === '') return;
+
+    const messageRef = db.ref(`messages/${messageId}`);
+    messageRef.update({
+        text: newText
+    }).then(() => {
+        showAlert('Post updated successfully!', 'success');
+        if (isAdmin()) {
+            setTimeout(() => {
+                window.location.href = '#messagesContainer';
+                location.reload();
+            }, 1000);
         }
     }).catch((error) => {
         console.error('Failed to update post:', error);

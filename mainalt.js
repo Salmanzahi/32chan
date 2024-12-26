@@ -433,6 +433,11 @@ function editPost(messageId) {
         text: newText
     }).then(() => {
         showAlert('Post updated successfully!', 'success');
+        if (isAdmin()) {
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
+        }
     }).catch((error) => {
         console.error('Failed to update post:', error);
         showAlert('Failed to update post.', 'error');
@@ -447,6 +452,11 @@ function deletePost(messageId) {
     const messageRef = db.ref(`messages/${messageId}`);
     messageRef.remove().then(() => {
         showAlert('Post deleted successfully!', 'success');
+        if (isAdmin()) {
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
+        }
     }).catch((error) => {
         console.error('Failed to delete post:', error);
         showAlert('Failed to delete post.', 'error');

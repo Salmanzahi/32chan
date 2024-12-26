@@ -446,7 +446,21 @@ function editPost(messageId) {
 
 // Function to delete a post
 function deletePost(messageId) {
-   
+    const confirmDelete = confirm("Are you sure you want to delete this post?");
+    if (!confirmDelete) return;
+
+    const messageRef = db.ref(`messages/${messageId}`);
+    messageRef.remove().then(() => {
+        showAlert('Post deleted successfully!', 'success');
+        // Remove the post in real-time
+        const postElement = document.querySelector(`li[data-id="${messageId}"]`);
+        if (postElement) {
+            postElement.remove();
+        }
+    }).catch((error) => {
+        console.error('Failed to delete post:', error);
+        showAlert('Failed to delete post.', 'error');
+    });
 }
 
 function toggleLike(messageId) {

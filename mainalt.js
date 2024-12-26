@@ -433,11 +433,10 @@ function editPost(messageId) {
         text: newText
     }).then(() => {
         showAlert('Post updated successfully!', 'success');
-        if (isAdmin()) {
-            setTimeout(() => {
-                window.location.href = '#messagesContainer';
-                location.reload();
-            }, 1000);
+        // Update the post in real-time
+        const postElement = document.querySelector(`li[data-id="${messageId}"] .content p`);
+        if (postElement) {
+            postElement.textContent = newText;
         }
     }).catch((error) => {
         console.error('Failed to update post:', error);
@@ -447,22 +446,7 @@ function editPost(messageId) {
 
 // Function to delete a post
 function deletePost(messageId) {
-    const confirmDelete = confirm("Are you sure you want to delete this post?");
-    if (!confirmDelete) return;
-
-    const messageRef = db.ref(`messages/${messageId}`);
-    messageRef.remove().then(() => {
-        showAlert('Post deleted successfully!', 'success');
-        if (isAdmin()) {
-            setTimeout(() => {
-                window.location.href = '#messagesContainer';
-                location.reload();
-            }, 1000);
-        }
-    }).catch((error) => {
-        console.error('Failed to delete post:', error);
-        showAlert('Failed to delete post.', 'error');
-    });
+   
 }
 
 function toggleLike(messageId) {
@@ -476,7 +460,21 @@ function toggleLike(messageId) {
                 message.likes.push(auth.currentUser.uid);
             }
         }
-        return message;
+        return message;const confirmDelete = confirm("Are you sure you want to delete this post?");
+        if (!confirmDelete) return;
+    
+        const messageRef = db.ref(`messages/${messageId}`);
+        messageRef.remove().then(() => {
+            showAlert('Post deleted successfully!', 'success');
+            // Remove the post in real-time
+            const postElement = document.querySelector(`li[data-id="${messageId}"]`);
+            if (postElement) {
+                postElement.remove();
+            }
+        }).catch((error) => {
+            console.error('Failed to delete post:', error);
+            showAlert('Failed to delete post.', 'error');
+        });
     });
 }
 // Function to reply to a message

@@ -862,5 +862,5 @@ function loadAdminAnnouncement() {
 // Load the admin announcement on page load
 document.addEventListener('DOMContentLoaded', (event) => {
     loadAdminAnnouncement();
-    handleUndefinedRoutes();
+
 });

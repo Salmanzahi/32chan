@@ -191,16 +191,17 @@ function toggleView() {
     const sortAscBtn = document.getElementById('sortAscBtn');
     const sortDescBtn = document.getElementById('sortDescBtn');
     const sortMostLikedBtn = document.getElementById('sortMostLikedBtn');
-
+    const userMessagesList = document.getElementById('userMessagesList');
     if (formContainer.style.display === 'none') {
         formContainer.style.display = 'block';
         messagesContainer.style.display = 'none';
         sortAscBtn.style.display = 'none';
         sortDescBtn.style.display = 'none';
         sortMostLikedBtn.style.display = 'none';
-        loadUserMessages(); // Load user messages when showing the form
+        userMessagesList.style.display = 'block';
     } else {
         formContainer.style.display = 'none';
+        userMessagesList.style.display = 'none';
         messagesContainer.style.display = 'block';
         sortAscBtn.style.display = 'inline-block';
         sortDescBtn.style.display = 'inline-block';
@@ -662,6 +663,7 @@ function toggleViewToMessages() {
     const sortMostLikedBtn = document.getElementById('sortMostLikedBtn');
 
     formContainer.style.display = 'none';
+    userMessagesList.style.display = 'none';
     viewMessagesContainer.style.display = 'block';
     sortAscBtn.style.display = 'block';
     sortDescBtn.style.display = 'block';

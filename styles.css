@@ -408,3 +408,24 @@ input[type="file"]:focus {
     outline: none;
 }
 
+/* Admin Announcement Section */
+.admin-announcement {
+    background-color: #ffeb3b;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.admin-announcement h2 {
+    margin: 0 0 10px 0;
+    font-size: 1.5em;
+    color: #333;
+}
+
+.admin-announcement p {
+    margin: 0;
+    font-size: 1.2em;
+    color: #555;
+}

@@ -175,11 +175,20 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 // Check authentication state on page load
 auth.onAuthStateChanged((user) => {
-    if (user) {
+    /*if (user) {
         displayUserProfile(user);
     } else {
         hideUserProfile();
-    }
+    }*/
+        if (user) {
+            displayUserProfile(user);
+            loadUserMessages(); // Load user messages after authentication
+            if (isAdmin()) {
+                document.getElementById('adminNameContainer').style.display = 'block';
+            }
+        } else {
+            hideUserProfile();
+        }
 });
 
 // References to Firebase services

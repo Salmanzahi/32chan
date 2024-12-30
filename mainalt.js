@@ -1,6 +1,13 @@
+/*
+WHAT ARE U DOING IN HERE ?
+KASIHANI AKU PLS JANGAN DI HACK WEB KU PLS !!!
+
+*/ 
+
 // Firebase configuration
 const script = document.createElement('script');
 script.src = "./role.js"
+script.src = "./404.js"
 document.head.appendChild(script);
 const firebaseConfig = {
     apiKey: "AIzaSyAYRcDk0UkOh9w7o1umQ_cDkPVxVOQojAw",
@@ -855,4 +862,5 @@ function loadAdminAnnouncement() {
 // Load the admin announcement on page load
 document.addEventListener('DOMContentLoaded', (event) => {
     loadAdminAnnouncement();
+    handleUndefinedRoutes();
 });

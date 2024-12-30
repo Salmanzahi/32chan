@@ -834,3 +834,25 @@ function deleteUserPost(messageId) {
         showAlert('Failed to delete post.', 'error');
     });
 }
+
+// Function to load admin announcement
+function loadAdminAnnouncement() {
+    const announcementText = document.getElementById('announcementText');
+    const adminAnnouncement = document.getElementById('adminAnnouncement');
+
+    // Fetch the announcement content from a source (e.g., Firebase, local storage, etc.)
+    // For this example, we'll use a hardcoded announcement
+    const announcementContent = "Welcome to 32Chan! Please follow the community guidelines.";
+
+    if (announcementContent) {
+        announcementText.textContent = announcementContent;
+        adminAnnouncement.style.display = 'block';
+    } else {
+        adminAnnouncement.style.display = 'none';
+    }
+}
+
+// Load the admin announcement on page load
+document.addEventListener('DOMContentLoaded', (event) => {
+    loadAdminAnnouncement();
+});

@@ -17,6 +17,26 @@ firebase.initializeApp(firebaseConfig);
 // Initialize Firebase Authentication and get a reference to the service
 const auth = firebase.auth();
 
+function requestNotificationPermission() {
+    if ('Notification' in window) {
+        Notification.requestPermission().then((permission) => {
+            if (permission === 'granted') {
+                console.log('Notification permission granted.');
+            } else {
+                console.log('Notification permission denied.');
+            }
+        });
+    } else {
+        console.log('This browser does not support notifications.');
+    }
+}
+
+// Send a notification
+function sendNotification(title, options) {
+    if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification(title, options);
+    }
+}
 // Function to handle Google Sign-In
 function googleSignIn() {
     console.log('Google Sign-In button clicked');
@@ -183,6 +203,9 @@ auth.onAuthStateChanged((user) => {
         if (user) {
             displayUserProfile(user);
             loadUserMessages(); // Load user messages after authentication
+            if (!user.isAnonymous) {
+                requestNotificationPermission(); // Request notification permission if the user is not anonymous
+            }
             if (isAdmin()) {
                 document.getElementById('adminNameContainer').style.display = 'block';
             }
@@ -485,6 +508,18 @@ function showMessages(sortOrder = 'desc') {
                     loadReplies(message.id);
                 });
             });
+
+            // Listen for new posts and send notifications
+        messagesRef.on('child_added', (snapshot) => {
+            const messageData = snapshot.val();
+            const title = messageData.title || 'New Post';
+            const options = {
+                body: messageData.text || 'No text provided',
+                icon: messageData.imageUrl || 'default-icon.png'
+            };
+            sendNotification(title, options);
+        });
+        
         } else {
             console.error('Messages list element not found in the DOM.');
         }

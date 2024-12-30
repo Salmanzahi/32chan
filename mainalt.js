@@ -3,6 +3,7 @@ WHAT ARE U DOING IN HERE ?
 KASIHANI AKU PLS JANGAN DI HACK WEB KU PLS !!!
 
 */ 
+import { adminRoles } from './role.js';
 
 // Firebase configuration
 const script = document.createElement('script');

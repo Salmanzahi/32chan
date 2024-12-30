@@ -842,7 +842,7 @@ function loadAdminAnnouncement() {
 
     // Fetch the announcement content from a source (e.g., Firebase, local storage, etc.)
     // For this example, we'll use a hardcoded announcement
-    const announcementContent = "Welcome to 32Chan! Please follow the community guidelines.";
+    const announcementContent = "This web is still on preview, please report any bugs you found to the admin.";
 
     if (announcementContent) {
         announcementText.textContent = announcementContent;

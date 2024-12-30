@@ -742,7 +742,7 @@ function loadUserMessages() {
             // Create message list item
             const li = document.createElement('li');
             li.innerHTML = `
-                <div class="header">
+                 <div class="header">
                     <div class="title" style="font-weight: bold; font-size: 1.2em;">${messageTitle}</div>
                     <div class="timestamp">${new Date(timestamp).toLocaleString()}</div>
                 </div>
@@ -750,8 +750,43 @@ function loadUserMessages() {
                     <p>${messageText}</p>
                     ${imageUrl ? `<img src="${imageUrl}" alt="Message Image" style="max-width: 100%; height: auto;">` : ''}
                 </div>
+                <div class="actions">
+                    <button onclick="editUserPost('${childSnapshot.key}')">Edit</button>
+                    <button onclick="deleteUserPost('${childSnapshot.key}')">Delete</button>
+                </div>
             `;
             userMessagesList.appendChild(li);
         });
+    });
+}
+
+function editUserPost(messageId) {
+    const newText = prompt("Enter the new text for the post:");
+    if (newText === null || newText.trim() === '') return;
+
+    const messageRef = db.ref(`messages/${messageId}`);
+    messageRef.update({
+        text: newText
+    }).then(() => {
+        showAlert('Post updated successfully!', 'success');
+        loadUserMessages(); // Reload user messages to reflect the update
+    }).catch((error) => {
+        console.error('Failed to update post:', error);
+        showAlert('Failed to update post.', 'error');
+    });
+}
+
+// Function to delete a user's post
+function deleteUserPost(messageId) {
+    const confirmDelete = confirm("Are you sure you want to delete this post?");
+    if (!confirmDelete) return;
+
+    const messageRef = db.ref(`messages/${messageId}`);
+    messageRef.remove().then(() => {
+        showAlert('Post deleted successfully!', 'success');
+        loadUserMessages(); // Reload user messages to reflect the deletion
+    }).catch((error) => {
+        console.error('Failed to delete post:', error);
+        showAlert('Failed to delete post.', 'error');
     });
 }

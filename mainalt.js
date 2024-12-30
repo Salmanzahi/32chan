@@ -713,3 +713,43 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     });
 });
+
+function loadUserMessages() {
+    const user = firebase.auth().currentUser;
+    if (!user) {
+        console.error('User not authenticated.');
+        return;
+    }
+
+    const userMessagesList = document.getElementById('userMessagesList');
+    if (!userMessagesList) {
+        console.error('User messages list element not found in the DOM.');
+        return;
+    }
+
+    const userMessagesRef = db.ref('messages').orderByChild('userId').equalTo(user.uid);
+    userMessagesRef.on('value', (snapshot) => {
+        userMessagesList.innerHTML = ''; // Clear existing messages before appending new ones
+        snapshot.forEach((childSnapshot) => {
+            const messageData = childSnapshot.val();
+            const messageTitle = messageData.title || 'No title';
+            const messageText = messageData.text || 'No text provided';
+            const timestamp = messageData.timestamp;
+            const imageUrl = messageData.imageUrl || null;
+
+            // Create message list item
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <div class="header">
+                    <div class="title" style="font-weight: bold; font-size: 1.2em;">${messageTitle}</div>
+                    <div class="timestamp">${new Date(timestamp).toLocaleString()}</div>
+                </div>
+                <div class="content">
+                    <p>${messageText}</p>
+                    ${imageUrl ? `<img src="${imageUrl}" alt="Message Image" style="max-width: 100%; height: auto;">` : ''}
+                </div>
+            `;
+            userMessagesList.appendChild(li);
+        });
+    });
+}

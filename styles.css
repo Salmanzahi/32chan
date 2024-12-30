@@ -410,22 +410,23 @@ input[type="file"]:focus {
 
 /* Admin Announcement Section */
 .admin-announcement {
-    background-color: #ffeb3b;
-    padding: 15px;
+    background-color: #f0f0f0; /* Light grey background */
+    padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
     text-align: center;
+    border: 1px solid #ddd; /* Light border */
 }
 
 .admin-announcement h2 {
     margin: 0 0 10px 0;
     font-size: 1.5em;
-    color: #333;
+    color: #333; /* Dark grey text */
 }
 
 .admin-announcement p {
     margin: 0;
     font-size: 1.2em;
-    color: #555;
+    color: #555; /* Medium grey text */
 }

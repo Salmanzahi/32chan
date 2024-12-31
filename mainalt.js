@@ -279,6 +279,7 @@ function toggleMessages() {
         formContainer.style.display = 'block';
     }
 }
+//window.toggleMessages = toggleMessages;
 
 // Function to send a message with an optional image
 function sendMessage() {
@@ -356,7 +357,7 @@ function sendMessage() {
         });
     }
 }
-
+window.sendMessage = sendMessage;
 // Function to reset form fields
 function resetForm() {
     const messageInput = document.getElementById('messageInput');
@@ -369,7 +370,7 @@ function resetForm() {
         console.error('One or more form elements not found in the DOM.');
     }
 }
-
+//window.resetForm = resetForm;
 // Function to show and load messages
 function showMessages(sortOrder = 'desc') {
     /*const messagesList = document.getElementById('messagesList');
@@ -534,7 +535,7 @@ function showMessages(sortOrder = 'desc') {
             console.error('Messages list element not found in the DOM.');
         }
 }
-
+window.showMessages = showMessages;
 function isAdmin() {
     const user = firebase.auth().currentUser;
     return user && adminRoles.admins.includes(user.uid);
@@ -578,7 +579,7 @@ function editPost(messageId) {
         showAlert('Failed to update post.', 'error');
     });
 }
-
+window.editPost = editPost;
 // Function to delete a post
 function deletePost(messageId) {
     const confirmDelete = confirm("Are you sure you want to delete this post?");
@@ -598,7 +599,7 @@ function deletePost(messageId) {
         showAlert('Failed to delete post.', 'error');
     });
 }
-
+//window.editPost = editPost;
 function toggleLike(messageId) {
     /*const messageRef = db.ref(`messages/${messageId}`);
     messageRef.transaction((message) => {
@@ -654,6 +655,7 @@ function toggleLike(messageId) {
     });
 
 }
+//window.toggleLike = toggleLike;
 // Function to reply to a message
 function replyToMessage(messageId) {
 /*
@@ -749,7 +751,7 @@ function loadReplies(messageId) {
         });
     });
 }
-
+//window.loadReplies = loadReplies;
 // Function to toggle dark/light mode
 function toggleTheme() {
     const body = document.body;

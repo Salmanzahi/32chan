@@ -249,6 +249,8 @@ function toggleView() {
         showMessages(); // Load all messages when showing the messages container
     }
 }
+
+window.toggleView = toggleView;
 // Function to toggle the send message form
 function toggleForm() {
     const formContainer = document.getElementById('formContainer');

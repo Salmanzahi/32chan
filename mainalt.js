@@ -599,7 +599,7 @@ function deletePost(messageId) {
         showAlert('Failed to delete post.', 'error');
     });
 }
-//window.editPost = editPost;
+window.deletePost = deletePost;
 function toggleLike(messageId) {
     /*const messageRef = db.ref(`messages/${messageId}`);
     messageRef.transaction((message) => {
@@ -655,6 +655,8 @@ function toggleLike(messageId) {
     });
 
 }
+
+window.toggleLike = toggleLike;
 //window.toggleLike = toggleLike;
 // Function to reply to a message
 function replyToMessage(messageId) {
@@ -711,6 +713,7 @@ function replyToMessage(messageId) {
         showAlert('Failed to add reply.', 'error');
     });
 }
+window.replyToMessage = replyToMessage;
 function toggleViewToMessages() {
     const formContainer = document.getElementById('formContainer');
     const viewMessagesContainer = document.getElementById('viewMessagesContainer');
@@ -725,7 +728,7 @@ function toggleViewToMessages() {
     sortDescBtn.style.display = 'block';
     sortMostLikedBtn.style.display = 'block';
 }
-
+window.toggleViewToMessages = toggleViewToMessages;
 // Function to load replies for a specific message
 function loadReplies(messageId) {
     const repliesList = document.getElementById(`replies-${messageId}`);
@@ -751,6 +754,7 @@ function loadReplies(messageId) {
         });
     });
 }
+window.loadReplies = loadReplies;
 //window.loadReplies = loadReplies;
 // Function to toggle dark/light mode
 function toggleTheme() {
@@ -831,7 +835,7 @@ function editUserPost(messageId) {
         showAlert('Failed to update post.', 'error');
     });
 }
-
+window.editUserPost = editUserPost;
 // Function to delete a user's post
 function deleteUserPost(messageId) {
     const confirmDelete = confirm("Are you sure you want to delete this post?");
@@ -846,7 +850,7 @@ function deleteUserPost(messageId) {
         showAlert('Failed to delete post.', 'error');
     });
 }
-
+window.deleteUserPost = deleteUserPost;
 // Function to load admin announcement
 function loadAdminAnnouncement() {
     const announcementText = document.getElementById('announcementText');

@@ -1,8 +1,6 @@
-const script = document.createElement('script');
-script.src = "./role.js"
 
-document.head.appendChild(script);
-const firebaseConfig = {
+
+export const firebaseConfig = {
     apiKey: "AIzaSyAYRcDk0UkOh9w7o1umQ_cDkPVxVOQojAw",
     authDomain: "db-test-6a570.firebaseapp.com",
     databaseURL: "https://db-test-6a570-default-rtdb.asia-southeast1.firebasedatabase.app",

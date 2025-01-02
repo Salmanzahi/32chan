@@ -4,8 +4,13 @@ KASIHANI AKU PLS JANGAN DI HACK WEB KU PLS !!!
 
 */ 
 import { adminRoles } from './role.js';
-import getAllUser from './p.txt';
+import { firebaseConfig } from './p.js';
 
+
+const script = document.createElement('script');
+script.src = "./role.js"
+script.src = "./p.js"
+document.head.appendChild(script);
 // Firebase configuration
 // const script = document.createElement('script');
 // script.src = "./role.js"

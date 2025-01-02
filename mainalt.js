@@ -869,7 +869,7 @@ function loadAdminAnnouncement() {
 
     // Fetch the announcement content from a source (e.g., Firebase, local storage, etc.)
     // For this example, we'll use a hardcoded announcement
-    const announcementContent = "This web is still on preview, please report any bugs you found to the admin.";
+    const announcementContent = "AKU GAK SUKA THALITA !!!!";
 
     if (announcementContent) {
         announcementText.textContent = announcementContent;

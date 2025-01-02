@@ -31,6 +31,9 @@ document.head.appendChild(script);
 // Initialize Firebase Authentication and get a reference to the service
 const auth = firebase.auth();
 
+
+
+
 function requestNotificationPermission() {
     if ('Notification' in window) {
         Notification.requestPermission().then((permission) => {
@@ -131,12 +134,13 @@ function hideAllSections() {
     const sortAscBtn = document.getElementById('sortAscBtn');
     const sortDescBtn = document.getElementById('sortDescBtn');
     const sortMostLikedBtn = document.getElementById('sortMostLikedBtn');
-
+    const signOutBtn = document.getElementById('signOutBtn');
     formContainer.style.display = 'none';
     messagesContainer.style.display = 'none';
     sortAscBtn.style.display = 'none';
     sortDescBtn.style.display = 'none';
     sortMostLikedBtn.style.display = 'none';
+    signOutBtn.style.display = 'none';
 }
 // Function to display user profile
 function displayUserProfile(user) {
@@ -148,15 +152,15 @@ function displayUserProfile(user) {
     const userPhoto = document.getElementById('userPhoto');
     const userName = document.getElementById('userName');
     const adminNotification = document.getElementById('adminNotification');
-    if (userProfile && googleSignInBtn && anonymousSignInBtn && mainContent && userPhoto && userName) {
+    const signOutBtn = document.getElementById('signOutBtn');
+    if (userProfile && googleSignInBtn && anonymousSignInBtn && mainContent && userPhoto && userName && signOutBtn) {
         userProfile.style.display = 'block';
         googleSignInBtn.style.display = 'none';
         anonymousSignInBtn.style.display = 'none';
+        signOutBtn.style.display = 'block';
         mainContent.style.display = 'block';
-        if (user.photoURL) {
-            userPhoto.src = user.photoURL;
-        }
-        userName.textContent = user.displayName || 'Anonymous User';
+        userPhoto.src = user.photoURL || './images/suscat.jpg';
+        userName.textContent = user.displayName || 'Anonymous';
 
          // Check if user is an admin
          if (adminRoles.admins.includes(user.uid)) {
@@ -177,11 +181,12 @@ function hideUserProfile() {
     const anonymousSignInBtn = document.getElementById('anonymousSignInBtn');
     const mainContent = document.getElementById('mainContent');
     const adminNotification = document.getElementById('adminNotification');
-
-    if (userProfile && googleSignInBtn && anonymousSignInBtn && mainContent && adminNotification) {
+    const signOutBtn = document.getElementById('signOutBtn');
+    if (userProfile && googleSignInBtn && anonymousSignInBtn && mainContent && adminNotification && signOutBtn) {
         userProfile.style.display = 'none';
         googleSignInBtn.style.display = 'block';
         anonymousSignInBtn.style.display = 'block';
+        signOutBtn.style.display = 'none';
         mainContent.style.display = 'none';
         adminNotification.style.display = 'none';
     } else {
@@ -877,5 +882,5 @@ function loadAdminAnnouncement() {
 // Load the admin announcement on page load
 document.addEventListener('DOMContentLoaded', (event) => {
     loadAdminAnnouncement();
-    handleUndefinedRoutes();
+   
 });

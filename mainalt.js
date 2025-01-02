@@ -4,7 +4,7 @@ KASIHANI AKU PLS JANGAN DI HACK WEB KU PLS !!!
 
 */ 
 import { adminRoles } from './role.js';
-import getAllUser from 'p.txt';
+import getAllUser from './p.txt';
 
 // Firebase configuration
 // const script = document.createElement('script');

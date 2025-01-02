@@ -24,25 +24,38 @@
     Administrator
     <br>
 </div>
+<nav class="navbar">
+    <div class="brand">32 CHAN</div>
+    <ul class="nav-links">
+        <div class="auth-container">
+            <div id="userProfile" class="user-profile" style="display: none;">
+                <div>
+                    <img id="userPhoto" src="" alt="User Photo">
+                </div>
+                <div id="usernamediv" class="username"></div>
+                <span id="userName"></span>
+            </div>
+                <button id="signOutBtn" style="display: none;" onclick="signOut()">Sign Out</button>
+            </div>
+            <button id="googleSignInBtn">Sign in with Google
+            </button>
+            <button id="anonymousSignInBtn">I'm Paranoid</button>
+        </div>
+
+    </ul>
+
+       
+</nav>
     <div class="container">
         <header>
-            <h1>32Chan Forums For Sixteen</h1>
-            <p>Express infinitely</p>
+            <h1>32Chan Forum </h1>
+            <p>Express Infinitely</p>
             <button id="themeToggleBtn">Toggle Dark/Light Mode</button>
         </header>
         </header>
 
         <!-- User Profile and Authentication Buttons -->
-        <div class="auth-container">
-            <div id="userProfile" class="user-profile" style="display: none;">
-                <img id="userPhoto" src="" alt="User Photo">
-                <span id="userName"></span>
-                <button id="signOutBtn" onclick="signOut()">Sign Out</button>
-            </div>
-            <button id="googleSignInBtn">Sign in with Google</button>
-            <button id="anonymousSignInBtn">Sign in Anonymously</button>
-        </div>
-
+     
         <!-- Main Content -->
         <div id="mainContent" style="display: none;">
             <!-- Admin Announcement Section -->

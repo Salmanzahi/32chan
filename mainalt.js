@@ -175,7 +175,7 @@ function displayUserProfile(user) {
 
 // Function to hide user profile
 function hideUserProfile() {
-    console.log('Hiding user profile');
+    /*console.log('Hiding user profile');
     const userProfile = document.getElementById('userProfile');
     const googleSignInBtn = document.getElementById('googleSignInBtn');
     const anonymousSignInBtn = document.getElementById('anonymousSignInBtn');
@@ -192,6 +192,11 @@ function hideUserProfile() {
     } else {
         console.error('One or more elements not found in the DOM.');
     }
+        */
+    const sections = document.querySelectorAll('.section');
+    sections.forEach(section => {
+        section.style.display = 'none';
+    });
 }
 
 // Add event listeners to your sign-in and sign-out buttons

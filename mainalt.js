@@ -129,7 +129,7 @@ function signOut() {
 
 // Function to hide all sections
 function hideAllSections() {
-    /*const formContainer = document.getElementById('formContainer');
+    const formContainer = document.getElementById('formContainer');
     const messagesContainer = document.getElementById('messagesContainer');
     const sortAscBtn = document.getElementById('sortAscBtn');
     const sortDescBtn = document.getElementById('sortDescBtn');
@@ -141,11 +141,6 @@ function hideAllSections() {
     sortDescBtn.style.display = 'none';
     sortMostLikedBtn.style.display = 'none';
     signOutBtn.style.display = 'none';
-    */
-    const sections = document.querySelectorAll('.section');
-    sections.forEach(section => {
-        section.style.display = 'none';
-    });
 }
 // Function to display user profile
 function displayUserProfile(user) {

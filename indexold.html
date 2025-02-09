@@ -1,0 +1,85 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>32Chan</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="styles.css" id="theme-link">
+</head>
+<body class="indexpg">
+    <style>
+         
+    </style>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="./mainalt.js?v=1.0" defer></script>
+    <script src="./404.js" defer></script>
+    <script src="./role.js" defer></script>
+    <!-- Main JavaScript files -->
+    <script src="./mainalt.js" defer></script>
+    <script type="module" src="./mainalt.js"></script>
+   <!-- Admin Notification -->
+<div id="adminNotification" style="display: none; position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background-color: red; color: white; padding: 5px 10px; border-radius: 5px;">
+    Administrator
+    <br>
+</div>
+
+
+<nav class="navbar">
+    <div class="brand">32 CHAN</div>
+    
+    <ul class="nav-links">
+        <div class="auth-container">
+            <div id="userProfile" class="user-profile" style="display: none;">
+                <div>
+                    <img id="userPhoto" src="" alt="User Photo">
+                </div>
+                <div id="usernamediv" class="username"></div>
+                <span id="userName"></span>
+            </div>
+                <button id="signOutBtn" style="display: none;" onclick="signOut()">Sign Out</button>
+            </div>
+            <button id="googleSignInBtn" style="display: block;" >Sign in with Google</button>
+            <button id="anonymousSignInBtn" style="display: block;" >I'm Paranoid</button>
+        </div>
+
+    </ul>
+
+       
+</nav>
+
+<div class="container left-container">
+    <header>
+        <h1>32Chan Forum</h1>
+        <p>Express Infinitely</p>
+        <button id="themeToggleBtn">Toggle Dark/Light Mode</button>
+    </header>
+    <div class="content-section">
+        <h2>About This Web</h2>
+        <p>This web is a platform for users to express their thoughts and ideas freely. It provides a space for open discussions and sharing of information.</p>
+    </div>
+    <div class="content-section">
+        <h2>History</h2>
+        <p>32Chan was created to offer a safe and anonymous environment for users to communicate. Over the years, it has grown into a vibrant community with diverse topics and active participation.</p>
+    </div>
+    <div class="content-section">
+        <h2>Additional Information</h2>
+        <p>Feel free to explore the various sections of the web, participate in discussions, and share your thoughts. We value your privacy and ensure a secure platform for all users.</p>
+    </div>
+<!-- Private Room Creation Form <div id="privateRoomForm" class="form-container" style="display: none;">
+    <h2>Create Private Room</h2>
+    <label for="privateRoomTitle">Title:</label>
+    <input type="text" id="privateRoomTitle" placeholder="Enter the title of your private room" style="margin-bottom: 15px;">
+    <label for="privateRoomCode">Code:</label>
+    <input type="text" id="privateRoomCode" placeholder="Enter a code for your private room" style="margin-bottom: 15px;">
+    <button class="submit-btn" onclick="ForumApp.createPrivateRoom()">Create Private Room</button>
+</div>
+-->
+</div>
+</body>
+</html>
+

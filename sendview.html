@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>32Chan</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="styles.css" id="theme-link">
+</head>
+<body>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="./mainalt.js?v=1.0" defer></script>
+    <script src="./404.js" defer></script>
+    <script src="./role.js" defer></script>
+    <!-- Main JavaScript files
+  </script -->
+  <script src="./mainalt.js" defer></script>
+  <script type="module" src="./mainalt.js"></script>
+   <!-- Admin Notification -->
+<div id="adminNotification" style="display: none; position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background-color: red; color: white; padding: 5px 10px; border-radius: 5px;">
+    Administrator
+    <br>
+</div>
+<nav class="navbar">
+    <div class="brand">32 CHAN</div>
+    <ul class="nav-links">
+        <div class="auth-container">
+            <div id="userProfile" class="user-profile" style="display: block;">
+                <div>
+                    <img id="userPhoto" src="" alt="User Photo">
+                </div>
+                <div id="usernamediv" class="username"></div>
+                <span id="userName"></span>
+            </div>
+                <button id="signOutBtn" onclick="signOut()">Sign Out</button>
+            </div>
+            <button id="googleSignInBtn" style="display: none;" >Sign in with Google</button>
+            <button id="anonymousSignInBtn" style="display: none;" >I'm Paranoid</button>
+        </div>
+
+    </ul>
+
+       
+</nav>
+<div class="container">
+    <header>
+        <h1>32Chan Forum</h1>
+        <p>Express Infinitely</p>
+        <button id="themeToggleBtn">Toggle Dark/Light Mode</button>
+    </header>
+<!-- Private Room Creation Form <div id="privateRoomForm" class="form-container" style="display: none;">
+    <h2>Create Private Room</h2>
+    <label for="privateRoomTitle">Title:</label>
+    <input type="text" id="privateRoomTitle" placeholder="Enter the title of your private room" style="margin-bottom: 15px;">
+    <label for="privateRoomCode">Code:</label>
+    <input type="text" id="privateRoomCode" placeholder="Enter a code for your private room" style="margin-bottom: 15px;">
+    <button class="submit-btn" onclick="ForumApp.createPrivateRoom()">Create Private Room</button>
+</div>
+-->
+
+
+
+        <!-- User Profile and Authentication Buttons -->
+     
+        <!-- Main Content -->
+        <div id="mainContent" style="display: block;">
+            <!-- Admin Announcement Section -->
+    <div id="adminAnnouncement" class="admin-announcement" style="display: none;">
+        <h2>Admin Announcement</h2>
+        <p id="announcementText">No announcements at this time.</p>
+    </div>
+
+            <!-- Button Options -->
+            <div class="buttons">
+                <button id="toggleViewBtn" style="display: block;" onclick="toggleView() ">Send Message / View Messages</button>
+                <button id="sortAscBtn" style="display: none;" onclick="showMessages('asc')">Sort Ascending</button>
+                <button id="sortDescBtn" style="display: none;" onclick="showMessages('desc')">Sort Descending</button>
+                <button id="sortMostLikedBtn" style="display: none;" onclick="showMessages('mostLiked')">Most Liked</button>
+            </div>
+            
+
+            <!-- Send Message Form -->
+            <div id="formContainer" class="form-container" style="display: none;">
+                <h2>Send Anonymous Message</h2>
+                <label for="titleInput">Title:</label>
+                <p></p>
+                <input type="text" id="titleInput" placeholder="Enter the title of your post" style="margin-bottom: 15px;">
+                <label for="messageInput">Message:</label>
+                <p></p>
+                <textarea id="messageInput" placeholder="Tulis pesan anonim Anda di sini..." style="margin-bottom: 15px;"></textarea>
+                <p></p>
+                
+                <div id="adminNameContainer" class="admin-only" style="display: none;">
+                    <label for="adminNameInput">Admin Name (optional):</label>
+                    <input type="text" id="adminNameInput" placeholder="Enter your admin name" style="margin-bottom: 15px;">
+                </div>
+            
+                <label for="imageInput">Upload Image (optional):</label>
+                <input type="file" id="imageInput" accept="image/*" aria-label="Upload image" title="Upload an optional image">
+                
+                <button class="submit-btn" onclick="sendMessage()">Submit</button>
+            
+                <!-- User's Post History -->
+                <h2>Your Post History</h2>
+                <ul id="userMessagesList">
+                    <!-- User's messages will be dynamically added here -->
+                    <button onclick="sendMessage()">Reresh</button>
+                </ul>
+            </div>
+            </div>
+
+            <!-- View Messages Section -->
+            <div id="messagesContainer" class="messages-container" style="display: none;">
+                <h2>All Messages</h2>
+                <ul id="messagesList">
+                    <!-- Messages will be dynamically added here -->
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

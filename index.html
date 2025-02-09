@@ -1,134 +1,247 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>32Chan</title>
-    <link rel="stylesheet" href="dashboard.css">
-    <link rel="stylesheet" href="styles.css" id="theme-link">
-</head>
-<body>
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
     <script src="./mainalt.js?v=1.0" defer></script>
     <script src="./404.js" defer></script>
     <script src="./role.js" defer></script>
     <!-- Main JavaScript files -->
     <script src="./mainalt.js" defer></script>
     <script type="module" src="./mainalt.js"></script>
-   <!-- Admin Notification -->
-<div id="adminNotification" style="display: none; position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background-color: red; color: white; padding: 5px 10px; border-radius: 5px;">
-    Administrator
-    <br>
-</div>
-<nav class="navbar">
-    <div class="brand">32 CHAN</div>
-    <ul class="nav-links">
-        <div class="auth-container">
-            <div id="userProfile" class="user-profile" style="display: none;">
-                <div>
+    <meta charset="UTF-8">
+   
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>32Chan - Next-Gen Forum</title>
+    <style>
+        :root {
+            --primary: #ff4757;
+            --bg: #0f0f0f;
+            --text: #ffffff;
+            --glass: rgba(15, 15, 15, 0.95);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* Cyberpunk Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--glass);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .brand {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.8rem;
+            color: var(--primary);
+            letter-spacing: -2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .auth-container {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        /* Modern Buttons */
+        button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+
+        #googleSignInBtn {
+            background: #4285f4;
+            color: white;
+        }
+
+        #anonymousSignInBtn {
+            background: #2a2a2a;
+            color: white;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+        }
+
+        /* User Profile */
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        #userPhoto {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+        }
+
+        /* Main Content */
+        .container {
+            margin-top: 100px;
+            padding: 4rem 5%;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .content-section {
+            margin: 4rem 0;
+            padding: 2rem;
+            background: var(--glass);
+            border-radius: 16px;
+            transform: translateY(50px);
+            opacity: 0;
+            transition: 1s;
+        }
+
+        .content-section.active {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Theme Toggle */
+        #themeToggleBtn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 1rem;
+            }
+            
+            button {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body class="indexpg">
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+
+    <nav class="navbar">
+        <div class="brand">32CHAN</div>
+        <div class="nav-links">
+            <div class="auth-container">
+                <div id="userProfile" class="user-profile" style="display: none;">
                     <img id="userPhoto" src="" alt="User Photo">
+                    <div id="usernamediv" class="username"></div>
                 </div>
-                <div id="usernamediv" class="username"></div>
-                <span id="userName"></span>
-            </div>
                 <button id="signOutBtn" style="display: none;" onclick="signOut()">Sign Out</button>
+                <button id="googleSignInBtn" style="display: block;" >Sign in with Google</button>
+            <button id="anonymousSignInBtn" style="display: block;" >I'm Paranoid</button>
             </div>
-            <button id="googleSignInBtn">Sign in with Google
-            </button>
-            <button id="anonymousSignInBtn">I'm Paranoid</button>
         </div>
+    </nav>
 
-    </ul>
-
-       
-</nav>
-<!-- Private Room Creation Form <div id="privateRoomForm" class="form-container" style="display: none;">
-    <h2>Create Private Room</h2>
-    <label for="privateRoomTitle">Title:</label>
-    <input type="text" id="privateRoomTitle" placeholder="Enter the title of your private room" style="margin-bottom: 15px;">
-    <label for="privateRoomCode">Code:</label>
-    <input type="text" id="privateRoomCode" placeholder="Enter a code for your private room" style="margin-bottom: 15px;">
-    <button class="submit-btn" onclick="ForumApp.createPrivateRoom()">Create Private Room</button>
-</div>
--->
-
-
-<!-- Form to Join Private Room -->
-<div id="joinPrivateRoomForm" class="form-container" style="display: none;">
-    <h2>Join Private Room</h2>
-    <label for="joinRoomCode">Enter Room Code:</label>
-    <input type="text" id="joinRoomCode" placeholder="Enter the room code" style="margin-bottom: 15px;">
-    <button class="submit-btn" onclick="ForumApp.joinPrivateRoom()">Join Private Room</button>
-</div>
     <div class="container">
         <header>
-            <h1>32Chan Forum </h1>
+            <h1 class="float">32CHAN</h1>
             <p>Express Infinitely</p>
-            <button id="themeToggleBtn">Toggle Dark/Light Mode</button>
-        </header>
         </header>
 
-        <!-- User Profile and Authentication Buttons -->
-     
-        <!-- Main Content -->
-        <div id="mainContent" style="display: none;">
-            <!-- Admin Announcement Section -->
-    <div id="adminAnnouncement" class="admin-announcement" style="display: none;">
-        <h2>Admin Announcement</h2>
-        <p id="announcementText">No announcements at this time.</p>
-    </div>
-
-            <!-- Button Options -->
-            <div class="buttons">
-                <button id="toggleViewBtn" onclick="toggleView()">Send Message / View Messages</button>
-                <button id="sortAscBtn" style="display: none;" onclick="showMessages('asc')">Sort Ascending</button>
-                <button id="sortDescBtn" style="display: none;" onclick="showMessages('desc')">Sort Descending</button>
-                <button id="sortMostLikedBtn" style="display: none;" onclick="showMessages('mostLiked')">Most Liked</button>
-            </div>
-            
-
-            <!-- Send Message Form -->
-            <div id="formContainer" class="form-container" style="display: none;">
-                <h2>Send Anonymous Message</h2>
-                <label for="titleInput">Title:</label>
-                <p></p>
-                <input type="text" id="titleInput" placeholder="Enter the title of your post" style="margin-bottom: 15px;">
-                <label for="messageInput">Message:</label>
-                <p></p>
-                <textarea id="messageInput" placeholder="Tulis pesan anonim Anda di sini..." style="margin-bottom: 15px;"></textarea>
-                <p></p>
-                
-                <div id="adminNameContainer" class="admin-only" style="display: none;">
-                    <label for="adminNameInput">Admin Name (optional):</label>
-                    <input type="text" id="adminNameInput" placeholder="Enter your admin name" style="margin-bottom: 15px;">
-                </div>
-            
-                <label for="imageInput">Upload Image (optional):</label>
-                <input type="file" id="imageInput" accept="image/*" aria-label="Upload image" title="Upload an optional image">
-                
-                <button class="submit-btn" onclick="sendMessage()">Submit</button>
-            
-                <!-- User's Post History -->
-                <h2>Your Post History</h2>
-                <ul id="userMessagesList">
-                    <!-- User's messages will be dynamically added here -->
-                    <button onclick="sendMessage()">Reresh</button>
-                </ul>
-            </div>
-            </div>
-
-            <!-- View Messages Section -->
-            <div id="messagesContainer" class="messages-container" style="display: none;">
-                <h2>All Messages</h2>
-                <ul id="messagesList">
-                    <!-- Messages will be dynamically added here -->
-                </ul>
-            </div>
+        <div class="content-section">
+            <h2>About This Web</h2>
+            <p>A next-generation anonymous community platform pushing the boundaries of digital communication...</p>
         </div>
+
+        <div class="content-section">
+            <h2>Our History</h2>
+            <p>Born from the ashes of traditional forums, 32chan emerged in 2023 as a revolutionary platform...</p>
+        </div>
+
+        <div class="content-section">
+            <h2>Digital Sanctuary</h2>
+            <p>Secure anonymous communication infrastructure with military-grade encryption...</p>
+        </div>
+
+        <button id="themeToggleBtn">Toggle Dark/Light Mode</button>
     </div>
+
+    <script>
+        // Scroll Animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.content-section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Theme Toggle
+        const themeLink = document.getElementById('theme-link');
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        
+        themeToggleBtn.addEventListener('click', () => {
+            if(themeLink.getAttribute('href') === 'styles.css') {
+                themeLink.setAttribute('href', 'light-theme.css');
+            } else {
+                themeLink.setAttribute('href', 'styles.css');
+            }
+        });
+    </script>
 </body>
 </html>

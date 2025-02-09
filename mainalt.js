@@ -63,7 +63,8 @@ function googleSignIn() {
             // The signed-in user info.
             const user = result.user;
             console.log('User signed in:', user);
-            displayUserProfile(user);
+            //displayUserProfile(user);
+            window.location.href = "sendview.html"; // Redirect to sendview.html after authentication
         })
         .catch((error) => {
             console.error('Error during sign-in:', error);
@@ -77,6 +78,7 @@ function anonymousSignIn() {
     auth.signInAnonymously()
         .then(() => {
             console.log('User signed in anonymously');
+            window.location.href = "sendview.html"; // Redirect to sendview.html after authentication
         })
         .catch((error) => {
             console.error('Error during anonymous sign-in:', error);
@@ -119,8 +121,9 @@ function showAlert(message, type = 'info') {
 function signOut() {
     auth.signOut().then(() => {
         console.log('User signed out');
-        hideUserProfile();
-        hideAllSections(); // Hide all sections when the user signs out
+        //hideUserProfile();
+        //hideAllSections(); // Hide all sections when the user signs out
+        window.location.href = "index.html"; // Redirect to index.html after sign-out
     }).catch((error) => {
         console.error('Error during sign-out:', error);
         alert('Failed to sign out: ' + error.message);
@@ -144,32 +147,33 @@ function hideAllSections() {
 }
 // Function to display user profile
 function displayUserProfile(user) {
-    console.log('Displaying user profile');
-    const userProfile = document.getElementById('userProfile');
-    const googleSignInBtn = document.getElementById('googleSignInBtn');
-    const anonymousSignInBtn = document.getElementById('anonymousSignInBtn');
-    const mainContent = document.getElementById('mainContent');
-    const userPhoto = document.getElementById('userPhoto');
-    const userName = document.getElementById('userName');
-    const adminNotification = document.getElementById('adminNotification');
-    const signOutBtn = document.getElementById('signOutBtn');
-    if (userProfile && googleSignInBtn && anonymousSignInBtn && mainContent && userPhoto && userName && signOutBtn) {
-        userProfile.style.display = 'block';
-        googleSignInBtn.style.display = 'none';
-        anonymousSignInBtn.style.display = 'none';
-        signOutBtn.style.display = 'block';
-        mainContent.style.display = 'block';
-        userPhoto.src = user.photoURL || './images/suscat.jpg';
-        userName.textContent = user.displayName || 'Anonymous';
+    // console.log('Displaying user profile');
+    // const userProfile = document.getElementById('userProfile');
+    // const googleSignInBtn = document.getElementById('googleSignInBtn');
+    // const anonymousSignInBtn = document.getElementById('anonymousSignInBtn');
+    // const mainContent = document.getElementById('mainContent');
+    // const userPhoto = document.getElementById('userPhoto');
+    // const userName = document.getElementById('userName');
+    // const adminNotification = document.getElementById('adminNotification');
+    // const signOutBtn = document.getElementById('signOutBtn');
+    // if (userProfile && googleSignInBtn && anonymousSignInBtn && mainContent && userPhoto && userName && signOutBtn) {
+    //     userProfile.style.display = 'block';
+    //     googleSignInBtn.style.display = 'none';
+    //     anonymousSignInBtn.style.display = 'none';
+    //     signOutBtn.style.display = 'block';
+    //     mainContent.style.display = 'block';
+       
+    // } else {
+    //     console.error('One or more elements not found in the DOM.');
+    // }
+    userPhoto.src = user.photoURL || './images/suscat.jpg';
+    userName.textContent = user.displayName || 'Anonymous';
 
-         // Check if user is an admin
-         if (adminRoles.admins.includes(user.uid)) {
-            adminNotification.style.display = 'block';
-        } else {
-            adminNotification.style.display = 'none';
-        }
+     // Check if user is an admin
+     if (adminRoles.admins.includes(user.uid)) {
+        adminNotification.style.display = 'block';
     } else {
-        console.error('One or more elements not found in the DOM.');
+        adminNotification.style.display = 'none';
     }
 }
 
@@ -220,16 +224,21 @@ auth.onAuthStateChanged((user) => {
         hideUserProfile();
     }*/
         if (user) {
+            //displayUserProfile(user);
             displayUserProfile(user);
             loadUserMessages(); // Load user messages after authentication
+            if ( window.location.pathname.endsWith('index.html')) {
+                window.location.href = 'sendview.html'; // Redirect to sendview.html if authenticated
+            }
             if (!user.isAnonymous) {
                 requestNotificationPermission(); // Request notification permission if the user is not anonymous
             }
-            if (isAdmin()) {
-                document.getElementById('adminNameContainer').style.display = 'block';
-            }
+           
         } else {
             hideUserProfile();
+            if (window.location.pathname.endsWith('sendview.html')) {
+                window.location.href = 'index.html'; // Redirect to index.html if not authenticated
+            }
         }
 });
 
@@ -384,79 +393,7 @@ function resetForm() {
 //window.resetForm = resetForm;
 // Function to show and load messages
 function showMessages(sortOrder = 'desc') {
-    /*const messagesList = document.getElementById('messagesList');
-    const sortButtons = document.querySelectorAll('.buttons button');
-
-    if (messagesList) {
-        messagesList.innerHTML = ''; // Clear existing messages before appending new ones
-
-        // Highlight the selected sort button
-        sortButtons.forEach(button => button.classList.remove('active'));
-        if (sortOrder === 'asc') {
-            document.getElementById('sortAscBtn').classList.add('active');
-        } else if (sortOrder === 'desc') {
-            document.getElementById('sortDescBtn').classList.add('active');
-        } else if (sortOrder === 'mostLiked') {
-            document.getElementById('sortMostLikedBtn').classList.add('active');
-        }
-
-        db.ref('messages').on('value', (snapshot) => {
-            const messages = [];
-            snapshot.forEach((childSnapshot) => {
-                const messageData = childSnapshot.val();
-                messages.push({ id: childSnapshot.key, ...messageData });
-            });
-
-            // Sort messages based on the selected sort order
-            if (sortOrder === 'asc') {
-                messages.sort((a, b) => a.timestamp - b.timestamp);
-            } else if (sortOrder === 'desc') {
-                messages.sort((a, b) => b.timestamp - a.timestamp);
-            } else if (sortOrder === 'mostLiked') {
-                messages.sort((a, b) => (b.likes || 0) - (a.likes || 0));
-            }
-
-            // Append sorted messages to the DOM
-            messages.forEach((message) => {
-                const messageTitle = message.title || null;
-                const adminName = message.adminName || null;
-                const messageText = message.text || 'No text provided';
-                const timestamp = message.timestamp;
-                const imageUrl = message.imageUrl || null;
-                const likes = message.likes || 0;
-
-                // Create message list item
-                const li = document.createElement('li');
-                li.setAttribute('data-id', message.id);
-                li.innerHTML = `
-                    <div class="header">
-                        ${adminName ? `<div class="admin-badge" style="color: red;">Administrator (${adminName})</div>` : ''}
-                        <div class="title" style="font-weight: bold; font-size: 1.2em;">${messageTitle || 'Legacy Post'}</div>
-                        <div class="timestamp">${new Date(timestamp).toLocaleString()}</div>
-                    </div>
-                    <div class="content">
-                        <p>${messageText}</p>
-                        ${imageUrl ? `<img src="${imageUrl}" alt="Message Image" style="max-width: 100%; height: auto;">` : ''}
-                    </div>
-                    <div class="actions">
-                        <button onclick="toggleLike('${message.id}')">Like (${likes})</button>
-                        <button onclick="replyToMessage('${message.id}')">Reply</button>
-                        <div class="like-count">${likes} likes</div>
-                        ${isAdmin() ? `
-                            <button onclick="editPost('${message.id}')">Edit</button>
-                            <button onclick="deletePost('${message.id}')">Delete</button>
-                        ` : ''}
-                    </div>
-                    <ul class="replies" id="replies-${message.id}"></ul>
-                `;
-                messagesList.appendChild(li);
-
-                loadReplies(message.id);
-            });
-        });
-    } else {
-        console.error('Messages list element not found in the DOM.');
-    }*/
+    
         const messagesList = document.getElementById('messagesList');
         const sortButtons = document.querySelectorAll('.buttons button');
     
@@ -504,6 +441,14 @@ function showMessages(sortOrder = 'desc') {
                     // Create message list item
                     const li = document.createElement('li');
                     li.setAttribute('data-id', message.id);
+                    li.style.backgroundColor = "#1e1e1e";
+                    li.style.padding = "15px";
+                    li.style.border = "1px solid #333";
+                    li.style.borderRadius = "8px";
+                    li.style.marginBottom = "10px";
+                    li.style.boxShadow = "0 2px 4px rgba(0, 0, 0, 0.5)";
+                    li.style.transition = "box-shadow 0.3s ease-in-out";
+                    
                     li.innerHTML = `
                         <div class="header">
                             ${adminName ? `<div class="admin-badge" style="color: red;">Administrator (${adminName})</div>` : ''}
@@ -757,6 +702,8 @@ function loadReplies(messageId) {
             const replyTimestamp = replyData.timestamp;
 
             const li = document.createElement('li');
+            li.style.backgroundColor = "#1e1e1e";
+            li.style.color = "#fff";
             li.innerHTML = `
                 <p>${replyText}</p>
                 <span class="timestamp">${new Date(replyTimestamp).toLocaleString()}</span>

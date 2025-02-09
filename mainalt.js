@@ -85,6 +85,37 @@ function anonymousSignIn() {
             alert('Failed to sign in anonymously: ' + error.message);
         });
 }
+document.addEventListener("DOMContentLoaded", () => {
+    auth.onAuthStateChanged((user) => {
+        console.log("Auth state changed. User:", user);
+        console.log("Current pathname:", window.location.pathname);
+        
+        if (user) {
+
+                // Check both root path and explicit "index.html"
+                if (window.location.pathname === '/' || window.location.pathname.endsWith('index.html')) {
+                    console.log("Redirecting to sendview.html");
+                    window.location.replace('sendview.html');
+                }
+                
+                if (!user.isAnonymous) {
+                    requestNotificationPermission();
+                }
+            } else {
+                hideUserProfile();
+                if (window.location.pathname.includes('sendview.html')) {
+                    console.log("Redirecting to index.html");
+                    window.location.replace('index.html');
+                }
+            }
+            displayUserProfile(user);
+            loadUserMessages();
+    
+        
+    });
+    
+    
+});
 // Function to show an alert
 function showAlert(message, type = 'info') {
     const alertContainer = document.createElement('div');
@@ -217,30 +248,28 @@ document.addEventListener('DOMContentLoaded', (event) => {
 });
 
 // Check authentication state on page load
-auth.onAuthStateChanged((user) => {
-    /*if (user) {
-        displayUserProfile(user);
-    } else {
-        hideUserProfile();
-    }*/
-        if (user) {
-            //displayUserProfile(user);
-            displayUserProfile(user);
-            loadUserMessages(); // Load user messages after authentication
-            if ( window.location.pathname.endsWith('index.html')) {
-                window.location.href = 'sendview.html'; // Redirect to sendview.html if authenticated
-            }
-            if (!user.isAnonymous) {
-                requestNotificationPermission(); // Request notification permission if the user is not anonymous
-            }
+// auth.onAuthStateChanged((user) => {
+    
+//         if (user) {
+          
+//             displayUserProfile(user);
+//             loadUserMessages(); 
+//             if ( window.location.pathname.endsWith('index.html')) {
+//                 window.location.href = 'sendview.html'; 
+//             }
+//             if (!user.isAnonymous) {
+//                 requestNotificationPermission(); 
+//             }
            
-        } else {
-            hideUserProfile();
-            if (window.location.pathname.endsWith('sendview.html')) {
-                window.location.href = 'index.html'; // Redirect to index.html if not authenticated
-            }
-        }
-});
+//         } else {
+//             hideUserProfile();
+//             if (window.location.pathname.endsWith('sendview.html')) {
+//                 window.location.href = 'index.html'; 
+//             }
+//         }
+// });
+
+
 
 // References to Firebase services
 const db = firebase.database();

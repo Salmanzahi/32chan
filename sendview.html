@@ -13,13 +13,13 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-    <script src="./mainalt.js?v=1.0" defer></script>
+    <script src="./mainalt.js" defer></script>
+    <script type="module" src="./mainalt.js"></script>
     <script src="./404.js" defer></script>
     <script src="./role.js" defer></script>
     <!-- Main JavaScript files
   </script -->
-  <script src="./mainalt.js" defer></script>
-  <script type="module" src="./mainalt.js"></script>
+ 
    <!-- Admin Notification -->
 <div id="adminNotification" style="display: none; position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background-color: red; color: white; padding: 5px 10px; border-radius: 5px;">
     Administrator
@@ -115,7 +115,7 @@
 
             <!-- View Messages Section -->
             <div id="messagesContainer" class="messages-container" style="display: none;">
-                <h2>All Messages</h2>
+                <h2 style="color: #f0f6fc">All Messages</h2>
                 <ul id="messagesList">
                     <!-- Messages will be dynamically added here -->
                 </ul>

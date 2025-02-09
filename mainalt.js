@@ -485,7 +485,7 @@ function showMessages(sortOrder = 'desc') {
                             <div class="timestamp">${new Date(timestamp).toLocaleString()}</div>
                         </div>
                         <div class="content">
-                            <p>${messageText}</p>
+                            <p style="color:#ffff" >${messageText}</p>
                             ${imageUrl ? `<img src="${imageUrl}" alt="Message Image" style="max-width: 100%; height: auto;">` : ''}
                         </div>
                         <div class="actions">
@@ -733,6 +733,7 @@ function loadReplies(messageId) {
             const li = document.createElement('li');
             li.style.backgroundColor = "#1e1e1e";
             li.style.color = "#fff";
+            li.style.border = "1px solid #333";
             li.innerHTML = `
                 <p>${replyText}</p>
                 <span class="timestamp">${new Date(replyTimestamp).toLocaleString()}</span>

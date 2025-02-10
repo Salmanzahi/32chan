@@ -33,7 +33,6 @@ const auth = firebase.auth();
 
 
 
-
 function requestNotificationPermission() {
     if ('Notification' in window) {
         Notification.requestPermission().then((permission) => {
@@ -236,15 +235,22 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const anonymousSignInBtn = document.getElementById('anonymousSignInBtn');
     const signOutBtn = document.getElementById('signOutBtn');
     const themeToggleBtn = document.getElementById('themeToggleBtn');
+    const mobileGoogleBtn = document.getElementById('mobilegoogleSignInBtn');
+    const mobileAnonymousBtn = document.getElementById('mobileanonymousSignInBtn');
+    const mobileSignOutBtn = document.getElementById('mobilesignOutBtn')
 
-    if (googleSignInBtn && anonymousSignInBtn && signOutBtn && themeToggleBtn) {
-        googleSignInBtn.addEventListener('click', googleSignIn);
-        anonymousSignInBtn.addEventListener('click', anonymousSignIn);
-        signOutBtn.addEventListener('click', signOut);
-        themeToggleBtn.addEventListener('click', toggleTheme);
-    } else {
-        console.error('One or more buttons not found in the DOM.');
-    }
+    // if (googleSignInBtn && anonymousSignInBtn && signOutBtn && themeToggleBtn && mobileGoogleBtn && mobileAnonymousBtn && mobileSignOutBtn) {
+
+    // } else {
+    //     console.error('One or more buttons not found in the DOM.');
+    // }
+    googleSignInBtn.addEventListener('click', googleSignIn);
+    anonymousSignInBtn.addEventListener('click', anonymousSignIn);
+    signOutBtn.addEventListener('click', signOut);
+    themeToggleBtn.addEventListener('click', toggleTheme);
+    mobileGoogleBtn.addEventListener('click', googleSignIn);
+    mobileAnonymousBtn.addEventListener('click', anonymousSignIn);
+    mobileSignOutBtn.addEventListener('click', signOut);
 });
 
 // Check authentication state on page load

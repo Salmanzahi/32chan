@@ -852,7 +852,7 @@ function loadAdminAnnouncement() {
 
     // Fetch the announcement content from a source (e.g., Firebase, local storage, etc.)
     // For this example, we'll use a hardcoded announcement
-    const announcementContent = `ririn :3`;
+    const announcementContent = `hi`;
 
     if (announcementContent) {
         announcementText.textContent = announcementContent;

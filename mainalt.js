@@ -852,7 +852,11 @@ function loadAdminAnnouncement() {
 
     // Fetch the announcement content from a source (e.g., Firebase, local storage, etc.)
     // For this example, we'll use a hardcoded announcement
-    const announcementContent = `HelloWorld("print")`;
+    const announcementContent = `ADMIN CLARIFICATION #1
+it is not what u thinking about, i just feel captivated with her. I`m not trying to built a relationship with her. But ....... a boy in her class trying to built a relation with her which is would make me feel jealous. Like........ why u do that bro ? I just want to neutralize it from that boy, ( tbh i would like just to be a supportive good friend for her instead of trying to built relation).
+She is gorgeous, she is cute, she is such a talented girl, she is kind, she is brilliant ! ( i want she is free from another boy)
+
+Signed by: Salman Zahi Muhajirin`;
 
     if (announcementContent) {
         announcementText.textContent = announcementContent;

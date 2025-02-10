@@ -285,13 +285,9 @@
     <a class="nav-link" href="#history" onclick="closeSidebar()">History</a>
     <a class="nav-link" href="#dev" onclick="closeSidebar()">Developers</a>
     <div class="auth-container">
-      <div id="mobileUserProfile" class="user-profile" style="display: none;">
-        <img id="mobileUserPhoto" src="" alt="User Photo">
-        <div id="mobileUsernameDiv" class="username"></div>
-      </div>
-      <button id="signOutBtn" style="display: none;" onclick="signOut()">Sign Out</button>
-      <button id="googleSignInBtn" style="display: block;">Sign in with Google</button>
-      <button id="anonymousSignInBtn" style="display: block;">I'm Paranoid</button>
+      <button id="mobilesignOutBtn" style="display: none;" onclick="signOut()">Sign Out</button>
+      <button id="mobilegoogleSignInBtn" style="display: block;" >Sign in with Google</button>
+      <button id="mobileanonymousSignInBtn" style="display: block;">I'm Paranoid</button>
     </div>
   </div>
 
@@ -320,6 +316,8 @@
   </div>
 
   <script>
+    // Mobile buttons: attach the same auth functions
+
     // Scroll Animations
     const observer = new IntersectionObserver(
       (entries) => {

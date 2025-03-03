@@ -1,85 +1,360 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>32Chan</title>
-    <link rel="stylesheet" href="dashboard.css">
-    <link rel="stylesheet" href="styles.css" id="theme-link">
-</head>
-<body class="indexpg">
-    <style>
-         
-    </style>
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-    <script src="./mainalt.js?v=1.0" defer></script>
     <script src="./404.js" defer></script>
     <script src="./role.js" defer></script>
     <!-- Main JavaScript files -->
     <script src="./mainalt.js" defer></script>
     <script type="module" src="./mainalt.js"></script>
-   <!-- Admin Notification -->
-<div id="adminNotification" style="display: none; position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background-color: red; color: white; padding: 5px 10px; border-radius: 5px;">
-    Administrator
-    <br>
-</div>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>32Chan - Next-Gen Forum</title>
+  <style>
+    :root {
+      --primary: #ff4757;
+      --bg: #0f0f0f;
+      --text: #ffffff;
+      --glass: rgba(15, 15, 15, 0.95);
+    }
 
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
 
-<nav class="navbar">
-    <div class="brand">32 CHAN</div>
-    
-    <ul class="nav-links">
-        <div class="auth-container">
-            <div id="userProfile" class="user-profile" style="display: none;">
-                <div>
-                    <img id="userPhoto" src="" alt="User Photo">
-                </div>
-                <div id="usernamediv" class="username"></div>
-                <span id="userName"></span>
-            </div>
-                <button id="signOutBtn" style="display: none;" onclick="signOut()">Sign Out</button>
-            </div>
-            <button id="googleSignInBtn" style="display: block;" >Sign in with Google</button>
-            <button id="anonymousSignInBtn" style="display: block;" >I'm Paranoid</button>
+    body {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 1.5rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--glass);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      border-bottom: 1px solid #2a2a2a;
+    }
+
+    .brand {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.8rem;
+      color: var(--primary);
+      letter-spacing: -2px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .nav-link {
+      color: var(--text);
+      text-decoration: none;
+      position: relative;
+      padding: 0.5rem 0;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: 0.3s;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .auth-container {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    /* Modern Buttons */
+    button {
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+      font-weight: 500;
+    }
+
+    #googleSignInBtn {
+      background: #4285f4;
+      color: white;
+    }
+
+    #anonymousSignInBtn {
+      background: #2a2a2a;
+      color: white;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+    }
+
+    /* User Profile */
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    #userPhoto {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid var(--primary);
+    }
+
+    /* Main Content */
+    .container {
+      margin-top: 100px;
+      padding: 4rem 5%;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    h1 {
+      font-size: 3rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    .content-section {
+      margin: 4rem 0;
+      padding: 2rem;
+      background: var(--glass);
+      border-radius: 16px;
+      transform: translateY(50px);
+      opacity: 0;
+      transition: 1s;
+    }
+
+    .content-section.active {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Theme Toggle */
+    #themeToggleBtn {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Floating Animation */
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .float {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    /* Mobile Sidebar Styles */
+    .menu-toggle {
+      display: none; /* Shown on mobile only */
+      position: fixed;
+      top: 1.5rem;
+      right: 5%;
+      z-index: 1100;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+    }
+
+    .menu-toggle .bar {
+      width: 25px;
+      height: 3px;
+      background: var(--text);
+      margin: 4px 0;
+      transition: 0.3s;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      right: -250px;
+      width: 250px;
+      height: 100%;
+      background: var(--glass);
+      z-index: 1050;
+      transition: right 0.3s ease;
+      padding: 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .sidebar.active {
+      right: 0;
+    }
+
+    .sidebar .close-btn {
+      align-self: flex-end;
+      background: transparent;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    /* Hide navbar links on mobile */
+    @media (max-width: 768px) {
+      .navbar .nav-links {
+        display: none;
+      }
+      .menu-toggle {
+        display: block;
+      }
+    }
+
+    /* Responsive adjustments for buttons */
+    @media (max-width: 768px) {
+      button {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body class="indexpg">
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+
+  <!-- Standard Navbar (Desktop) -->
+  <nav class="navbar">
+    <div class="brand" href="#"> 32CHAN </div>
+    <div class="nav-links">
+      <a class="nav-link" href="#about">About</a>
+      <a class="nav-link" href="#history">History</a>
+      <a class="nav-link" href="#dev">Developers</a>
+      <div class="auth-container">
+        <div id="userProfile" class="user-profile" style="display: none;">
+          <img id="userPhoto" src="" alt="User Photo">
+          <div id="usernamediv" class="username"></div>
+          <!-- <span id="userName"></span> -->
         </div>
+        <button id="signOutBtn" style="display: none;" onclick="signOut()">Sign Out</button>
+        <button id="googleSignInBtn" style="display: block;">Sign in with Google</button>
+        <button id="anonymousSignInBtn" style="display: block;">I'm Paranoid</button>
+      </div>
+    </div>
+  </nav>
 
-    </ul>
+  <!-- Mobile Menu Toggle Button -->
+  <button class="menu-toggle" id="mobileMenuToggle">
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+  </button>
 
-       
-</nav>
+  <!-- Mobile Sidebar Navigation -->
+  <div id="mobileSidebar" class="sidebar">
+    <button class="close-btn" id="mobileSidebarClose">&times;</button>
+    <a class="nav-link" href="#about" onclick="closeSidebar()">About</a>
+    <a class="nav-link" href="#history" onclick="closeSidebar()">History</a>
+    <a class="nav-link" href="#dev" onclick="closeSidebar()">Developers</a>
+    <div class="auth-container">
+      <button id="mobilesignOutBtn" style="display: none;" onclick="signOut()">Sign Out</button>
+      <button id="mobilegoogleSignInBtn" style="display: block;" >Sign in with Google</button>
+      <button id="mobileanonymousSignInBtn" style="display: block;">I'm Paranoid</button>
+    </div>
+  </div>
 
-<div class="container left-container">
+  <div class="container">
     <header>
-        <h1>32Chan Forum</h1>
-        <p>Express Infinitely</p>
-        <button id="themeToggleBtn">Toggle Dark/Light Mode</button>
+      <h1 class="float">32CHAN</h1>
+      <p>Express Infinitely</p>
     </header>
+
     <div class="content-section">
-        <h2>About This Web</h2>
-        <p>This web is a platform for users to express their thoughts and ideas freely. It provides a space for open discussions and sharing of information.</p>
+      <h2>About This Web</h2>
+      <p>A next-generation anonymous community platform pushing the boundaries of digital communication...</p>
     </div>
+
     <div class="content-section">
-        <h2>History</h2>
-        <p>32Chan was created to offer a safe and anonymous environment for users to communicate. Over the years, it has grown into a vibrant community with diverse topics and active participation.</p>
+      <h2>Our History</h2>
+      <p>Born from the ashes of traditional forums, 32chan emerged in 2023 as a revolutionary platform...</p>
     </div>
+
     <div class="content-section">
-        <h2>Additional Information</h2>
-        <p>Feel free to explore the various sections of the web, participate in discussions, and share your thoughts. We value your privacy and ensure a secure platform for all users.</p>
+      <h2>Digital Sanctuary</h2>
+      <p>Secure anonymous communication infrastructure with military-grade encryption...</p>
     </div>
-<!-- Private Room Creation Form <div id="privateRoomForm" class="form-container" style="display: none;">
-    <h2>Create Private Room</h2>
-    <label for="privateRoomTitle">Title:</label>
-    <input type="text" id="privateRoomTitle" placeholder="Enter the title of your private room" style="margin-bottom: 15px;">
-    <label for="privateRoomCode">Code:</label>
-    <input type="text" id="privateRoomCode" placeholder="Enter a code for your private room" style="margin-bottom: 15px;">
-    <button class="submit-btn" onclick="ForumApp.createPrivateRoom()">Create Private Room</button>
-</div>
--->
-</div>
+
+    <button id="themeToggleBtn">Toggle Dark/Light Mode</button>
+  </div>
+
+  <script>
+    // Mobile buttons: attach the same auth functions
+
+    // Scroll Animations
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    document.querySelectorAll('.content-section').forEach((section) => {
+      observer.observe(section);
+    });
+
+    // Theme Toggle (if a theme stylesheet exists)
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    // Add theme toggle logic here if you are using different theme stylesheets
+
+    // Mobile Sidebar Toggle Functionality
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const mobileSidebar = document.getElementById('mobileSidebar');
+    const mobileSidebarClose = document.getElementById('mobileSidebarClose');
+
+    mobileMenuToggle.addEventListener('click', () => {
+      mobileSidebar.classList.add('active');
+    });
+
+    mobileSidebarClose.addEventListener('click', () => {
+      mobileSidebar.classList.remove('active');
+    });
+
+    function closeSidebar() {
+      mobileSidebar.classList.remove('active');
+    }
+  </script>
 </body>
 </html>
-

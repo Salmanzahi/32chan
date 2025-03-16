@@ -1,0 +1,18 @@
+.bg-index { background-color: #0f0f0f; }
+.text-index { color: #ffffff; }
+.text-primary { color: #ff4757; }
+.border-primary { border-color: #ff4757; }
+/* Light mode overrides */
+.light-mode {
+  background-color: #f9f9f9;
+  color: #333333;
+}
+.light-mode .bg-index {
+  background-color: #f9f9f9;
+}
+.light-mode .text-index {
+  color: #333333;
+}
+.light-mode .bg-gray-800 {
+  background-color: #e5e5e5;
+}

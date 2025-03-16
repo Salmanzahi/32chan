@@ -1,0 +1,24 @@
+/* Like button styles */
+.action-btn.liked {
+    background-color: var(--secondary) !important;
+    color: white !important;
+    transform: scale(1.05);
+    transition: all 0.3s ease;
+}
+
+.action-btn.liked:hover {
+    background-color: var(--secondary) !important;
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(46, 105, 255, 0.4);
+}
+
+/* Animation for like button when clicked */
+@keyframes likeAnimation {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1.05); }
+}
+
+.action-btn.liked-animation {
+    animation: likeAnimation 0.3s ease forwards;
+}

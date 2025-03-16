@@ -4,9 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>32Chan</title>
-    <link rel="stylesheet" href="dashboard.css">
-    <link rel="stylesheet" href="styles.css" id="theme-link">
-    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="dropdown.css">
+    <link rel="stylesheet" href="./styles/nav.css">
+    <link rel="stylesheet" href="./script/alert/alert.css">
+    <link rel="stylesheet" href="./styles/donate.css">
+    <link rel="stylesheet" href="./styles/loader.css">
+    <link rel="stylesheet" href="./styles/quora-theme.css">
+    <link rel="stylesheet" href="./styles/like-button.css">
   <script src="https://cdn.tailwindcss.com"></script>
     
 
@@ -18,10 +23,10 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-    <script src="./mainalt.js" defer></script>
-    <script type="module" src="./mainalt.js"></script>
+    <script type="module" src="./mainalt.js" defer></script>
     <script src="./404.js" defer></script>
-    <script src="./role.js" defer></script>
+    <script src="./role.js"defer ></script>
+    <script type="module" src="./script/messagehandling/importmsg.js" defer></script>
     <!-- Main JavaScript files
   </script -->
  
@@ -30,27 +35,6 @@
     Administrator
     <br>
 </div>
-<!-- <nav class="navbar">
-    <div class="brand">32 CHAN</div>
-    <ul class="nav-links">
-        <div class="auth-container">
-            <div id="userProfile" class="user-profile" style="display: block;">
-                <div>
-                    <img id="userPhoto" src="" alt="User Photo">
-                </div>
-                <div id="usernamediv" class="username"></div>
-                <span id="userName"></span>
-            </div>
-                <button id="signOutBtn" onclick="signOut()">Sign Out</button>
-            </div>
-            <button id="googleSignInBtn" style="display: none;" >Sign in with Google</button>
-            <button id="anonymousSignInBtn" style="display: none;" >I'm Paranoid</button>
-        </div>
-
-    </ul>
-
-       
-</nav> -->
 <!-- Navbar -->
 <nav class="bg-gray-900 shadow-lg fixed top-0 left-0 w-full z-50">
     <div class="max-w-7xl mx-auto px-4">
@@ -77,6 +61,9 @@
             <!-- <button id="googleSignInBtn" class="hidden bg-blue-500 text-white px-3 py-2 rounded-md text-sm font-medium">Sign in with Google</button>
             <button id="anonymousSignInBtn" class="hidden bg-gray-600 text-white px-3 py-2 rounded-md text-sm font-medium">I'm Paranoid</button> -->
           </div>
+          <button id="donateMe" onclick="window.location.href='https://trakteer.id/salmanzahi'">
+            <strong>Donate Me !</strong>
+            </button>
         </div>
         <!-- Mobile Menu Button -->
         <div class="md:hidden">
@@ -93,6 +80,9 @@
       <a href="#about" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">About</a>
       <a href="#history" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">History</a>
       <a href="#dev" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Developers</a>
+      <button id="donateMe" onclick="window.location.href='https://trakteer.id/salmanzahi'">
+        <strong>Donate Me !</strong>
+        </button>
       <!-- Mobile Auth Container -->
       <div class="flex flex-col space-y-2 mt-2">
         <div id="mobileUserProfile" class="hidden flex items-center space-x-2">
@@ -109,8 +99,7 @@
 <div class="container">
     <header>
         <h1>32Chan Forum</h1>
-        <p>Express Infinitely</p>
-        <button id="themeToggleBtn">Toggle Dark/Light Mode</button>
+        <p>Share knowledge, experiences, and ideas with the community</p>
     </header>
 <!-- Private Room Creation Form <div id="privateRoomForm" class="form-container" style="display: none;">
     <h2>Create Private Room</h2>
@@ -134,49 +123,95 @@
         <p id="announcementText">No announcements at this time.</p>
     </div>
 
-            <!-- Button Options -->
-            <div class="buttons">
-                <button id="toggleViewBtn" style="display: block;" onclick="toggleView() ">Send Message / View Messages</button>
-                <button id="sortAscBtn" style="display: none;" onclick="showMessages('asc')">Sort Ascending</button>
-                <button id="sortDescBtn" style="display: none;" onclick="showMessages('desc')">Sort Descending</button>
+            <!-- Main Action Button -->
+            <button id="toggleViewBtn" style="display: block;" class="main-action-btn" onclick="toggleView()">Send Message / View Messages</button>
+            
+            <!-- Sorting Options -->
+            <div class="buttons hidden md:flex">
+                <button id="sortAscBtn" style="display: none;" onclick="showMessages('asc')">Oldest First</button>
+                <button id="sortDescBtn" style="display: none;" onclick="showMessages('desc')">Newest First</button>
                 <button id="sortMostLikedBtn" style="display: none;" onclick="showMessages('mostLiked')">Most Liked</button>
             </div>
             
 
             <!-- Send Message Form -->
             <div id="formContainer" class="form-container" style="display: none;">
-                <h2>Send Anonymous Message</h2>
-                <label for="titleInput">Title:</label>
-                <p></p>
-                <input type="text" id="titleInput" placeholder="Enter the title of your post" style="margin-bottom: 15px;">
-                <label for="messageInput">Message:</label>
-                <p></p>
-                <textarea id="messageInput" placeholder="Tulis pesan anonim Anda di sini..." style="margin-bottom: 15px;"></textarea>
-                <p></p>
+                <h2>Create a New Post</h2>
+                
+                <label for="titleInput">Title</label>
+                <input type="text" id="titleInput" placeholder="What do you want to ask or share?">
+                
+                <label for="messageInput">Details</label>
+                <textarea id="messageInput" placeholder="Include all the information someone would need to answer your question or understand your post"></textarea>
                 
                 <div id="adminNameContainer" class="admin-only" style="display: none;">
-                    <label for="adminNameInput">Admin Name (optional):</label>
-                    <input type="text" id="adminNameInput" placeholder="Enter your admin name" style="margin-bottom: 15px;">
+                    <label for="adminNameInput">Admin Name (optional)</label>
+                    <input type="text" id="adminNameInput" placeholder="Enter your admin name">
                 </div>
             
-                <label for="imageInput">Upload Image (optional):</label>
+                <label for="imageInput">Add an image</label>
                 <input type="file" id="imageInput" accept="image/*" aria-label="Upload image" title="Upload an optional image">
                 
-                <button class="submit-btn" onclick="sendMessage()">Submit</button>
+                <div class="profile-toggle-container">
+                    <label for="showProfileToggle" class="toggle-label">Show profile in post</label>
+                    <label class="switch">
+                        <input type="checkbox" id="showProfileToggle" checked>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                
+                <button class="submit-btn" onclick="sendMessage()">Post</button>
             
                 <!-- User's Post History -->
                 <h2>Your Post History</h2>
                 <ul id="userMessagesList">
                     <!-- User's messages will be dynamically added here -->
-                    <button onclick="sendMessage()">Reresh</button>
+                    <button onclick="sendMessage()">Refresh</button>
                 </ul>
             </div>
             </div>
 
             <!-- View Messages Section -->
+          
             <div id="messagesContainer" class="messages-container" style="display: none;">
-                <h2 style="color: #f0f6fc">All Messages</h2>
-                <ul id="messagesList">
+              <!-- Mobile Sorting Options -->
+              <div id="dropdown" class="block md:hidden flex justify-end space-x-4 mb-4">
+                <div class="relative inline-block text-left">
+                  <button id="dropdownButton1" data-dropdown-toggle="dropdown1" class="text-white bg-blue-600 hover:bg-blue-700 focus:outline-none font-medium rounded-lg text-sm px-4 py-2.5 inline-flex items-center" type="button">
+                    Sort Posts
+                    <svg class="w-2.5 h-2.5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1l4 4 4-4"/>
+                    </svg>
+                  </button>
+                  <!-- Dropdown menu -->
+                  <div id="dropdown1" class="hidden absolute z-10 custom-dropdown" style="top: 100%; left: 0;">
+                    <ul class="py-1" aria-labelledby="dropdownButton1">
+                      <li>
+                        <a onclick="showMessages('asc')">Oldest First</a>
+                      </li>
+                      <li>
+                        <a onclick="showMessages('desc')">Newest First</a>
+                      </li>
+                      <li>
+                        <a onclick="showMessages('mostLiked')">Most Popular</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Messages Header -->
+              <h2>Community Posts</h2>
+              
+              <!-- Loading Indicator -->
+              <div id="notme" class="loading-indicator">
+                <p>
+                  <span>Loading posts...</span>
+                </p>
+              </div>
+              
+              <!-- Messages List -->
+              <ul id="messagesList">
                     <!-- Messages will be dynamically added here -->
                 </ul>
             </div>
@@ -191,10 +226,30 @@
       mobileMenu.classList.toggle('hidden');
     });
 
-    // Theme Toggle Functionality
-    const themeToggleBtn = document.getElementById('themeToggleBtn');
-    themeToggleBtn.addEventListener('click', () => {
-      document.body.classList.toggle('light-mode');
+    // // Theme Toggle Functionality
+    // const themeToggleBtn = document.getElementById('themeToggleBtn');
+    // themeToggleBtn.addEventListener('click', () => {
+    //   document.body.classList.toggle('light-mode');
+    // });
+
+    // Improved dropdown toggle with outside click handling
+    document.getElementById("dropdown").addEventListener("click", function (event) {
+        event.stopPropagation();
+        let dropdownMenu = document.getElementById("dropdown1");
+        
+        if (dropdownMenu.style.display === "none" || dropdownMenu.style.display === "") {
+            dropdownMenu.style.display = "block";
+        } else {
+            dropdownMenu.style.display = "none";
+        }
+    });
+    
+    // Close dropdown when clicking outside
+    document.addEventListener("click", function (event) {
+        let dropdownMenu = document.getElementById("dropdown1");
+        if (dropdownMenu.style.display === "block") {
+            dropdownMenu.style.display = "none";
+        }
     });
   </script>
 </html>

@@ -1,0 +1,108 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 50%;
+    max-width: 600px;
+    margin: 50px auto;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 20px;
+    
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group select {
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+}
+
+.form-group input[type="text"]:hover,
+.form-group input[type="email"]:hover,
+.form-group input[type="password"]:hover,
+.form-group select:hover {
+    border-color: #007bff;
+}
+
+/* Inline styling for radio and checkbox groups */
+.inline-group {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.inline-group input[type="radio"],
+.inline-group input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    padding-bottom: 8px;
+    padding-top: 8px;
+    margin-left: -20px;
+    width: 104%;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    display: block;
+}
+
+button:hover {
+  background-color: #0056b3;
+  color: white;
+}
+
+@media (max-width: 600px) {
+    .container {
+        width: 90%;
+        padding: 15px;
+    }
+
+    button {
+        padding: 8px 15px;
+    }
+}
+
+input[type=text] {
+    width: 97%
+  }
+
+
+
+#register-form {
+    padding-left: 0;
+    margin-left: 20px;
+}
+
+#country {
+    width: 95%;
+    background-color: #efefef;
+}

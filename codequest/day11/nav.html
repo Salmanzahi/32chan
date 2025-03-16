@@ -1,0 +1,38 @@
+  <!-- Navbar -->
+  
+  <link rel="stylesheet" href="styles/nav.css">
+  <script type="module" src="./nav.js"></script>
+  <!-- <script type="module" src="./script/nav.js"></script> -->
+ <nav class="bg-gray-900 shadow-lg fixed top-0 left-0 w-full z-50">
+   <div class="max-w-7xl mx-auto px-4">
+     <div class="flex justify-between items-center h-16">
+       <div class="flex-shrink-0">
+         <a href="./home.html" class="text-2xl font-bold text-primary hover:text-blue-400 transition duration-300">
+           SalmanZahi
+         </a>
+       </div>
+    
+       <div class="hidden md:flex items-center space-x-8">
+         <a href="./home.html" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-300 hover:-translate-y-1">Home</a>
+         <a href="./contact.html" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-300 hover:-translate-y-1">Contact</a>
+         <a href="./about.html" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-300 hover:-translate-y-1">About</a>
+       </div>
+
+       <!-- Mobile Menu Button -->
+       <div class="md:hidden">
+         <button id="mobile-menu-button" type="button" title="Toggle mobile menu" class="text-gray-300 hover:text-white focus:outline-none">
+           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+           </svg>
+         </button>
+       </div>
+     </div>
+   </div>
+   <!-- Mobile Menu -->
+   <div id="mobile-menu" class="hidden md:hidden bg-111827-800 px-4 pt-2 pb-3 space-y-1">
+     <a href="./home.html" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Home</a>
+     <a href="./contact.html" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Contact</a>
+     <a href="./about.html" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">About</a>
+   </div>
+ </nav>
+ 

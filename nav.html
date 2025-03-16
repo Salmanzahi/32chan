@@ -1,0 +1,66 @@
+  <!-- Navbar -->
+   <link rel="stylesheet" href="styles/donate.css">
+   <link rel="stylesheet" href="styles/nav.css">
+   <script type="module" src="./script/nav.js"></script>
+  <nav class="bg-gray-900 shadow-lg fixed top-0 left-0 w-full z-50">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex justify-between items-center h-16">
+        <!-- Brand -->
+        <div class="flex-shrink-0">
+          <a href="./" class="text-2xl font-bold text-primary hover:text-blue-400 transition duration-300">
+            32CHAN
+          </a>
+        </div>
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="./sendview.html" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-300 hover:-translate-y-1">Forum</a>
+          <a href="./changelog.html" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-300 hover:-translate-y-1">Changelog</a>
+          <a href="#dev" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-300 hover:-translate-y-1">Developers</a>
+          <!-- Auth Container -->
+          <div class="flex items-center space-x-4">
+            <div id="userProfile" class="hidden flex items-center space-x-2">
+              <img id="userPhoto" src="" alt="User Photo" class="w-10 h-10 rounded-full border-2 border-primary">
+              <div id="usernamediv" class="text-white"></div>
+            </div>
+            <button id="signOutBtn" class="hidden bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium" onclick="signOut()">Sign Out</button>
+            <button id="googleSignInBtn" class="bg-blue-500 text-white px-3 py-2 rounded-md text-sm font-medium">Sign in with Google</button>
+            <button id="anonymousSignInBtn" class="bg-gray-600 text-white px-3 py-2 rounded-md text-sm font-medium">I'm Paranoid</button>
+           
+          </div>
+          <button id="donateMe" onclick="window.location.href='https://trakteer.id/salmanzahi'">
+            <strong>Donate Me !</strong>
+          </button>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <div class="md:hidden">
+          <button id="mobile-menu-button" type="button" title="Toggle mobile menu" class="text-gray-300 hover:text-white focus:outline-none">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-gray-800 px-4 pt-2 pb-3 space-y-1">
+      <a href="./sendview.html" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Forum</a>
+      <a href="./changelog.html" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Changelog</a>
+      <a href="#dev" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Developers</a>
+      <button id="donateMe" onclick="window.location.href='https://trakteer.id/salmanzahi'">
+        <strong>Donate Me !</strong>
+        </button>
+      <!-- Mobile Auth Container -->
+      <div class="flex flex-col space-y-2 mt-2">
+        <div id="mobileUserProfile" class="hidden flex items-center space-x-2">
+          <img id="mobileUserPhoto" src="" alt="User Photo" class="w-10 h-10 rounded-full border-2 border-primary">
+          <!-- <div id="mobileUserName" class="text-white"></div> -->
+          <span id="userName"></span>
+        </div>
+        <button id="mobilesignOutBtn" class="hidden bg-gray-700 text-white px-3 py-2 rounded-md text-base font-medium" onclick="signOut()">Sign Out</button>
+        <button id="mobilegoogleSignInBtn" class="bg-blue-500 text-white px-3 py-2 rounded-md text-base font-medium">Sign in with Google</button>
+        <button id="mobileanonymousSignInBtn" class="bg-gray-600 text-white px-3 py-2 rounded-md text-base font-medium">I'm Paranoid</button>
+      </div>
+    </div>
+  </nav>
+  

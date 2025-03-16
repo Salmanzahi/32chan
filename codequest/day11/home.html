@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+   <link rel="stylesheet" href="nav.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module" src="./nav.js">
+       
+    </script>
+    <title>Website Sederhana</title>
+ 
+</head>
+<body class="bg-index text-index min-h-screen">
+
+    <!-- Buat navbar -->
+    <!-- <nav class="navbar">
+        <ul>
+
+        </ul>
+    </nav> -->
+    <div id="navbarContainer"></div>
+    <script>
+        
+      fetch('nav.html')
+        .then(response => response.text())
+        .then(html => {
+          document.getElementById('navbarContainer').innerHTML = html;
+          mobile();
+        })
+        .catch(error => console.error('Error loading navbar:', error));
+       
+    </script>
+    </body>
+  <!-- sambungkan navbar dengan file HTML lain menggunakan tag <a> -->
+  
+  <!-- Buat 3 file HTML:
+  1. home.html (untuk navbar dan halaman utama)
+  2. about.html (untuk About section)
+  3. contact.html (untuk Contact section)
+  Untuk isi masing-masing file nya sebagai berikut:
+  -->
+  
+    <!-- Home Section -->
+    <!-- jangan lupa tambahkan navbarnya juga-->
+        <section id="home">
+            <h1>Selamat Datang di Website Saya</h1>
+            <!-- tambahkan gambar foto kamu -->
+            <p>Klik <a href="./IMG/myphoto.JPG"><span id="glow">di sini</span></a> untuk mengetahui lebih lanjut tentang saya.</p>
+        </section>
+    
+     </div>
+    
+    <!-- About Section -->
+    <!-- jangan lupa tambahkan navbarnya juga-->
+   
+
+    <!-- Contact Section -->
+    <!-- jangan lupa tambahkan navbarnya juga-->
+  
+
+
+</html>
+<!-- percantik file html ini dengan css -->

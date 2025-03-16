@@ -1,0 +1,1 @@
+ questions = session.get("questions", [])

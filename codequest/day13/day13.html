@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulir Pendaftaran</title>
+    <!-- link css -->
+     <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <h1>Formulir Pendaftaran</h1>
+
+    <form action="#" method="POST">
+        <!-- Nama Lengkap -->
+        <label for="nama">Nama Lengkap:</label>
+        <input type="text" id="nama" name="nama" placeholder="isi nama lengkap..." required>
+      
+        <!-- Email -->
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" placeholder="isi email..." required>
+      
+        <!-- Password -->
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" placeholder="isi password..." required>
+      
+        <!-- Jenis Kelamin menggunakan radio -->
+       
+            <legend style="margin:20px; text-align: center;"><strong>Jenis Kelamin:</strong></legend>
+            <label for="pria" style="text-align: center;">Pria</label>
+            <input type="radio" id="pria" name="jenis_kelamin" value="pria" required>
+            <label for="wanita" style="text-align: center;">Wanita</label>
+            <input type="radio" id="wanita" name="jenis_kelamin" value="wanita" required>
+            
+       
+
+        <!-- Tanggal Lahir -->
+        <label for="tanggal_lahir">Tanggal Lahir:</label>
+        <input type="date" id="tanggal_lahir" name="tanggal_lahir" required>
+
+        <!-- Kota Asal -->
+        <label for="kota">Kota Asal:</label>
+        <select id="kota" name="kota" required>
+            <option value="">Pilih Kota</option>
+            <option value="Jakarta">Jakarta</option>
+            <option value="Surabaya">Surabaya</option>
+            <option value="Surakarta">Surakarta</option>
+            <option value="Bandung">Bandung</option>
+            <option value="Lainnya">Lainnya</option>
+        </select>
+        <input type="text" id="kota_lain" name="kota_lain" placeholder="Masukkan kota asal lainnya">
+
+        <!-- Pesan -->
+        <label for="pesan">Pesan:</label>
+        <textarea id="pesan" name="pesan" placeholder="tulis pesan di sini..." rows="4"></textarea>
+
+        <!-- Tombol Submit -->
+        <button type="submit">Daftar</button>
+    </form>
+
+</body>
+</html>

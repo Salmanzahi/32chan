@@ -1,0 +1,77 @@
+/* Styling untuk body */
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f4f4f4;
+    margin: 20px;
+}
+
+/* Styling untuk judul berwarna hitam */
+h1 {
+    color: black;
+}
+
+/* Styling untuk formulir */
+form {
+    background-color: white;
+    padding: 20px;
+    width: 40%;
+    margin: auto;
+    /* styling radius border agar tidak tajam di ujungnya */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    /* buat text rata kiri */
+    text-align: left;
+    border-radius: 5px;
+}
+
+/* Styling untuk label */
+label {
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;
+}
+
+/* Styling untuk input, select, dan textarea */
+input, select, textarea {
+    width: 98%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Styling untuk radio button */
+.radio-group {
+    display: flex;
+    gap: 10px;
+    /* buat agar berada di tengah */
+    justify-content: center;
+    margin-top: 5px;
+}
+
+/* Styling untuk tombol */
+button {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 15px;
+    cursor: pointer;
+    /* jangan tampilkan garis tombol */
+    border: none;
+    /* berikan warna background biru, warna text putih, dan ukuran tulisan 16px */
+    background-color: blue;
+    color: white;
+    font-size: 16px;
+}
+
+/* Berikan hover effect untuk tombol */
+button:hover {
+    background-color: darkblue;
+}
+
+/* Berikan validasi form input yang belum diisi berwarna merah */
+input:invalid,
+select:invalid,
+textarea:invalid {
+    border-color: red;
+}

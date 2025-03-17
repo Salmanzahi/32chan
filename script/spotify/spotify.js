@@ -107,7 +107,10 @@ export function handleSpotifyCallback() {
 
 // Search for tracks on Spotify
 export async function searchSpotifyTracks(query) {
-    if (!hasValidToken()) {
+    // Always get the latest token from localStorage to ensure we're using the current user's token
+    const currentToken = localStorage.getItem('spotify_token');
+    
+    if (!currentToken) {
         console.error('No valid Spotify token');
         return [];
     }
@@ -115,9 +118,17 @@ export async function searchSpotifyTracks(query) {
     try {
         const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=track&limit=10`, {
             headers: {
-                'Authorization': `Bearer ${spotifyToken}`
+                'Authorization': `Bearer ${currentToken}`
             }
         });
+        
+        // Check for specific error codes that might indicate auth issues
+        if (response.status === 401) {
+            console.error('Spotify token expired or invalid');
+            localStorage.removeItem('spotify_token');
+            localStorage.removeItem('spotify_token_expiry');
+            return [];
+        }
         
         if (!response.ok) {
             throw new Error(`Spotify API error: ${response.status}`);
@@ -141,7 +152,10 @@ export async function searchSpotifyTracks(query) {
 
 // Get track details by ID
 export async function getTrackDetails(trackId) {
-    if (!hasValidToken()) {
+    // Always get the latest token from localStorage
+    const currentToken = localStorage.getItem('spotify_token');
+    
+    if (!currentToken) {
         console.error('No valid Spotify token');
         return null;
     }
@@ -149,9 +163,17 @@ export async function getTrackDetails(trackId) {
     try {
         const response = await fetch(`https://api.spotify.com/v1/tracks/${trackId}`, {
             headers: {
-                'Authorization': `Bearer ${spotifyToken}`
+                'Authorization': `Bearer ${currentToken}`
             }
         });
+        
+        // Check for auth issues
+        if (response.status === 401) {
+            console.error('Spotify token expired or invalid');
+            localStorage.removeItem('spotify_token');
+            localStorage.removeItem('spotify_token_expiry');
+            return null;
+        }
         
         if (!response.ok) {
             throw new Error(`Spotify API error: ${response.status}`);

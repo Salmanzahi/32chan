@@ -5,7 +5,7 @@
 // Note: In a production environment, these should be stored securely
 const spotifyConfig = {
     clientId: 'ce846521760443b5b6932d4d217940ec', // Add your Spotify Client ID here
-    redirectUri: window.location.origin + '/callback.html',
+    redirectUri: 'https://unicraft.fun/callback.html',
     authEndpoint: 'https://accounts.spotify.com/authorize',
     tokenEndpoint: 'https://accounts.spotify.com/api/token',
     scopes: ['user-read-private', 'user-read-email']

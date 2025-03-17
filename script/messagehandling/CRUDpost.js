@@ -1,4 +1,4 @@
-import { db, storage } from "../../mainalt.js";
+import { db, storage, isAdmin } from "../../mainalt.js";
 import { dbConfig } from "../../config.js";
 import { showAlert } from "../alert/alert.js";
 import { sanitizeText } from "../santizeText/sanitize.js";

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Toko Nyaman</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <!-- Header with simple navigation -->
+    <header>
+        <div class="container header-container">
+            <a href="index.html" class="logo">Toko Nyaman</a>
+            <nav>
+                <button class="mobile-menu-btn">☰ Menu</button>
+                <ul>
+                    <li><a href="index.html">Beranda</a></li>
+                    <li><a href="#">Kategori</a></li>
+                    <li><a href="#">Promo</a></li>
+                    <li><a href="#">Bantuan</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Breadcrumb navigation for easy orientation -->
+    <div class="container" style="margin-top: 20px; margin-bottom: 20px;">
+        <div style="font-size: 18px;">
+            <a href="index.html" style="color: var(--text-color); text-decoration: none;">Beranda</a> &gt; 
+            <a href="product.html" style="color: var(--text-color); text-decoration: none;">Sepatu Nyaman Premium</a> &gt; 
+            <span style="color: var(--primary-color);">Checkout</span>
+        </div>
+    </div>
+
+    <!-- Checkout section -->
+    <section class="container">
+        <h1 style="font-size: 32px; margin-bottom: 30px;">Checkout</h1>
+        
+        <div class="checkout-container">
+            <!-- Checkout form with large, easy-to-read fields -->
+            <div class="checkout-form">
+                <form id="checkout-form">
+                    <h2 style="font-size: 24px; margin-bottom: 20px;">Informasi Pengiriman</h2>
+                    
+                    <div class="form-group">
+                        <label for="name">Nama Lengkap</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Nomor Telepon</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="address">Alamat Lengkap</label>
+                        <textarea id="address" name="address" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="city">Kota</label>
+                        <input type="text" id="city" name="city" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="postal-code">Kode Pos</label>
+                        <input type="text" id="postal-code" name="postal-code" required>
+                    </div>
+                    
+                    <h2 style="font-size: 24px; margin-top: 40px; margin-bottom: 20px;">Metode Pembayaran</h2>
+                    
+                    <div class="form-group">
+                        <label for="payment-method">Pilih Metode Pembayaran</label>
+                        <select id="payment-method" name="payment-method" required>
+                            <option value="">-- Pilih Metode Pembayaran --</option>
+                            <option value="transfer">Transfer Bank</option>
+                            <option value="cod">Bayar di Tempat (COD)</option>
+                            <option value="ewallet">E-Wallet</option>
+                        </select>
+                    </div>
+                    
+                    <div style="margin-top: 40px;">
+                        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 15px; font-size: 22px;">Selesaikan Pesanan</button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Order summary with clear, large text -->
+            <div class="order-summary">
+                <h3>Ringkasan Pesanan</h3>
+                
+                <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                    <img src="https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" alt="Sepatu Nyaman Premium" style="width: 80px; height: 80px; object-fit: cover; margin-right: 15px; border-radius: 5px;">
+                    <div>
+                        <p style="font-size: 18px; font-weight: bold;">Sepatu Nyaman Premium</p>
+                        <p style="font-size: 16px;">Jumlah: 1</p>
+                    </div>
+                </div>
+                
+                <div class="summary-item">
+                    <span>Harga Produk</span>
+                    <span>Rp 599.000</span>
+                </div>
+                
+                <div class="summary-item">
+                    <span>Biaya Pengiriman</span>
+                    <span>Rp 20.000</span>
+                </div>
+                
+                <div class="summary-total">
+                    <span>Total</span>
+                    <span>Rp 619.000</span>
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <p style="font-size: 16px; line-height: 1.5;">
+                        <strong>Catatan:</strong> Pesanan Anda akan diproses setelah pembayaran berhasil. Estimasi pengiriman 2-3 hari kerja.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer with important links and contact info -->
+    <footer>
+        <div class="container footer-container">
+            <div class="footer-section">
+                <h3>Toko Nyaman</h3>
+                <p style="margin-bottom: 15px;">Belanja mudah dan nyaman untuk semua.</p>
+                <p>Email: bantuan@tokonyaman.com</p>
+                <p>Telepon: 0800-1234-5678</p>
+            </div>
+            <div class="footer-section">
+                <h3>Tautan</h3>
+                <ul>
+                    <li><a href="index.html">Beranda</a></li>
+                    <li><a href="#">Tentang Kami</a></li>
+                    <li><a href="#">Syarat & Ketentuan</a></li>
+                    <li><a href="#">Kebijakan Privasi</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Bantuan</h3>
+                <ul>
+                    <li><a href="#">Cara Berbelanja</a></li>
+                    <li><a href="#">Cara Pembayaran</a></li>
+                    <li><a href="#">Pengiriman</a></li>
+                    <li><a href="#">Pengembalian Barang</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2023 Toko Nyaman. Hak Cipta Dilindungi.</p>
+        </div>
+    </footer>
+</body>
+</html>

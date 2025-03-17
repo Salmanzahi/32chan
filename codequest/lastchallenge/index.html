@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toko Nyaman - Belanja Mudah untuk Semua</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <!-- Header with simple navigation -->
+    <header>
+        <div class="container header-container">
+            <a href="index.html" class="logo">Toko Nyaman</a>
+            <nav>
+                <button class="mobile-menu-btn">☰ Menu</button>
+                <ul>
+                    <li><a href="index.html" class="active">Beranda</a></li>
+                    <li><a href="#">Kategori</a></li>
+                    <li><a href="#">Promo</a></li>
+                    <li><a href="#">Bantuan</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero section with clear value proposition -->
+    <section class="hero">
+        <div class="container">
+            <h1>Belanja Mudah dan Nyaman</h1>
+            <p>Temukan berbagai produk berkualitas dengan harga terbaik. Pengalaman belanja yang sederhana dan menyenangkan untuk Anda.</p>
+            <a href="#featured-products" class="btn btn-primary">Lihat Produk</a>
+        </div>
+    </section>
+
+    <!-- Featured products section -->
+    <section id="featured-products" class="container">
+        <h2 style="font-size: 28px; margin-bottom: 30px;">Produk Pilihan</h2>
+        <div class="products-grid">
+            <!-- Product 1 -->
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" alt="Sepatu Nyaman Premium" class="product-img">
+                <div class="product-info">
+                    <h3 class="product-title">Sepatu Nyaman Premium</h3>
+                    <p class="product-price">Rp 599.000</p>
+                    <p class="product-description">Sepatu dengan bahan berkualitas tinggi, sangat nyaman dipakai untuk aktivitas sehari-hari.</p>
+                    <a href="product.html" class="btn btn-primary">Lihat Detail</a>
+                </div>
+            </div>
+
+            <!-- Product 2 -->
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" alt="Headphone Bluetooth" class="product-img">
+                <div class="product-info">
+                    <h3 class="product-title">Headphone Bluetooth</h3>
+                    <p class="product-price">Rp 450.000</p>
+                    <p class="product-description">Headphone nirkabel dengan kualitas suara jernih dan baterai tahan lama hingga 20 jam.</p>
+                    <a href="#" class="btn btn-primary">Lihat Detail</a>
+                </div>
+            </div>
+
+            <!-- Product 3 -->
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1560769629-975ec94e6a86?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" alt="Jam Tangan Klasik" class="product-img">
+                <div class="product-info">
+                    <h3 class="product-title">Jam Tangan Klasik</h3>
+                    <p class="product-price">Rp 750.000</p>
+                    <p class="product-description">Jam tangan dengan desain klasik yang elegan, tahan air dan terbuat dari bahan berkualitas.</p>
+                    <a href="#" class="btn btn-primary">Lihat Detail</a>
+                </div>
+            </div>
+
+            <!-- Product 4 -->
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" alt="Tas Ransel Multifungsi" class="product-img">
+                <div class="product-info">
+                    <h3 class="product-title">Tas Ransel Multifungsi</h3>
+                    <p class="product-price">Rp 350.000</p>
+                    <p class="product-description">Tas ransel dengan banyak kantong, tahan air, dan nyaman untuk digunakan sehari-hari.</p>
+                    <a href="#" class="btn btn-primary">Lihat Detail</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories section with large, clear buttons -->
+    <section class="container" style="margin-bottom: 60px;">
+        <h2 style="font-size: 28px; margin-bottom: 30px;">Kategori Produk</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
+            <a href="#" class="btn btn-secondary" style="text-align: center; padding: 20px;">Pakaian</a>
+            <a href="#" class="btn btn-secondary" style="text-align: center; padding: 20px;">Elektronik</a>
+            <a href="#" class="btn btn-secondary" style="text-align: center; padding: 20px;">Kesehatan</a>
+            <a href="#" class="btn btn-secondary" style="text-align: center; padding: 20px;">Rumah Tangga</a>
+            <a href="#" class="btn btn-secondary" style="text-align: center; padding: 20px;">Olahraga</a>
+            <a href="#" class="btn btn-secondary" style="text-align: center; padding: 20px;">Makanan</a>
+        </div>
+    </section>
+
+    <!-- Simple benefits section -->
+    <section class="container" style="margin-bottom: 60px;">
+        <h2 style="font-size: 28px; margin-bottom: 30px;">Mengapa Belanja di Toko Nyaman?</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px;">
+            <div style="padding: 20px; background-color: var(--light-gray); border-radius: 8px;">
+                <h3 style="font-size: 22px; margin-bottom: 15px;">Mudah Digunakan</h3>
+                <p style="font-size: 18px;">Tampilan sederhana dan mudah dipahami untuk pengalaman belanja yang nyaman.</p>
+            </div>
+            <div style="padding: 20px; background-color: var(--light-gray); border-radius: 8px;">
+                <h3 style="font-size: 22px; margin-bottom: 15px;">Pengiriman Cepat</h3>
+                <p style="font-size: 18px;">Pesanan Anda akan dikirim dengan cepat ke alamat tujuan.</p>
+            </div>
+            <div style="padding: 20px; background-color: var(--light-gray); border-radius: 8px;">
+                <h3 style="font-size: 22px; margin-bottom: 15px;">Produk Berkualitas</h3>
+                <p style="font-size: 18px;">Semua produk kami dipilih dengan teliti untuk memastikan kualitas terbaik.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer with important links and contact info -->
+    <footer>
+        <div class="container footer-container">
+            <div class="footer-section">
+                <h3>Toko Nyaman</h3>
+                <p style="margin-bottom: 15px;">Belanja mudah dan nyaman untuk semua.</p>
+                <p>Email: bantuan@tokonyaman.com</p>
+                <p>Telepon: 0800-1234-5678</p>
+            </div>
+            <div class="footer-section">
+                <h3>Tautan</h3>
+                <ul>
+                    <li><a href="index.html">Beranda</a></li>
+                    <li><a href="#">Tentang Kami</a></li>
+                    <li><a href="#">Syarat & Ketentuan</a></li>
+                    <li><a href="#">Kebijakan Privasi</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Bantuan</h3>
+                <ul>
+                    <li><a href="#">Cara Berbelanja</a></li>
+                    <li><a href="#">Cara Pembayaran</a></li>
+                    <li><a href="#">Pengiriman</a></li>
+                    <li><a href="#">Pengembalian Barang</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2023 Toko Nyaman. Hak Cipta Dilindungi.</p>
+        </div>
+    </footer>
+</body>
+</html>

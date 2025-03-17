@@ -97,11 +97,16 @@ export function showMessages(sortOrder = 'desc') {
                         <div class="content">
                             <p style="color:#ffff">${safeMessageText}</p>
                             ${imageUrl ? `<img src="${imageUrl}" alt="Message Image" style="max-width: 100%; height: auto;">` : ''}
+                            ${message.spotifyTrack ? `
+                            <div class="spotify-track-embed">
+                                <iframe src="https://open.spotify.com/embed/track/${message.spotifyTrack.id}" 
+                                width="100%" height="80" frameborder="0" allowtransparency="true" 
+                                allow="encrypted-media"></iframe>
+                            </div>` : ''}
                         </div>
                         <div class="actions">
                             <button onclick="toggleLike('${message.id}')" class="action-btn ${likedClass}">Like (${likes})</button>
                             <button onclick="replyToMessage('${message.id}')" class="action-btn">Reply</button>
-                            <button onclick="viewSinglePost('${message.id}')" class="share-btn">View/Share</button>
                             <div class="like-count">${likes} likes</div>
                             ${isAdmin() ? `
                                 <button onclick="editPost('${message.id}')" class="action-btn">Edit</button>

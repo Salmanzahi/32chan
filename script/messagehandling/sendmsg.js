@@ -1,6 +1,7 @@
 import { isAdmin, db, storage, loadUserMessages} from "../../mainalt.js";
 import { dbConfig } from "../../config.js";
 import { showAlert } from "../alert/alert.js";
+import { getSelectedSpotifyTrack } from "../spotify/spotify.js";
 
 export function sendMessage() {
     const titleInput = document.getElementById('titleInput').value;
@@ -27,13 +28,17 @@ export function sendMessage() {
     const newMessageRef = db.ref(dbConfig.messagesPath).push();
     const showProfile = document.getElementById('showProfileToggle').checked;
     
+    // Get selected Spotify track if any
+    const spotifyTrack = getSelectedSpotifyTrack();
+    
     const messageData = {
         title: titleInput || null,
         text: messageInput || null,
         timestamp: Date.now(),
         userId: user.uid,
         replies: [],
-        showProfile: showProfile
+        showProfile: showProfile,
+        spotifyTrack: spotifyTrack
     };
     
     // Add user profile data if toggle is checked
@@ -94,10 +99,17 @@ window.sendMessage = sendMessage;
 export function resetForm() {
     const messageInput = document.getElementById('messageInput');
     const imageInput = document.getElementById('imageInput');
+    const titleInput = document.getElementById('titleInput');
 
     if (messageInput && imageInput) {
         messageInput.value = '';
         imageInput.value = '';
+        titleInput.value = '';
+        
+        // Clear selected Spotify track if any
+        if (window.clearSelectedSpotifyTrack) {
+            window.clearSelectedSpotifyTrack();
+        }
     } else {
         console.error('One or more form elements not found in the DOM.');
     }

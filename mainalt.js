@@ -322,20 +322,7 @@ function deleteUserPost(messageId) {
 }
 window.deleteUserPost = deleteUserPost;
 // Function to load admin announcement
-function loadAdminAnnouncement() {
-    const announcementText = document.getElementById('announcementText');
-    const announcementContainer = document.getElementById('adminAnnouncement');
 
-    // Fetch the announcement content from the imported configuration
-    const announcementContent = `${adminAnnouncement.announcement}`;
-
-    if (announcementContent) {
-        announcementText.textContent = announcementContent;
-        announcementContainer.style.display = 'block';
-    } else {
-        announcementContainer.style.display = 'none';
-    }
-}
 
 // Load the admin announcement on page load
 

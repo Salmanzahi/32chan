@@ -1,1 +1,2 @@
-import "./messagehandling/importmsg.js"
+// import "./messagehandling/importmsg.js"
+import { loadAdminAnnouncement } from "./Annoucement/announcement";

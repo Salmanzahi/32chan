@@ -21,16 +21,29 @@ export function addChangelog() {
         userId: user.uid,
     };
 
-    newMessageRef.set(messageData)
-      .then(() => {
-          showAlert("Changelog added successfully!", "success");
-      })
-      .catch(error => {
-          showAlert("Error adding changelog: " + error.message, "error");
-      });
+    
+
+    newMessageRef.set(messageData, (error) => {
+        if (error) {
+            console.error('Failed to save message:', error);
+            showAlert('Error saving changelog', 'error');
+        } else {
+            // showAlert('Changelog saved successfully!', 'success');
+            // Clear input fields after successful save
+            showAlert('Changelog saved successfully!', 'success');
+            document.getElementById('changelogTitleInput').value = '';
+            document.getElementById('changelogMsgInput').value = '';
+        }
+    });
 }
 
 window.addChangelog = addChangelog;
+
+
+
+
+
+
 
 // export function viewChangelog() {
 //     const changelogContainer = document.getElementById('changelogContainer');

@@ -3,7 +3,8 @@ import { replyToMessage,  toggleViewToMessages, loadReplies, hideReplyForm, show
 import { sendMessage, resetForm } from "./sendmsg.js"
 import { toggleView } from "./toggleview.js";
 import {showMessages} from "./viewmsg.js"
-import { viewSinglePost } from "./sharepost.js"
+import { initSpotify, initSpotifySearchUI } from "../spotify/spotify.js";
+// Share post feature has been removed
 
 
 
@@ -15,7 +16,6 @@ import { viewSinglePost } from "./sharepost.js"
 // window.deletePost = deletePost;
 // window.editPost = editPost;
 // window.submitReply = submitReply;
-// window.toggleLike = toggleLike;
 // window.replyToMessage = replyToMessage;
 // window.toggleViewToMessages = toggleViewToMessages;
 // window.loadReplies = loadReplies;
@@ -24,3 +24,12 @@ import { viewSinglePost } from "./sharepost.js"
 // window.resetForm = resetForm;
 // window.showMessages = showMessages;
 // window.showReplyForm = showReplyForm;
+
+// Initialize Spotify functionality when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize Spotify authentication
+    initSpotify();
+    
+    // Initialize Spotify search UI in the message form
+    initSpotifySearchUI();
+});

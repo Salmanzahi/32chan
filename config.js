@@ -1,6 +1,6 @@
 // Database configuration
 export const dbConfig = {
-    messagesPath: 'messages',
+    messagesPath: 'artol',
     changelogPath: 'changelog',
     announcementsPath: 'announcements',
     imagesPath: 'images',
@@ -8,5 +8,5 @@ export const dbConfig = {
 };
 
 export const adminAnnouncement = {
-    announcement: 'hidup arin <3',
+    announcement: 'hidup cgg',
 };

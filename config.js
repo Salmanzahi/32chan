@@ -1,6 +1,6 @@
 // Database configuration
 export const dbConfig = {
-    messagesPath: 'artol',
+    messagesPath: 'messages',
     changelogPath: 'changelog',
     announcementsPath: 'announcements',
     imagesPath: 'images',

@@ -90,7 +90,7 @@ export function handleSpotifyCallback() {
         
         // Store the token
         spotifyToken = params.access_token;
-        const expiresIn = parseInt(params.expires_in, 10) || 3600; // Default to 1 hour
+        const expiresIn = parseInt(params.expires_in, 10) || 25200; // Default to 1 hour
         tokenExpiry = new Date(new Date().getTime() + expiresIn * 1000);
         
         localStorage.setItem('spotify_token', spotifyToken);

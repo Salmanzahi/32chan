@@ -1,0 +1,25 @@
+#donateMe {
+    background: linear-gradient(to right, #ef4444, #f97316);
+    color: #fff;
+    padding: 0.6rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+  
+#donateMe:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(to right, #dc2626, #ea580c);
+    box-shadow: 0 4px 6px rgba(239, 68, 68, 0.3);
+}
+
+@media (min-width: 1024px) {
+    #donateMe {
+        margin: 0.5rem 0;
+        padding: 0.75rem;
+    }
+}

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direct Messages - 32chan</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Styles -->
+    <link rel="stylesheet" href="./styles/global.css">
+    <link rel="stylesheet" href="./styles/nav.css">
+    <link rel="stylesheet" href="./styles/chat.css">
+    <link rel="stylesheet" href="./script/alert/alert.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+    <!-- Import scripts -->
+    <script type="module" src="./script/auth/auth-init.js"></script>
+    <script type="module" src="./config.js"></script>
+    <script type="module" src="./script/chat/chat.js"></script>
+    <script type="module" src="script/nav.js" defer></script>
+    <!-- Custom Styling -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="chat-bg">
+    <!-- Navbar Container -->
+    <div id="navbarContainer"></div>
+
+    <main class="h-screen pt-14 pb-0 px-0 w-full">
+        <div class="chat-container flex flex-col md:flex-row h-full overflow-hidden w-full">
+            <!-- Sidebar / User Search -->
+            <div id="sidebar" class="sidebar w-full md:w-72 lg:w-80 border-r border-dark flex flex-col h-full md:block">
+                <!-- Header with user info -->
+                <div class="sidebar-header p-3 border-b border-dark flex items-center justify-between">
+                    <h2 class="text-xl font-semibold text-white">Messages</h2>
+                    <button id="newChatBtn" class="text-gray-300 hover:text-white p-2 rounded-full transition-colors">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </div>
+                
+        
+                <div class="warn-container bg-red-900/30 border border-red-500/50 text-red-200 p-3 mx-3 my-2 rounded-lg text-sm">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>
+                    <span>Sorry for the inconvenience. A UI (User Interface) bug may occur in the DM feature.</span>
+                </div>
+                
+                <!-- Search Bar -->
+                <div class="search-container p-2 border-b border-dark">
+                    <div class="relative">
+                        <input type="text" id="userSearchInput" placeholder="Search users..." 
+                            class="search-input w-full py-2 px-4 rounded-full text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent">
+                        <i class="fas fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                    <!-- Search Results Container -->
+                    <div id="searchResults" class="search-results mt-2 max-h-60 overflow-y-auto hidden"></div>
+                </div>
+                
+                <!-- Conversation List -->
+                <div id="conversationsList" class="conversations-list flex-grow overflow-y-auto">
+                    <!-- Conversations will be loaded here -->
+                    <div class="empty-state flex flex-col items-center justify-center text-center p-8 text-gray-400 h-full">
+                        <i class="fas fa-comments text-4xl mb-4"></i>
+                        <p>No conversations yet.</p>
+                        <p class="text-sm mt-2">Search for users to start chatting!</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Chat Area -->
+            <div id="chatArea" class="chat-area flex-1 flex flex-col h-full md:block hidden">
+                <!-- Chat Header -->
+                <div id="chatHeader" class="chat-header p-3 border-b border-dark flex items-center">
+                    <button id="backToConversations" class="md:hidden mr-2 text-gray-300 hover:text-white p-2">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="flex items-center">
+                        <div class="user-avatar-container block">
+                            <img id="chatUserAvatar" src="./images/suscat.jpg" alt="User Avatar" class="w-10 h-10 rounded-full border-2 border-dark">
+                        </div>
+                        <div class="ml-3">
+                            <h3 id="chatUsername" class="text-lg font-medium text-white">Select a conversation</h3>
+                            <p id="chatUserStatus" class="text-xs text-gray-400">Online</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Messages Container -->
+                <div id="messagesContainer" class="messages-container flex-grow overflow-y-auto p-4">
+                    <!-- Welcome screen -->
+                    <div id="welcomeScreen" class="welcome-screen flex flex-col items-center justify-center text-center p-8 text-gray-400 h-full">
+                        <img src="./images/suscat.jpg" alt="32chan Logo" class="w-24 h-24 rounded-full mb-6">
+                        <h3 class="text-xl font-semibold text-white mb-2">Welcome to 32chan Direct Messages</h3>
+                        <p class="mb-4">Connect with other users privately</p>
+                        <p class="text-sm">Search for users to start chatting!</p>
+                    </div>
+                    
+                    <!-- Messages will be loaded here -->
+                    <div id="messagesList" class="messages-list space-y-2 hidden w-full max-w-full"></div>
+                </div>
+                
+                <!-- Message Input Form -->
+                <div id="messageInputContainer" class="message-input-container p-3 border-t border-dark hidden">
+                    <form id="messageForm" class="flex items-center space-x-2">
+                        <input type="text" id="messageInput" placeholder="Type a message..." 
+                            class="chat-input flex-grow py-3 px-4 rounded-full text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent">
+                        <button type="submit" id="sendMessageBtn" class="send-btn text-white p-3 rounded-full hover:bg-accent-dark transition-colors">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- User Search Modal -->
+    <div id="userSearchModal" class="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center hidden">
+        <div class="modal-content bg-sidebar rounded-lg p-6 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-white">New Conversation</h3>
+                <button id="closeModalBtn" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="mb-4">
+                <input type="text" id="modalSearchInput" placeholder="Search by username..." 
+                    class="search-input w-full py-2 px-4 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent">
+            </div>
+            
+            <div id="modalSearchResults" class="max-h-60 overflow-y-auto mb-4">
+                <!-- Search results will be populated here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Load navbar -->
+    <script type="module">
+        // Load navbar
+        fetch('./nav.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('navbarContainer').innerHTML = html;
+                // Initialize mobile menu after navbar is loaded
+                if (typeof mobile === 'function') {
+                    mobile();
+                }
+            })
+            .catch(error => console.error('Error loading navbar:', error));
+    </script>
+    
+    <style>
+       /* Custom chat styles to enhance the chat.css file */
+       :root {
+           --chat-bg: #0f172a;
+           --sidebar-bg: #131c2e;
+           --message-bg: #1e293b;
+           --message-sent: #922c33;
+           --message-received: #2a3c59;
+           --accent: #ef4444;
+           --accent-dark: #dc2626;
+           --border-dark: #1f2937;
+           --input-bg: #1e293b;
+           --search-input-bg: rgba(59, 71, 100, 0.5);
+       }
+       
+       /* Responsive spacing improvements */
+       @media (min-width: 768px) {
+           .chat-header, .sidebar-header {
+               margin-top: 16px;
+               padding-top: 12px;
+               padding-bottom: 12px;
+           }
+           
+           .messages-container {
+               padding: 24px 16px 12px 24px;
+           }
+           
+           /* Fix for PC view */
+           #sidebar, #chatArea {
+               position: static;
+               height: 100%;
+               display: block;
+           }
+           
+           #chatArea {
+               flex: 1;
+               display: flex;
+               flex-direction: column;
+           }
+       }
+       
+       /* Message styling enhancements */
+       .messages-list {
+           margin-top: 12px;
+       }
+       
+       .message {
+           padding: 12px 16px;
+           box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+       }
+       
+       .message-sent {
+           margin-right: 10px;
+       }
+       
+       .message-received {
+           margin-left: 10px;
+       }
+       
+       /* Improved vertical spacing */
+       .space-y-2 > * + * {
+           margin-top: 1rem;
+       }
+       
+       /* WhatsApp-style mobile UI */
+       @media (max-width: 767px) {
+           .chat-container {
+               height: calc(100vh - 56px);
+               overflow: hidden;
+           }
+           
+           .sidebar, .chat-area {
+               position: absolute;
+               top: 56px;
+               left: 0;
+               right: 0;
+               bottom: 0;
+               width: 100%;
+               height: calc(100vh - 56px);
+               transition: transform 0.3s ease-in-out;
+           }
+           
+           .chat-area {
+               background-color: var(--chat-bg);
+               z-index: 10;
+           }
+           
+           .conversation-item {
+               padding: 12px 16px;
+               border-bottom: 1px solid var(--border-dark);
+           }
+           
+           .conversation-avatar {
+               width: 50px;
+               height: 50px;
+           }
+           
+           .conversation-name {
+               font-size: 16px;
+               font-weight: 600;
+           }
+           
+           .conversation-last-message {
+               font-size: 14px;
+               margin-top: 4px;
+           }
+           
+           .message-input-container {
+               position: fixed;
+               bottom: 0;
+               left: 0;
+               right: 0;
+               background-color: var(--chat-bg);
+               border-top: 1px solid var(--border-dark);
+               padding: 10px 16px;
+               z-index: 20;
+           }
+           
+           .messages-container {
+               padding-bottom: 70px;
+           }
+       }
+       
+       /* Back button styling */
+       #backToConversations {
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           width: 32px;
+           height: 32px;
+           border-radius: 50%;
+           transition: background-color 0.2s;
+       }
+       
+       #backToConversations:hover {
+           background-color: rgba(255, 255, 255, 0.1);
+       }
+    </style>
+    
+    
+</body>
+</html> 

@@ -1,0 +1,337 @@
+/* Profile Page Styles */
+.profile-container {
+    max-width: 900px;
+    margin: 100px auto 40px;
+    padding: 0 20px;
+}
+
+.profile-card {
+    background-color: var(--card-bg, #1f1f1f);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    padding: 32px;
+    border: 1px solid var(--card-border, #333);
+}
+
+.profile-card h1 {
+    margin-top: 0;
+    margin-bottom: 24px;
+    font-size: 1.75rem;
+    color: var(--text, #fff);
+    text-align: center;
+}
+
+.profile-section {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    margin-bottom: 32px;
+}
+
+@media (min-width: 768px) {
+    .profile-section {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+}
+
+/* Profile Picture */
+.profile-picture-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid var(--button-primary, #ff4757);
+}
+
+@media (min-width: 768px) {
+    .profile-picture-container {
+        margin: 0;
+    }
+}
+
+.profile-picture-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-picture-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    padding: 8px 0;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.profile-picture-container:hover .profile-picture-overlay {
+    opacity: 1;
+}
+
+.change-photo-btn {
+    color: white;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+/* Profile Source Info */
+.profile-source-info {
+    position: absolute;
+    bottom: -25px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 0.75rem;
+}
+
+/* Profile Info */
+.profile-info {
+    flex: 1;
+}
+
+.profile-field {
+    margin-bottom: 20px;
+}
+
+.profile-field label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary, #aaa);
+    margin-bottom: 6px;
+}
+
+.profile-field p {
+    font-size: 1rem;
+    color: var(--text, #fff);
+    margin: 0;
+}
+
+.profile-field small {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.75rem;
+}
+
+/* Edit Field */
+.edit-field {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.edit-field input {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 6px;
+    background-color: var(--input-bg, #2a2a2a);
+    border: 1px solid var(--input-border, #444);
+    color: var(--text, #fff);
+}
+
+.edit-field input:read-only {
+    background-color: var(--input-bg-readonly, #222);
+}
+
+/* Buttons */
+.edit-btn, .save-btn, .cancel-btn {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.edit-btn {
+    background-color: var(--button-secondary, #2d3436);
+    color: var(--text, #fff);
+}
+
+.save-btn {
+    background-color: var(--button-primary, #ff4757);
+    color: white;
+}
+
+.cancel-btn {
+    background-color: var(--button-danger, #636e72);
+    color: white;
+}
+
+.edit-controls {
+    display: none;
+    gap: 8px;
+}
+
+/* Profile Actions */
+.profile-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: flex-end;
+    margin-top: 32px;
+}
+
+.primary-btn, .secondary-btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.primary-btn {
+    background-color: var(--button-primary, #ff4757);
+    color: white;
+}
+
+.primary-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.secondary-btn {
+    background-color: var(--button-secondary, #2d3436);
+    color: var(--text, #fff);
+}
+
+/* Light mode overrides */
+.light-mode .profile-card {
+    background-color: #f9f9f9;
+    border-color: #e0e0e0;
+}
+
+.light-mode .profile-field label {
+    color: #555;
+}
+
+.light-mode .profile-field p,
+.light-mode .profile-card h1 {
+    color: #333;
+}
+
+.light-mode .edit-field input {
+    background-color: #fff;
+    border-color: #ddd;
+    color: #333;
+}
+
+.light-mode .edit-field input:read-only {
+    background-color: #f5f5f5;
+}
+
+.light-mode .edit-btn,
+.light-mode .cancel-btn {
+    border-color: #ddd;
+    color: #333;
+}
+
+.light-mode .edit-btn:hover,
+.light-mode .cancel-btn:hover {
+    background-color: #eee;
+}
+
+/* Add the saved-feedback class */
+.saved-feedback {
+    color: #4caf50;
+    font-weight: bold;
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: rgba(76, 175, 80, 0.1);
+    border-radius: 4px;
+    animation: fadeInOut 3s ease-in-out;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { opacity: 0; }
+} 
+
+#toggleAnonymousBtn {
+    background-color: var(--button-primary, #ff4757);
+    color: white;
+    padding: 8px 79px;
+    margin-top: 10px;
+}
+#toggleAnonymousBtn:hover {
+    background-color: var(--button-primary-hover, #e63946);
+}
+@media (max-width: 768px) {
+    #toggleAnonymousBtn {
+        padding: 8px 90px;
+        display: block;
+        margin: 0 auto;
+        margin-top: 10px;
+    }
+
+}
+
+/* Toggle switch for searchability */
+.toggle-switch-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 5px;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+    margin-bottom: 8px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #555;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+    background-color: #9c2131;
+}
+
+input:focus + .toggle-slider {
+    box-shadow: 0 0 1px #9c2131;
+}
+
+input:checked + .toggle-slider:before {
+    transform: translateX(30px);
+}
+
+label[for="searchableToggle"] .status-text {
+    font-weight: bold;
+    color: #4CAF50;
+}

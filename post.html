@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>32Chan - Post</title>
+    <meta property="og:title" content="32Chan Post">
+    <meta property="og:description" content="View this post on 32Chan">
+    <meta property="og:type" content="website">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="./styles/preload.css">
+    <link rel="stylesheet" href="dropdown.css">
+    <link rel="stylesheet" href="./styles/nav.css">
+    <link rel="stylesheet" href="./script/alert/alert.css">
+    <link rel="stylesheet" href="./styles/donate.css">
+    <link rel="stylesheet" href="./styles/loader.css">
+    <link rel="stylesheet" href="./styles/quora-theme.css">
+    <link rel="stylesheet" href="./styles/like-button.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="preloader-logo">32CHAN</div>
+        <span class="loader"></span>
+        <div class="preloader-text">Initializing secure connection...</div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script type="module" src="./mainalt.js"></script>
+    <script src="./404.js" defer></script>
+    <script src="./role.js" defer></script>
+    <script type="module" src="./script/auth/auth-init.js"></script>
+    <script type="module" src="./script/messagehandling/importmsg.js" defer></script>
+    <script type="module" src="./script/post.js" defer></script>
+    <!-- <script  type= "module" src="./script/nav.js"></script> -->
+
+    <!-- Admin Notification -->
+    <!-- <div id="adminNotification" style="display: none; position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background-color: red; color: white; padding: 5px 10px; border-radius: 5px;">
+        Administrator
+        <br>
+    </div> -->
+
+    <!-- Navbar -->
+    <div id="navbarContainer"></div>
+    <script>
+        // Hide preloader after page loads
+        window.addEventListener('load', function() {
+            const preloader = document.querySelector('.preloader');
+            setTimeout(() => {
+                preloader.classList.add('hidden');
+            }, 1000); // Hide after 1 second
+        });
+        
+        fetch('nav.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('navbarContainer').innerHTML = html;
+            })
+            .catch(error => console.error('Error loading navbar:', error));
+    </script>
+
+    <div class="container">
+        <header>
+            <h1>32Chan Forum</h1>
+            <p>View Post</p>
+        </header>
+
+        <!-- Main Content -->
+        <div id="mainContent" style="display: block;">
+            <!-- Loading Indicator -->
+            <div id="notme" class="loading-indicator">
+                <p>
+                    <span>Loading post...</span>
+                </p>
+            </div>
+
+            <!-- Single Post Container -->
+            <div id="singlePostContainer" class="messages-container">
+                <!-- Post will be dynamically added here -->
+            </div>
+
+            <!-- Back to Forum Button -->
+            <div class="text-center mt-6">
+                <button onclick="window.location.href='./sendview.html'" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Back to Forum
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile Menu Toggle
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,316 @@
+.bg-index { background-color: #0f0f0f; }
+.text-index { color: #ffffff; }
+.text-primary { color: #ff4757; }
+.border-primary { border-color: #ff4757; }
+
+/* Navbar animation styles */
+nav {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.nav-hidden {
+  transform: translateY(-100%);
+  opacity: 0.9;
+}
+
+/* Light mode overrides */
+.light-mode {
+  background-color: #f9f9f9;
+  color: #333333;
+}
+.light-mode .bg-index {
+  background-color: #f9f9f9;
+}
+.light-mode .text-index {
+  color: #333333;
+}
+.light-mode .bg-gray-800 {
+  background-color: #e5e5e5;
+}
+
+.nav-container {
+    background: var(--nav-bg);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.75rem 1rem;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    justify-content: center;
+}
+
+.nav-content {
+    width: 100%;
+    max-width: 1280px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text);
+    text-decoration: none;
+    background: linear-gradient(135deg, var(--button-primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-left: 10rem;
+    margin-right: 20rem;
+}
+
+@media (min-width: 768px) {
+    .nav-container {
+        padding: 0.75rem 2rem;
+    }
+
+    .nav-links {
+        gap: 2.5rem;
+    }
+
+    .nav-link {
+        font-size: 1rem;
+        padding: 0.5rem;
+    }
+}
+
+.nav-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+}
+
+.nav-link:hover {
+    color: var(--button-primary);
+}
+
+.auth-buttons {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.sign-out-btn {
+    padding: 0.5rem 1.25rem;
+    border-radius: 0.5rem;
+    background: var(--card-bg);
+    color: var(--text);
+    border: 1px solid var(--card-border);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
+    width: auto;
+    max-width: fit-content;
+}
+
+.sign-out-btn:hover {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: var(--button-primary);
+    color: var(--button-primary);
+}
+
+.donate-btn {
+    padding: 0.5rem 1.25rem;
+    border-radius: 0.5rem;
+    background: linear-gradient(135deg, var(--button-primary), var(--secondary));
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.donate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+/* Mobile menu button */
+.mobile-menu-btn {
+    display: block;
+    padding: 0.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text);
+}
+
+@media (min-width: 768px) {
+    .mobile-menu-btn {
+        display: none;
+    }
+}
+
+/* Mobile menu */
+.mobile-menu {
+    display: none;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background: var(--nav-bg);
+    backdrop-filter: blur(8px);
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+#mobile-menu.active {
+    max-height: 500px; /* Adjust based on your menu's maximum height */
+    opacity: 1;
+}
+
+@media (min-width: 768px) {
+    .mobile-menu {
+        display: none !important;
+    }
+}
+
+/* Hide desktop nav links and auth buttons on mobile */
+@media (max-width: 767px) {
+    .hidden.md\:flex {
+        display: none !important;
+    }
+    
+    .nav-links, 
+    .auth-buttons {
+        display: none !important;
+    }
+    
+    /* Ensure only brand and mobile menu button are visible */
+    .nav-container .max-w-7xl > div {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+    
+    /* Make mobile menu button clearly visible */
+    .mobile-menu-btn {
+        display: block !important;
+    }
+}
+
+/* User Profile Styles */
+.user-profile {
+    display: flex !important;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background: transparent;
+}
+
+.user-profile img {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-profile .user-name {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #fff;
+}
+
+.user-profile .admin-tag {
+    color: var(--button-primary);
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* Override for nav.html buttons */
+/* Ensure all buttons have consistent width and spacing */
+@media (min-width: 768px) {
+    #signOutBtn,
+    #googleSignInBtn,
+    #anonymousSignInBtn,
+    #donateMe {
+        width: auto !important;
+        min-width: 105px !important;
+        max-width: none !important;
+        padding: 0.5rem 1rem !important;
+        text-align: center !important;
+        justify-content: center !important;
+    }
+    
+    .hidden.md\:flex.items-center.space-x-4 {
+        gap: 1rem !important;
+    }
+    
+    #userProfile {
+        width: auto !important;
+        min-width: auto !important;
+        max-width: none !important;
+    }
+}
+
+/* Animated Hamburger Menu */
+.menu-icon {
+  width: 24px;
+  height: 24px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.hamburger-line {
+  width: 100%;
+  height: 2px;
+  background-color: currentColor;
+  position: absolute;
+  border-radius: 2px;
+  transition: all 0.3s ease-in-out;
+}
+
+.hamburger-line:nth-child(1) {
+  transform: translateY(-8px);
+}
+
+.hamburger-line:nth-child(2) {
+  transform: translateY(0);
+}
+
+.hamburger-line:nth-child(3) {
+  transform: translateY(8px);
+}
+
+/* Animation for X icon */
+.menu-icon.active .hamburger-line:nth-child(1) {
+  transform: translateY(0) rotate(45deg);
+}
+
+.menu-icon.active .hamburger-line:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-icon.active .hamburger-line:nth-child(3) {
+  transform: translateY(0) rotate(-45deg);
+}
+
+/* Mobile menu styles */
+#mobile-menu {
+    border-bottom: 1px solid rgba(75, 85, 99, 0.5);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out, opacity 0.3s ease-in-out;
+    opacity: 0;
+}

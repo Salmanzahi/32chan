@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - 32chan</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Styles -->
+    <link rel="stylesheet" href="./styles/global.css">
+    <link rel="stylesheet" href="./styles/nav.css">
+    <link rel="stylesheet" href="./styles/donate.css">
+    <link rel="stylesheet" href="./styles/profile.css">
+    <link rel="stylesheet" href="./script/alert/alert.css">
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+    <!-- Import config first -->
+    <script type="module" src="./script/profile/profile.js"></script>
+    <script type="module" src="./script/auth/auth-init.js"></script>
+    <script type="module" src="./config.js"></script>
+</head>
+<body class="bg-gray-900 text-white">
+    <!-- Navbar Container -->
+    <div id="navbarContainer"></div>
+
+    <main class="profile-container">
+        <div class="profile-card">
+            <h1>Your Profile</h1>
+            
+            <div class="profile-section">
+                <div class="profile-picture-container">
+                    <img id="profilePicture" src=" " alt="Profile Picture">
+                    <div class="profile-picture-overlay">
+                        <label for="profilePictureInput" class="change-photo-btn">Change Photo</label>
+                        <input type="file" id="profilePictureInput" accept="image/*" style="display: none;">
+                    </div>
+                    <div class="profile-source-info">
+                        <small class="text-gray-400">Using Google profile photo when available</small>
+                    </div>
+                </div>
+                
+                <div class="profile-info">
+                    <div class="profile-field">
+                        <label for="displayName">Username</label>
+                        <div class="edit-field">
+                            <input type="text" id="displayName" placeholder="Your username" readonly>
+                         
+                            <button id="editNameBtn" class="edit-btn">Edit</button>
+                            <div id="nameEditControls" class="edit-controls" style="display: none;">
+                                <button id="saveNameBtn" class="save-btn">Save</button>
+                                <button id="cancelNameBtn" class="cancel-btn">Cancel</button>
+                            </div>
+                        </div>
+                        <small class="text-gray-400">Default username is using your google accont name</small>
+                        <label for="anonymUsername">Anonymous Username</label>
+                        <div class="edit-field">
+                            <input type="text" id="anonymUsername" placeholder="Your anonymous username" readonly>
+                            <button id="editNameBtnAnonymous" class="edit-btn">Edit</button>
+                            <div id="nameEditControlsAnonymous" class="edit-controls" style="display: none;">
+                                <button id="saveNameBtnAnonymous" class="save-btn">Save</button>
+                                <button id="cancelNameBtnAnonymous" class="cancel-btn">Cancel</button>
+                            </div>
+                        </div>
+                        <small class="text-gray-400">If u turn on the anonym mode, please set up your username to make it different with real account</small>
+                        <button id="toggleAnonymousBtn" class="edit-btn">Activate Anonymous</button>
+                    </div>
+
+                    <div class="profile-field">
+                        <label for="searchableToggle">Profile Searchability <span class="status-text">ON</span></label>
+                        <div class="toggle-switch-container">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="searchableToggle" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <small class="text-gray-400">Allow other users to find you in direct message search</small>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-field">
+                        <label>Email</label>
+                        <p id="userEmail">Not available</p>
+                    </div>
+                    
+                    <div class="profile-field">
+                        <label>Account Type</label>
+                        <p id="accountType">Standard User</p>
+                    </div>
+                    
+                    <div class="profile-field">
+                        <label>Member Since</label>
+                        <p id="memberSince">Unknown</p>
+                    </div>
+
+                    <div class="profile-field">
+                        <label>Total Posts</label>
+                        <p id="totalPosts">none</p>
+                    </div>
+
+                    <div class="profile-field">
+                        <label>Ur Roles</label>
+                        <p id="userRole">Regular User</p>
+                </div>
+            </div>
+            
+            <div class="profile-actions">
+                <button id="saveProfileBtn" class="primary-btn" disabled>Save Changes</button>
+                <button id="cancelBtn" class="secondary-btn">Cancel</button>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Load navbar -->
+    <script type="module">
+        // Load navbar
+        fetch('./nav.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('navbarContainer').innerHTML = html;
+                // Initialize mobile menu after navbar is loaded
+                if (typeof mobile === 'function') {
+                    mobile();
+                }
+            })
+            .catch(error => console.error('Error loading navbar:', error));
+    </script>
+    
+    <!-- Profile scripts -->
+    <script type="module" src="./script/nav.js"></script>
+    <script type="module" src="./script/profile/profile.js"></script>
+</body>
+</html>

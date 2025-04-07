@@ -1,0 +1,179 @@
+.spotify-search-container {
+    background: #1e1e1e;
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    margin: 1rem 0;
+    border: 1px solid #333;
+}
+
+.spotify-search-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.spotify-logo {
+    width: 24px;
+    height: 24px;
+    margin-right: 0.75rem;
+}
+
+.spotify-search-title {
+    color: #1DB954;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.spotify-search-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: #333;
+    border: 1px solid #444;
+    border-radius: 0.5rem;
+    color: white;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+}
+
+.spotify-track {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    background: #282828;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.spotify-track:hover {
+    background: #333;
+}
+
+.spotify-track-info {
+    margin-left: 1rem;
+}
+
+.spotify-track-title {
+    color: white;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.spotify-track-artist {
+    color: #b3b3b3;
+    font-size: 0.875rem;
+}
+
+.spotify-search-results {
+    max-height: 300px;
+    overflow-y: auto;
+    border-radius: 4px;
+    background-color: #2e2e2e;
+    margin-top: 5px;
+}
+
+.spotify-track-result {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    border-bottom: 1px solid #333;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.spotify-track-result:hover {
+    background-color: #3e3e3e;
+}
+
+.spotify-track-result:last-child {
+    border-bottom: none;
+}
+
+.track-album-art {
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+    margin-right: 10px;
+    object-fit: cover;
+}
+
+.track-info {
+    flex: 1;
+}
+
+.track-name {
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 4px;
+}
+
+.track-artist {
+    font-size: 0.9em;
+    color: #aaa;
+}
+
+.selected-spotify-track {
+    margin-top: 10px;
+    border: 1px solid #1DB954;
+    border-radius: 4px;
+    padding: 10px;
+    background-color: #2e2e2e;
+}
+
+.selected-track-info {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.track-details {
+    flex: 1;
+    margin-left: 10px;
+}
+
+.remove-track-btn {
+    background: none;
+    border: none;
+    color: #ff5555;
+    font-size: 20px;
+    cursor: pointer;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
+
+.loading {
+    padding: 10px;
+    text-align: center;
+    color: #aaa;
+}
+
+.no-results {
+    padding: 10px;
+    text-align: center;
+    color: #aaa;
+}
+
+.form-container .spotify-auth-btn {
+    background-color: #1DB954;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 8px 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 5px;
+    transition: all 0.2s ease;
+    transform: translateY(0);
+}
+
+.form-container .spotify-auth-btn:hover {
+    background-color: #1ed760;
+    transform: translateY(-2px);
+}
+
+.spotify-track-embed {
+    margin-top: 10px;
+    width: 100%;
+}

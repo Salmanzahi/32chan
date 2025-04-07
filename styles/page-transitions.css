@@ -1,0 +1,164 @@
+/* Page Transitions CSS */
+:root {
+    --transition-duration: 0.7s;
+    --transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Base transition class */
+.page-transition {
+    transition: opacity var(--transition-duration) var(--transition-easing),
+                transform var(--transition-duration) var(--transition-easing);
+}
+
+/* Fade transition */
+.fade-transition {
+    opacity: 0;
+}
+
+.fade-transition.active {
+    opacity: 1;
+}
+
+/* Pop-in transition */
+.pop-transition {
+    opacity: 0;
+    transform: scale(0.95);
+}
+
+.pop-transition.active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Slide transition - from bottom */
+.slide-up-transition {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.slide-up-transition.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Slide transition - from top */
+.slide-down-transition {
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+.slide-down-transition.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Slide transition - from left */
+.slide-right-transition {
+    opacity: 0;
+    transform: translateX(-20px);
+}
+
+.slide-right-transition.active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Slide transition - from right */
+.slide-left-transition {
+    opacity: 0;
+    transform: translateX(20px);
+}
+
+.slide-left-transition.active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Staggered animation for multiple elements */
+.stagger-fade {
+    opacity: 0;
+    transition: opacity var(--transition-duration) var(--transition-easing);
+}
+
+.stagger-fade.animate > * {
+    opacity: 0;
+    transition: opacity var(--transition-duration) var(--transition-easing);
+}
+
+.stagger-fade.animate > *:nth-child(1) { transition-delay: 0.1s; }
+.stagger-fade.animate > *:nth-child(2) { transition-delay: 0.2s; }
+.stagger-fade.animate > *:nth-child(3) { transition-delay: 0.3s; }
+.stagger-fade.animate > *:nth-child(4) { transition-delay: 0.4s; }
+.stagger-fade.animate > *:nth-child(5) { transition-delay: 0.5s; }
+
+.stagger-fade.animate.active,
+.stagger-fade.animate.active > * {
+    opacity: 1;
+}
+
+/* Page content wrapper */
+.page-content {
+    transition: opacity var(--transition-duration) var(--transition-easing);
+}
+
+.page-entering .page-content {
+    opacity: 0;
+}
+
+.page-entered .page-content {
+    opacity: 1;
+}
+
+/* Hero section specific animations */
+.hero-section .hero-title,
+.hero-section .hero-subtitle,
+.hero-section .hero-buttons {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity var(--transition-duration) var(--transition-easing),
+                transform var(--transition-duration) var(--transition-easing);
+}
+
+.hero-section.active .hero-title {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.2s;
+}
+
+.hero-section.active .hero-subtitle {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.4s;
+}
+
+.hero-section.active .hero-buttons {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.6s;
+}
+
+/* Feature cards animation */
+.feature-card {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity var(--transition-duration) var(--transition-easing),
+                transform var(--transition-duration) var(--transition-easing);
+}
+
+.features-section.active .feature-card:nth-child(1) {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.2s;
+}
+
+.features-section.active .feature-card:nth-child(2) {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.4s;
+}
+
+.features-section.active .feature-card:nth-child(3) {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.6s;
+}

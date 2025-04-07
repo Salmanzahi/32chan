@@ -1,0 +1,125 @@
+:root {
+    --primary: #ef4444;
+    --secondary: #dc2626;
+    --container: #111827;
+    --bg: #0f172a;
+    --text: #f8fafc;
+    --text-secondary: #94a3b8;
+    --card-bg: #1e293b;
+    --card-border: #334155;
+    --glass: rgba(15, 23, 42, 0.92);
+    --input-bg: #334155;
+    --input-border: #475569;
+    --button-primary: #ef4444;
+    --button-hover: #dc2626;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+/* Preloader styles */
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.6s ease-out, visibility 0.6s ease-out;
+}
+
+.preloader.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.preloader-logo {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+    letter-spacing: -0.025em;
+    background: linear-gradient(45deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: pulse 2s infinite;
+}
+
+.loader {
+    width: 48px;
+    height: 48px;
+    border: 5px solid transparent;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    position: relative;
+    animation: rotation 2s linear infinite;
+}
+
+.loader::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border-radius: 50%;
+    border: 5px solid var(--card-border);
+    border-top-color: var(--primary);
+    border-bottom-color: var(--secondary);
+    animation: spin 3s linear infinite;
+}
+
+.loader::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px;
+    height: 16px;
+    background: var(--primary);
+    border-radius: 50%;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.preloader-text {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    opacity: 0.8;
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(720deg);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.7;
+        transform: scale(0.8);
+    }
+}

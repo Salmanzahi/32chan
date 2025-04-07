@@ -1,0 +1,85 @@
+/* Quora-inspired theme additions */
+
+/* Main action button styling */
+.main-action-btn {
+    background-color: var(--primary) !important;
+    color: white !important;
+    font-weight: 600 !important;
+    padding: 10px 24px !important;
+    border-radius: 99px !important; /* Pill shape */
+    box-shadow: 0 2px 8px rgba(185, 43, 39, 0.3) !important;
+    margin: 15px auto 25px !important;
+    display: block !important;
+    transition: all 0.2s ease !important;
+}
+
+.main-action-btn:hover {
+    background-color: #a12622 !important;
+    box-shadow: 0 4px 12px rgba(185, 43, 39, 0.4) !important;
+}
+
+/* Loading indicator styling */
+.loading-indicator {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+/* Message card enhancements */
+#messagesList li {
+    position: relative;
+}
+
+#messagesList li:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-color: var(--primary);
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+/* Post title styling */
+#messagesList li h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--text);
+    line-height: 1.4;
+}
+
+/* User info styling */
+.user-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.user-info img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.user-info .name {
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--text);
+}
+
+/* Answer count badge */
+.answer-count {
+    display: inline-block;
+    background-color: rgba(185, 43, 39, 0.1);
+    color: var(--primary);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 12px;
+    margin-left: 10px;
+}

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ 
+  <link rel="stylesheet" href="./styles/noselect.css">
+  <link rel="stylesheet" href="./styles/preload.css">
+  <link rel="stylesheet" href="./script/alert/alert.css">
+  <script src="./404.js" defer></script>
+  <script type="module" src="./mainalt.js"></script>
+  <script type="module" src="./script/nav.js"></script>
+  <link rel="stylesheet" href="./styles/adminbadge.css">
+  <link rel="stylesheet" href="./styles/inputtext.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>32Chan - Changelog</title>
+  <!-- Include Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+  <script type="module" src="./script/changelog/changelog.js"></script>
+  <script type="module" src="./script/privateroom/inputhandling.js"></script>
+  <script type="module" src="./script/privateroom/room/room.js"></script>
+  <script type="module" src="./script/privateroom/roomhistory.js"></script>
+</head>
+<body class="bg-index text-index min-h-screen">
+  <!-- Preloader -->
+  <div class="preloader">
+    <div class="preloader-logo">32CHAN</div>
+    <span class="loader"></span>
+    <div class="preloader-text">Initializing secure connection...</div>
+  </div>
+
+  <div id="navbarContainer"></div>
+  <script>
+    // Hide preloader after page loads
+    window.addEventListener('load', function() {
+      const preloader = document.querySelector('.preloader');
+      setTimeout(() => {
+        preloader.classList.add('hidden');
+      }, 1000); // Hide after 1 second
+    });
+    
+    fetch('nav.html')
+      .then(response => response.text())
+      .then(html => {
+        document.getElementById('navbarContainer').innerHTML = html;
+      })
+      .catch(error => console.error('Error loading navbar:', error));
+  </script>
+  <script type="module" src="./script/auth/auth-init.js"></script>
+
+  </script>
+     <div id="private" class="container mx-auto mt-20 p-4">
+      <section id="createRoom" class="bg-gray-800 p-6 rounded-lg mb-6">
+        <h2 class="text-2xl text-white mb-2 no-select">Create a Private Room</h2>
+        <p class="text-gray-300 no-select">A next-generation anonymous community platform pushing the boundaries of digital communication...</p>
+        <label for="roomCreateName">Room Name: </label>
+     
+        <input type="text" id="roomCreateName" placeholder="Configured your room code" style="margin-bottom: 15px;">
+        <label for="roomCreateCode" style="display: block" >Room Code:</label>
+        
+        <input type= "text" id="roomCreateCode" placeholder="Enter ur room code" style="margin-bottom: 15px;">
+      
+        <button id="createRoom" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full text-center" onclick="createRoom()">Submit</button>
+      </section>
+      <section id="joinRoom" class="bg-gray-800 p-6 rounded-lg mb-6">
+        <h2 class="text-2xl text-white mb-2 no-select">Join a Room</h2>
+        <p class="text-gray-300 no-select">Join the available room</p>
+        <label for="titleInput">Room name</label>
+        <input type="text" id="roomJoinName" placeholder="Enter the room name" style="margin-bottom: 15px;">
+        <label for="titleInput">Room Code</label>
+        <input type="text" id="roomJoinCode" placeholder="Enter the room code" style="margin-bottom: 15px;">
+        <button id="submitChangelog" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full text-center" onclick="joinRoom()">Submit</button>
+      </section>
+      
+      <section id="roomHistory" class="bg-gray-800 p-6 rounded-lg mb-6">
+        <h2 class="text-2xl text-white mb-2 no-select">Your Room History</h2>
+        <p class="text-gray-300 no-select">Rooms you've created or joined</p>
+        <!-- Room history will be displayed here -->
+      </section>
+      </div>
+  
+   
+ 
+  <div id="footer"></div>
+  <script>
+     fetch('footer.html')
+      .then(response => response.text())
+      .then(html => {
+        document.getElementById('footer').innerHTML = html;
+      })
+      .catch(error => console.error('Error loading navbar:', error));
+  </script>
+</body>
+</html>

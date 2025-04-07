@@ -1,0 +1,461 @@
+/* Rich Text Editor Styles */
+
+/* Editor container */
+#editor-container {
+  height: 200px;
+  max-height: 400px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Hide all Quill tooltips */
+.ql-tooltip {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Quill specific overrides */
+.ql-toolbar.ql-snow {
+  background-color: #1e2630;
+  border: 2px solid #3d444d;
+  border-bottom: none;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-start;
+  align-items: center;
+  overflow: visible;
+  z-index: 100;
+}
+
+.ql-container.ql-snow {
+  border: 2px solid #3d444d;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  background-color: #1a1f24;
+  color: #ffffff;
+  font-size: 16px;
+  line-height: 1.5;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Fix toolbar buttons */
+.ql-snow.ql-toolbar button {
+  background: #2d3748;
+  border: 1px solid #4a5568;
+  border-radius: 4px;
+  margin: 0 2px;
+  padding: 5px 7px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  width: 32px;
+}
+
+.ql-snow.ql-toolbar button:hover {
+  background: #3a4a61;
+  border-color: #60a5fa;
+  transform: translateY(-1px);
+}
+
+.ql-snow.ql-toolbar button.ql-active {
+  background-color: #3b82f6;
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.5);
+}
+
+/* Style consistent button groups */
+.ql-formats {
+  display: inline-flex;
+  margin-right: 10px;
+  align-items: center;
+  background: rgba(24, 32, 45, 0.5);
+  border-radius: 4px;
+  padding: 4px;
+  margin-bottom: 4px;
+}
+
+.ql-editor {
+  color: #ffffff;
+  font-size: 16px;
+  line-height: 1.5;
+  min-height: 150px;
+  padding: 15px;
+  max-height: 350px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #3d444d #1a1f24;
+  scroll-behavior: smooth;
+  scroll-padding-top: 0;
+  scroll-margin-top: 0;
+  transform: translateZ(0);
+}
+
+/* Custom scrollbar for WebKit browsers */
+.ql-editor::-webkit-scrollbar {
+  width: 8px;
+}
+
+.ql-editor::-webkit-scrollbar-track {
+  background: #1a1f24;
+  border-radius: 4px;
+}
+
+.ql-editor::-webkit-scrollbar-thumb {
+  background: #3d444d;
+  border-radius: 4px;
+}
+
+.ql-editor::-webkit-scrollbar-thumb:hover {
+  background: #4a5568;
+}
+
+.ql-editor p {
+  color: #ffffff;
+}
+
+.ql-editor.ql-blank::before {
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* Toolbar buttons */
+.ql-snow .ql-stroke {
+  stroke: #9ca3af;
+}
+
+.ql-snow .ql-fill {
+  fill: #9ca3af;
+}
+
+.ql-snow.ql-toolbar button:hover .ql-stroke,
+.ql-snow.ql-toolbar button.ql-active .ql-stroke {
+  stroke: #ffffff;
+}
+
+.ql-snow.ql-toolbar button:hover .ql-fill,
+.ql-snow.ql-toolbar button.ql-active .ql-fill {
+  fill: #ffffff;
+}
+
+/* Editor mode toggle */
+.editor-mode-toggle {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  background-color: #1e2630;
+  border-radius: 8px;
+  padding: 10px;
+  border: 1px solid #3d444d;
+}
+
+.toggle-label {
+  margin-right: 10px;
+  font-size: 14px;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.toggle-buttons {
+  display: flex;
+  gap: 5px;
+}
+
+.toggle-buttons button {
+  padding: 8px 12px;
+  background-color: #2d3748;
+  color: #e2e8f0;
+  border: 1px solid #3d444d;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.toggle-buttons button:hover {
+  background-color: #3a4a61;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.toggle-buttons button.active {
+  background-color: #3b82f6;
+  color: #ffffff;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.5);
+}
+
+.toggle-buttons button svg {
+  stroke: currentColor;
+}
+
+/* Improved toolbar icons */
+.ql-snow.ql-toolbar button svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Enhance dropdown menus */
+.ql-snow .ql-picker {
+  position: relative;
+  color: #9ca3af;
+  height: 32px;
+  background: #2d3748;
+  border: 1px solid #4a5568;
+  border-radius: 4px;
+  margin: 0 2px;
+}
+
+.ql-snow .ql-picker-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 100;
+  background-color: #1e2630;
+  border: 1px solid #3d444d;
+  border-radius: 4px;
+  padding: 5px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  width: auto;
+  min-width: 100%;
+}
+
+.ql-snow .ql-picker.ql-expanded .ql-picker-label {
+  color: #ffffff;
+  border-color: #3b82f6;
+}
+
+.ql-snow .ql-picker.ql-expanded .ql-picker-options {
+  border-color: #3b82f6;
+}
+
+.ql-snow .ql-picker-label {
+  padding: 3px 20px 3px 8px;
+  border: none;
+  border-radius: 4px;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  position: relative;
+}
+
+.ql-snow .ql-picker-label:hover {
+  color: #ffffff;
+}
+
+.ql-snow .ql-picker-item {
+  padding: 4px 8px;
+  border-radius: 3px;
+}
+
+.ql-snow .ql-picker-item:hover {
+  background-color: #3a4a61;
+  color: #ffffff;
+}
+
+.ql-snow .ql-picker-item.ql-selected {
+  background-color: #3b82f6;
+  color: #ffffff;
+}
+
+/* Fix color picker display and positioning */
+.ql-snow .ql-color-picker .ql-picker-options,
+.ql-snow .ql-background .ql-picker-options {
+  padding: 8px;
+  width: 196px !important;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-top: 5px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  z-index: 110;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #1e2630;
+  border: 1px solid #3d444d;
+  border-radius: 6px;
+}
+
+.ql-snow .ql-color-picker .ql-picker-item,
+.ql-snow .ql-background .ql-picker-item {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #4a5568;
+  margin: 1px;
+  border-radius: 3px;
+  transition: transform 0.15s ease;
+}
+
+.ql-snow .ql-color-picker .ql-picker-item:hover,
+.ql-snow .ql-background .ql-picker-item:hover {
+  transform: scale(1.1);
+  border-color: #ffffff;
+  box-shadow: 0 0 3px rgba(255, 255, 255, 0.5);
+}
+
+/* Fix dropdown button styling */
+.ql-snow .ql-picker.ql-color-picker,
+.ql-snow .ql-picker.ql-background {
+  width: 32px;
+  padding: 0;
+}
+
+.ql-snow .ql-picker.ql-color-picker .ql-picker-label,
+.ql-snow .ql-picker.ql-background .ql-picker-label {
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hide extra elements in color picker that might cause spacing issues */
+.ql-snow .ql-color-picker .ql-picker-label svg,
+.ql-snow .ql-background .ql-picker-label svg {
+  display: block;
+  margin: 0 auto;
+}
+
+/* Force dropdown to display correctly */
+.ql-snow .ql-picker.ql-expanded .ql-picker-options {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Ensure dropdown is hidden when not expanded */
+.ql-snow .ql-picker:not(.ql-expanded) .ql-picker-options {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+/* Fix header dropdown */
+.ql-snow .ql-header .ql-picker-options {
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ql-snow .ql-header .ql-picker-item {
+  padding: 6px 10px;
+  text-align: left;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .editor-mode-toggle {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .toggle-label {
+    margin-bottom: 5px;
+  }
+  
+  .ql-toolbar.ql-snow {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  
+  .ql-toolbar.ql-snow button {
+    margin: 3px;
+  }
+  
+  .ql-formats {
+    margin: 3px;
+  }
+  
+  /* Increase touch target size for buttons */
+  .ql-snow.ql-toolbar button,
+  .ql-snow .ql-picker-label {
+    height: 40px;
+    width: 40px;
+    padding: 8px;
+    margin: 2px;
+  }
+  
+  /* Improve color picker display on mobile */
+  .ql-snow .ql-color-picker .ql-picker-options,
+  .ql-snow .ql-background .ql-picker-options {
+    width: 240px !important; /* Wider for mobile to accommodate larger touch targets */
+    max-width: 90vw; /* Prevent overflow on small screens */
+    padding: 10px;
+    gap: 6px; /* Larger gap for easier touch selection */
+    position: fixed; /* Use fixed positioning on mobile */
+    left: 50% !important;
+    transform: translateX(-50%);
+    z-index: 9999; /* Ensure it's above everything */
+    top: 50%; /* Center vertically */
+    margin-top: 0;
+    bottom: auto;
+  }
+  
+  /* Make color swatches larger on mobile */
+  .ql-snow .ql-color-picker .ql-picker-item,
+  .ql-snow .ql-background .ql-picker-item {
+    width: 28px;
+    height: 28px;
+    margin: 2px;
+    border-radius: 4px;
+  }
+  
+  /* Add backdrop for better visibility */
+  .color-picker-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9000;
+    display: none;
+  }
+  
+  /* Show backdrop when picker is expanded */
+  .color-picker-backdrop.show {
+    display: block;
+  }
+  
+  /* Add close button for mobile */
+  .mobile-picker-close {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    background: #2d3748;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+    line-height: 30px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: none;
+  }
+  
+  /* Show close button on mobile */
+  @media (max-width: 768px) {
+    .mobile-picker-close {
+      display: block;
+    }
+  }
+}

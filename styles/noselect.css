@@ -1,0 +1,22 @@
+.no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.no-select * {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Prevent copy via context menu */
+.no-select::-moz-selection {
+    background: transparent;
+}
+
+.no-select::selection {
+    background: transparent;
+}

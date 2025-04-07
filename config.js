@@ -9,6 +9,6 @@ export const dbConfig = {
 };
 
 export const adminAnnouncement = {
-    announcement: 'long live for my pookie (arin <3)',
+    announcement: 'PREVIEW 3.0.3 (07/04/2025)',
 };
 

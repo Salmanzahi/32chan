@@ -9,7 +9,7 @@ let allMessages = [];
 let currentDisplayedCount = 0;
 let currentSortOrder = 'desc';
 const MESSAGES_PER_LOAD = 5;
-let isLazyLoadingEnabled = true; // New global variable for lazy loading toggle
+let isLazyLoadingEnabled = false; // New global variable for lazy loading toggle
 let lastScrollPosition = 0; // Track scroll position
 
 /**
@@ -243,6 +243,17 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 export function showMessages(sortOrder = 'desc') {
+    // Track if this is a sort change rather than initial load
+    const isSortChange = sortOrder !== currentSortOrder && currentDisplayedCount > 0;
+    
+    // Only allow scrolling on initial load, not when changing sort
+    const shouldScrollToMessage = !isSortChange && window.scrollToMessageAfterLoad;
+    
+    // If this is a sort change, we don't want to scroll again
+    if (isSortChange) {
+        window.scrollToMessageAfterLoad = null;
+    }
+    
     preserveScrollPosition(() => {
         const messagesList = document.getElementById('messagesList');
         
@@ -297,6 +308,17 @@ export function showMessages(sortOrder = 'desc') {
                 
                 // Update UI elements
                 updateUIElements();
+                
+                // Only scroll to message if this is not a sort change
+                if (shouldScrollToMessage) {
+                    const messageIdToScrollTo = window.scrollToMessageAfterLoad;
+                    window.scrollToMessageAfterLoad = null; // Clear the flag
+                    
+                    // Give time for the messages to render
+                    setTimeout(() => {
+                        scrollToMessage(messageIdToScrollTo);
+                    }, 500);
+                }
             });
         }
     });

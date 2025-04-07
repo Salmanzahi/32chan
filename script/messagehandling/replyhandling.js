@@ -11,8 +11,9 @@ export function showReplyForm(messageId) {
         // Create a reply form container
         replyForm = document.createElement('div');
         replyForm.id = `reply-form-${messageId}`;
-        replyForm.style.marginTop = '10px';
-        replyForm.style.padding = '10px';
+        replyForm.className = 'reply-form';
+        replyForm.style.marginTop = '15px';
+        replyForm.style.padding = '20px';
         replyForm.style.backgroundColor = '#2e2e2e';
         replyForm.style.borderRadius = '5px';
         replyForm.style.boxShadow = '0 2px 4px rgba(0,0,0,0.3)';
@@ -22,8 +23,18 @@ export function showReplyForm(messageId) {
             <textarea id="reply-text-${messageId}" placeholder="Enter your reply..." 
                 style="width: 100%; height: 50px; margin-bottom: 5px; padding: 5px; border-radius: 3px; border: 1px solid #444; background-color: #1e1e1e; color: #fff;"></textarea>
             <br>
-            <button onclick="submitReply('${messageId}')" style="margin-right: 5px; color: whitesmoke; font-weight: bold;">Submit Reply</button>
-            <button onclick="hideReplyForm('${messageId}')" style="color: whitemsoke; font-weight: bold;">Cancel</button>
+            <button onclick="submitReply('${messageId}')" style="margin-right: 5px;" class="action-btn submit-action">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z"/>
+                </svg>
+                <span style="margin-left: 4px;">Submit</span>
+            </button>
+            <button onclick="hideReplyForm('${messageId}')" class="action-btn cancel-action">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                </svg>
+                <span style="margin-left: 4px;">Cancel</span>
+            </button>
         `;
 
         // Append the reply form above the replies container instead of at the bottom

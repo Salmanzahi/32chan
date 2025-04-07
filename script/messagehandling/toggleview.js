@@ -1,4 +1,3 @@
-
 export function toggleView() {
     const formContainer = document.getElementById('formContainer');
     const messagesContainer = document.getElementById('messagesContainer');
@@ -35,7 +34,15 @@ window.toggleView = toggleView;
 
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("toggleViewBtn").innerText = "Form";
-  });
+    
+    // Check if we should show messages view based on localStorage flag
+    if (localStorage.getItem('showMessagesView') === 'true') {
+        // Switch to messages view
+        toggleView();
+        // Clear the flag
+        localStorage.removeItem('showMessagesView');
+    }
+});
 //window.resetForm = resetForm;
 // Function to show and load messages
 

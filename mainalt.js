@@ -68,7 +68,7 @@ export function anonymousSignIn() {
 }
 document.addEventListener("DOMContentLoaded", () => {
     auth.onAuthStateChanged((user) => {
-        console.log("Auth state changed. User:", user);
+        // console.log("Auth state changed. User:", user);
         console.log("Current pathname:", window.location.pathname);
        if (user) {
         // Check for custom username in database and sync with Auth profile
@@ -254,11 +254,11 @@ function getstringdb(path) {
         .then((snapshot) => {
           // Get the value (could be null if path doesn't exist)
           const value = snapshot.val();
-          console.log(`Retrieved from ${path}:`, value);
+        //   console.log(`Retrieved from ${path}:`, value);
           resolve(value);
         })
         .catch((error) => {
-          console.error(`Error retrieving data from ${path}:`, error);
+        //   console.error(`Error retrieving data from ${path}:`, error);
           reject(error);
         });
     });
@@ -319,12 +319,12 @@ function displayUserProfile(user) {
                 // If we have a custom display name from the database that doesn't match the current Firebase Auth displayName,
                 // update the Firebase Auth profile to match
                 if (customName && user.displayName !== customName && !user.isAnonymous) {
-                    console.log('Syncing Firebase Auth profile with custom username:', customName);
+                    console.log('Syncing with username:', customName);
                     // Update the Firebase Auth display name
                     user.updateProfile({
                         displayName: customName
                     }).then(() => {
-                        console.log('Firebase Auth profile successfully updated with custom username');
+                        // console.log('Firebase Auth profile successfully updated with custom username');
                     }).catch(error => {
                         console.error('Error updating Firebase Auth profile:', error);
                     });
@@ -369,7 +369,7 @@ function hideUserProfile() {
 
 // Add event listeners to your sign-in and sign-out buttons
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("DOM fully loaded and parsed");
+    console.log("DOM fully loaded");
 
     const elements = [
         { id: "googleSignInBtn", handler: googleSignIn },
@@ -524,7 +524,7 @@ function syncCustomUsername(user) {
         .then(snapshot => {
             const customName = snapshot.val();
             if (customName && customName !== user.displayName) {
-                console.log('Syncing custom username with Auth profile on login:', customName);
+                console.log('Syncing username with Auth profile on login:', customName);
                 // Update Firebase Auth profile
                 return user.updateProfile({
                     displayName: customName

@@ -34,3 +34,56 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize Spotify search UI in the message form
     initSpotifySearchUI();
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if we need to scroll to a specific message (coming back from shared post)
+    const scrollToMessageId = localStorage.getItem('scrollToMessageId');
+    if (scrollToMessageId) {
+        // Clear the stored ID
+        localStorage.removeItem('scrollToMessageId');
+        
+        // Since we're coming from a shared post, make sure we're in message view
+        if (document.getElementById('messagesContainer').style.display === 'none') {
+            // This will trigger showMessages() which will load the messages
+            toggleView();
+        }
+        
+        // Set a flag for when messages finish loading
+        window.scrollToMessageAfterLoad = scrollToMessageId;
+        
+        // Try to scroll after a delay in case messages are already loaded
+        setTimeout(() => {
+            scrollToMessage(scrollToMessageId);
+        }, 1000);
+    }
+});
+
+// Function to scroll to a specific message by ID
+function scrollToMessage(messageId) {
+    // Small delay to ensure the DOM is ready
+    setTimeout(() => {
+        const messageElement = document.querySelector(`li[data-id="${messageId}"]`);
+        if (messageElement) {
+            // Scroll to the message with some offset
+            const yOffset = -100; // Adjust as needed to account for fixed headers
+            const y = messageElement.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            
+            window.scrollTo({top: y, behavior: 'smooth'});
+            
+            // Highlight the message temporarily
+            messageElement.classList.add('highlight-message');
+            setTimeout(() => {
+                messageElement.classList.remove('highlight-message');
+            }, 3000);
+        } else {
+            // Message not found in current view, might need to load more messages or switch tabs
+            console.log('Message not found in current view. Might need additional handling.');
+            
+            // If you have pagination or lazy loading, you might need to
+            // store the ID and check again after more messages load
+        }
+    }, 500);
+}
+
+// Expose the function to the global scope
+window.scrollToMessage = scrollToMessage;

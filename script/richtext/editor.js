@@ -816,3 +816,33 @@ export function toggleWideMode() {
         console.error('Error toggling wide mode:', error);
     }
 }
+
+let editorInitialized = false;
+    
+function initEditor() {
+    if (!editorInitialized) {
+        setTimeout(() => {
+            initRichTextEditor();
+            editorInitialized = true;
+        }, 300);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize the rich text editor when the form container is shown
+    const toggleViewBtn = document.getElementById('toggleViewBtn');
+    const formContainer = document.getElementById('formContainer');
+    
+    if (toggleViewBtn) {
+        toggleViewBtn.addEventListener('click', function() {
+            if (formContainer && formContainer.style.display === 'block') {
+                initEditor();
+            }
+        });
+    }
+    
+    // Also initialize if the form is already visible (page refresh)
+    if (formContainer && formContainer.style.display === 'block') {
+        initEditor();
+    }
+});

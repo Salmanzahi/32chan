@@ -6,7 +6,7 @@ import { sanitizeText } from "../santizeText/sanitize.js";
 import { loadReplies, replyToMessage, showReplyForm } from "./replyhandling.js";
 import { showMessages } from "./viewmsg.js";
 import { createMessageElement } from "./viewmsg.js";
-
+import { toggleView } from "./toggleview.js";
 
 export function shareMessage(messageId) {
     window.location.href = `../../share.html?id=${messageId}`;
@@ -18,9 +18,29 @@ export function shareViaWhatsApp(messageId) {
     window.open(whatsappUrl, '_blank');
 }
 
+export function goBackToMessage(messageId) {
+    // Store the messageId in localStorage to scroll to it after redirect
+    if (messageId) {
+        localStorage.setItem('scrollToMessageId', messageId);
+        // Set flag to show messages container instead of form
+        localStorage.setItem('showMessagesView', 'true');
+    }
+    // Redirect to the main page
+    window.location.href = 'sendview.html';
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const roomId = getUrlParameter('id');
     document.getElementById('roomIdDisplay').textContent = roomId;
+    
+    // Setup back button
+    const backButton = document.getElementById('backToMessageBtn');
+    if (backButton) {
+        backButton.addEventListener('click', () => {
+            goBackToMessage(roomId);
+        });
+    }
+    
     loadSharedMessage(roomId);
 });
 
@@ -46,6 +66,25 @@ export function loadSharedMessage(messageId) {
                 
                 // Clear existing content before updating
                 messageContainer.innerHTML = '';
+                
+                // Create the back button header
+                const backButtonHeader = document.createElement('div');
+                backButtonHeader.className = 'back-button-header';
+                backButtonHeader.innerHTML = `
+                    <button id="backToMessageBtn" class="back-to-message-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                        </svg>
+                        Back to original post
+                    </button>
+                `;
+                messageContainer.appendChild(backButtonHeader);
+                
+                // Add click event to the back button
+                const backButton = backButtonHeader.querySelector('#backToMessageBtn');
+                backButton.addEventListener('click', () => {
+                    goBackToMessage(message.id);
+                });
                 
                 // Create and append the message element
                 const messageElement = createMessageElement(message, user);
@@ -89,3 +128,4 @@ export function loadSharedMessage(messageId) {
 
 window.shareMessage = shareMessage;
 window.shareViaWhatsApp = shareViaWhatsApp;
+window.goBackToMessage = goBackToMessage;

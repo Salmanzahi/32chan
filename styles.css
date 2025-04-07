@@ -349,7 +349,7 @@ header p {
     font-weight: 400;
 }
 
-#messagesList li button {
+/* #messagesList li button {
     background-color: var(--button-primary);
     color: white;
     border: none;
@@ -361,7 +361,7 @@ header p {
     transition: var(--transition);
     display: inline-flex;
     align-items: center;
-}
+} */
 
 #messagesList li button:hover {
     background-color: var(--button-hover);
@@ -906,3 +906,292 @@ input:checked + .slider:before {
 }
 
 
+/* Messages Header Styles */
+
+/* Anonymous Mode Warning Styles */
+.anonymous-mode-warning {
+    display: flex;
+    align-items: center;
+    background-color: #2d2d2d;
+    border: 1px solid #ffcc00;
+    border-radius: 6px;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.warning-icon {
+    font-size: 20px;
+    margin-right: 12px;
+}
+
+.warning-text {
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.warning-text strong {
+    color: #ffcc00;
+    font-weight: 600;
+}
+
+/* Message header styles */
+.header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+    .header {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.5rem;
+    }
+
+    .user-profile {
+        flex: 0 0 auto;
+    }
+
+    .title {
+        flex: 1;
+        margin: 0;
+    }
+
+    .timestamp {
+        flex: 0 0 auto;
+        margin: 0;
+    }
+}
+
+.title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.4;
+}
+
+.timestamp {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+/* Actions container */
+.actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+@media (min-width: 768px) {
+    .actions {
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        gap: 1rem;
+    }
+}
+
+/* Action buttons */
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    background: var(--card-bg);
+    color: var(--text);
+    border: 1px solid var(--card-border);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+@media (min-width: 768px) {
+    .action-btn {
+        min-width: 120px;
+        justify-content: center;
+    }
+}
+
+.action-btn:hover {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: var(--button-primary);
+    transform: translateY(-2px);
+}
+
+/* Liked state */
+.action-btn.liked {
+    background: linear-gradient(135deg, var(--button-primary), var(--secondary));
+    color: white;
+    border: none;
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+/* Heart icon for like button */
+.action-btn.liked svg {
+    fill: white;
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
+}
+
+.action-btn.liked:hover {
+    background: linear-gradient(135deg, var(--secondary), var(--button-primary));
+    transform: scale(1.1);
+}
+
+/* Animations */
+@keyframes likeAnimation {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1.05); }
+}
+
+@keyframes shine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.action-btn.liked-animation {
+    animation: likeAnimation 0.3s ease forwards;
+}
+
+/* Enhanced Reply Button Styling with Higher Specificity */
+#messagesList .action-btn.submit-action {
+    color: whitesmoke !important;
+    font-weight: bold !important;
+    background-color: var(--card-bg) !important;
+    border: 1px solid var(--card-border) !important;
+}
+
+#messagesList .action-btn.submit-action:hover {
+    background: rgba(20, 79, 230, 0.2) !important;
+    color: whitesmoke !important;
+    border-color: #144FE6 !important;
+    transform: translateY(-2px) !important;
+}
+
+#messagesList .action-btn.cancel-action {
+    color: #ef4444 !important;
+    font-weight: bold !important;
+    background-color: var(--card-bg) !important;
+    border: 1px solid var(--card-border) !important;
+}
+
+#messagesList .action-btn.cancel-action:hover {
+    background: rgba(239, 68, 68, 0.1) !important;
+    border-color: #ef4444 !important;
+    transform: translateY(-2px) !important;
+}
+
+#messagesList .action-btn.submit-action svg,
+#messagesList .action-btn.submit-action span {
+    color: whitesmoke !important;
+}
+
+#messagesList .action-btn.cancel-action svg,
+#messagesList .action-btn.cancel-action span {
+    color: #ef4444 !important;
+}
+
+/* Override any conflicting styles */
+li[data-id] .action-btn.submit-action {
+    color: whitesmoke !important;
+    font-weight: bold !important;
+}
+
+li[data-id] .action-btn.cancel-action {
+    color: #ef4444 !important;
+    font-weight: bold !important;
+}
+
+/* Ensure buttons maintain proper spacing */
+li[data-id] .action-btn.submit-action {
+    margin-right: 5px !important;
+}
+
+/* Direct styling for reply form buttons specifically */
+#messagesList div[id^="reply-form-"] .action-btn.submit-action,
+#messagesList div[id^="reply-form-"] .action-btn.cancel-action {
+    padding: 0.5rem 1rem !important;
+    border-radius: 0.5rem !important;
+    font-size: 0.875rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+/* Back button styles for shared post */
+.back-button-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--card-border);
+}
+
+.back-to-message-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background-color: var(--card-bg);
+    color: var(--text);
+    border: 1px solid var(--card-border);
+    border-radius: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.back-to-message-btn:hover {
+    background-color: var(--blue);
+    color: white;
+    border-color: var(--blue);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.back-to-message-btn svg {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.2s ease;
+}
+
+.back-to-message-btn:hover svg {
+    transform: translateX(-3px);
+}
+
+/* Highlight for messages when returning from shared posts */
+@keyframes highlightFade {
+    0% { 
+        background-color: rgba(69, 105, 194, 0.2);
+        border-color: var(--blue);
+        box-shadow: 0 0 0 2px rgba(69, 105, 194, 0.2);
+    }
+    70% { 
+        background-color: rgba(69, 105, 194, 0.2);
+        border-color: var(--blue);
+        box-shadow: 0 0 0 2px rgba(69, 105, 194, 0.2);
+    }
+    100% { 
+        background-color: var(--container);
+        border-color: var(--card-border);
+        box-shadow: var(--shadow-sm);
+    }
+}
+
+.highlight-message {
+    animation: highlightFade 3s ease-out;
+    border-color: var(--blue) !important;
+    box-shadow: 0 0 0 2px rgba(69, 105, 194, 0.2) !important;
+}

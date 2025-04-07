@@ -26,7 +26,6 @@ function handleClickOutside(event) {
                 mobileMenu.classList.add('hidden');
             }, 500); // Match this with your CSS transition duration
             
-            console.log('Mobile menu closed by clicking outside with animation');
         }
     }
 }
@@ -48,7 +47,7 @@ function initMobileMenu() {
         
         // Add a visual feedback class for better UX
         mobileMenuButton.classList.add('menu-button-initialized');
-        console.log('Mobile menu initialized successfully');
+        // console.log('Mobile menu initialized successfully');
     } else {
         console.error('Mobile menu elements not found, will retry when DOM changes');
     }

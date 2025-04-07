@@ -921,6 +921,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (window.innerWidth < 768) {
             sidebar.classList.add('hidden');
             chatArea.classList.remove('hidden');
+            chatArea.style.display = 'flex';
             // Force scroll to bottom when switching to chat view
             setTimeout(forceScrollToBottom, 300);
         }
@@ -931,6 +932,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (window.innerWidth < 768) {
             sidebar.classList.remove('hidden');
             chatArea.classList.add('hidden');
+            chatArea.style.display = 'none';
+            // Reset current chat when going back to sidebar
+            currentChat = null;
         }
     }
     
@@ -953,6 +957,31 @@ document.addEventListener('DOMContentLoaded', function() {
         originalOpenConversation(conversationId);
         if (window.innerWidth < 768) {
             showChatArea();
+        }
+    };
+    
+    // Handle browser back button
+    window.addEventListener('popstate', function(e) {
+        if (window.innerWidth < 768 && currentChat) {
+            showSidebar();
+            // Push a new state to allow going back to chat
+            history.pushState({ chat: currentChat }, '', window.location.href);
+        }
+    });
+    
+    // Push initial state when opening a chat
+    function pushChatState(conversationId) {
+        if (window.innerWidth < 768) {
+            history.pushState({ chat: conversationId }, '', window.location.href);
+        }
+    }
+    
+    // Update the openConversation function to handle history state
+    window.openConversation = function(conversationId) {
+        originalOpenConversation(conversationId);
+        if (window.innerWidth < 768) {
+            showChatArea();
+            pushChatState(conversationId);
         }
     };
     
@@ -980,6 +1009,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // On desktop, ensure both panels are visible
             sidebar.classList.remove('hidden');
             chatArea.classList.remove('hidden');
+            chatArea.style.display = 'flex';
         }
         // Force scroll to bottom on any resize (orientation change)
         setTimeout(forceScrollToBottom, 300);
@@ -989,6 +1019,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (window.innerWidth >= 768) {
         sidebar.classList.remove('hidden');
         chatArea.classList.remove('hidden');
+        chatArea.style.display = 'flex';
     }
     
     // Listen for orientation change on mobile

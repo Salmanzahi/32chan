@@ -194,13 +194,34 @@ function displayUserResults(snapshot, resultsContainer, isModal) {
         // Get user avatar
         const userAvatar = user.data.photoURL || './images/suscat.jpg';
         
-        resultItem.innerHTML = `
-            <img src="${userAvatar}" alt="${user.data.customDisplayName}" class="search-result-avatar">
-            <div class="search-result-info">
-                <div class="search-result-name">${user.data.customDisplayName}</div>
-                ${user.data.email ? `<div class="search-result-email">${user.data.email}</div>` : ''}
-            </div>
-        `;
+        // Get total posts count
+        db.ref(dbConfig.messagesPath).orderByChild('userId').equalTo(user.id).once('value')
+            .then((snapshot) => {
+                const postCount = snapshot.numChildren();
+                const creationDate = user.data.createdAt ? 
+                    new Date(user.data.createdAt).toLocaleDateString() : 
+                    'Unknown';
+                
+                resultItem.innerHTML = `
+                    <img src="${userAvatar}" alt="${user.data.customDisplayName}" class="search-result-avatar">
+                    <div class="search-result-info">
+                        <div class="search-result-name">${user.data.customDisplayName}</div>
+                        <div class="search-result-posts text-xs text-gray-500">Total Posts: ${postCount}</div>
+                        <div class="search-result-posts text-xs text-gray-500">Member Since: ${creationDate}</div>
+                    </div>
+                `;
+            })
+            .catch(error => {
+                console.error("Error getting user data:", error);
+                resultItem.innerHTML = `
+                    <img src="${userAvatar}" alt="${user.data.customDisplayName}" class="search-result-avatar">
+                    <div class="search-result-info">
+                        <div class="search-result-name">${user.data.customDisplayName}</div>
+                        <div class="search-result-posts text-xs text-gray-500">Total Posts: 0</div>
+                        <div class="search-result-posts text-xs text-gray-500">Member Since: Unknown</div>
+                    </div>
+                `;
+            });
         
         // Add click handler
         resultItem.addEventListener('click', () => {
@@ -326,13 +347,34 @@ function searchUsers(query, resultsContainer, isModal) {
             // Get user avatar
             const userAvatar = user.data.photoURL || './images/suscat.jpg';
             
-            resultItem.innerHTML = `
-                <img src="${userAvatar}" alt="${user.data.customDisplayName}" class="search-result-avatar">
-                <div class="search-result-info">
-                    <div class="search-result-name">${user.data.customDisplayName}</div>
-                    ${user.data.email ? `<div class="search-result-email">${user.data.email}</div>` : ''}
-                </div>
-            `;
+            // Get total posts count
+            db.ref(dbConfig.messagesPath).orderByChild('userId').equalTo(user.id).once('value')
+                .then((snapshot) => {
+                    const postCount = snapshot.numChildren();
+                    const creationDate = user.data.createdAt ? 
+                        new Date(user.data.createdAt).toLocaleDateString() : 
+                        'Unknown';
+                    
+                    resultItem.innerHTML = `
+                        <img src="${userAvatar}" alt="${user.data.customDisplayName}" class="search-result-avatar">
+                        <div class="search-result-info">
+                            <div class="search-result-name">${user.data.customDisplayName}</div>
+                            <div class="search-result-posts text-xs text-gray-500">Total Posts: ${postCount}</div>
+                            <div class="search-result-posts text-xs text-gray-500">Member Since: ${creationDate}</div>
+                        </div>
+                    `;
+                })
+                .catch(error => {
+                    console.error("Error getting user data:", error);
+                    resultItem.innerHTML = `
+                        <img src="${userAvatar}" alt="${user.data.customDisplayName}" class="search-result-avatar">
+                        <div class="search-result-info">
+                            <div class="search-result-name">${user.data.customDisplayName}</div>
+                            <div class="search-result-posts text-xs text-gray-500">Total Posts: 0</div>
+                            <div class="search-result-posts text-xs text-gray-500">Member Since: Unknown</div>
+                        </div>
+                    `;
+                });
             
             // Add click handler
             resultItem.addEventListener('click', () => {

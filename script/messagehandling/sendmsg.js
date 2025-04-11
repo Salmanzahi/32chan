@@ -3,6 +3,7 @@ import { dbConfig } from "../../config.js";
 import { showAlert } from "../alert/alert.js";
 import { getSelectedSpotifyTrack } from "../spotify/spotify.js";
 import { getEditorContent, clearEditorContent } from "../richtext/editor.js";
+import { uploadImageToSupabase } from "../config/supabase.js";
 
 // Check for anonymous mode when page loads
 document.addEventListener('DOMContentLoaded', function() {
@@ -17,6 +18,68 @@ document.addEventListener('DOMContentLoaded', function() {
         if (user) {
             checkAndUpdateAnonymousWarning(user.uid);
             checkAndUpdateAnonymousUserWarning(user);
+        }
+    });
+
+    // Add image preview functionality
+    const imageInput = document.getElementById('imageInput');
+    const imagePreviewContainer = document.createElement('div');
+    imagePreviewContainer.id = 'imagePreviewContainer';
+    imagePreviewContainer.style.marginTop = '10px';
+    imagePreviewContainer.style.display = 'none';
+    
+    // Insert the preview container after the image input
+    imageInput.parentNode.insertBefore(imagePreviewContainer, imageInput.nextSibling);
+    
+    // Add event listener for image selection
+    imageInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            // Clear previous preview
+            imagePreviewContainer.innerHTML = '';
+            imagePreviewContainer.style.display = 'block';
+            
+            // Create preview image
+            const img = document.createElement('img');
+            img.style.maxWidth = '200px';
+            img.style.maxHeight = '200px';
+            img.style.borderRadius = '4px';
+            img.style.marginTop = '10px';
+            
+            // Create remove button
+            const removeButton = document.createElement('button');
+            removeButton.textContent = 'Remove Image';
+            removeButton.style.marginLeft = '10px';
+            removeButton.style.padding = '5px 10px';
+            removeButton.style.backgroundColor = '#ff4444';
+            removeButton.style.color = 'white';
+            removeButton.style.border = 'none';
+            removeButton.style.borderRadius = '4px';
+            removeButton.style.cursor = 'pointer';
+            
+            // Add click handler for remove button
+            removeButton.addEventListener('click', function() {
+                imageInput.value = '';
+                imagePreviewContainer.style.display = 'none';
+            });
+            
+            // Create container for image and button
+            const previewWrapper = document.createElement('div');
+            previewWrapper.style.display = 'flex';
+            previewWrapper.style.alignItems = 'center';
+            previewWrapper.style.gap = '10px';
+            
+            // Read and display the image
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                img.src = e.target.result;
+                previewWrapper.appendChild(img);
+                previewWrapper.appendChild(removeButton);
+                imagePreviewContainer.appendChild(previewWrapper);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            imagePreviewContainer.style.display = 'none';
         }
     });
 });
@@ -161,6 +224,7 @@ function sendMessageWithName(displayName) {
     const user = firebase.auth().currentUser;
     const showProfile = document.getElementById('showProfileToggle').checked;
     const spotifyTrack = getSelectedSpotifyTrack();
+    const imageInput = document.getElementById('imageInput').files[0];
     
     // Check if this is an anonymous post by comparing the displayName
     // with the user's regular username
@@ -180,7 +244,7 @@ function sendMessageWithName(displayName) {
             timestamp: Date.now(),
             userId: user.uid,
             userDisplayName: displayName,
-            isAnonymousMode: isAnonymousMode, // Flag to indicate anonymous mode
+            isAnonymousMode: isAnonymousMode,
             replies: [],
             showProfile: showProfile,
             spotifyTrack: spotifyTrack
@@ -191,16 +255,35 @@ function sendMessageWithName(displayName) {
             messageData.userPhotoURL = user.photoURL || './images/suscat.jpg';
         }
 
-        newMessageRef.set(messageData, (error) => {
-            if (error) {
-                console.error('Failed to save message:', error);
-                showAlert('Failed to save message.', 'error');
-            } else {
-                showAlert('Message sent successfully!', 'success');
-                resetForm();
-                loadUserMessages();
-            }
-        });
+        // Handle image upload if an image is selected
+        if (imageInput) {
+            uploadImageToSupabase(imageInput, user.uid, newMessageRef.key)
+                .then(imageURL => {
+                    messageData.imageURL = imageURL;
+                    return newMessageRef.set(messageData);
+                })
+                .then(() => {
+                    showAlert('Message sent successfully!', 'success');
+                    resetForm();
+                    loadUserMessages();
+                })
+                .catch(error => {
+                    console.error('Error uploading image:', error);
+                    showAlert('Failed to upload image. Please try again.', 'error');
+                });
+        } else {
+            // If no image, just save the message
+            newMessageRef.set(messageData, (error) => {
+                if (error) {
+                    console.error('Failed to save message:', error);
+                    showAlert('Failed to save message.', 'error');
+                } else {
+                    showAlert('Message sent successfully!', 'success');
+                    resetForm();
+                    loadUserMessages();
+                }
+            });
+        }
     }).catch(error => {
         console.error('Error checking anonymous status:', error);
         
@@ -223,16 +306,35 @@ function sendMessageWithName(displayName) {
             messageData.userPhotoURL = user.photoURL || './images/suscat.jpg';
         }
 
-        newMessageRef.set(messageData, (error) => {
-            if (error) {
-                console.error('Failed to save message:', error);
-                showAlert('Failed to save message.', 'error');
-            } else {
-                showAlert('Message sent successfully!', 'success');
-                resetForm();
-                loadUserMessages();
-            }
-        });
+        // Handle image upload if an image is selected
+        if (imageInput) {
+            uploadImageToSupabase(imageInput, user.uid, newMessageRef.key)
+                .then(imageURL => {
+                    messageData.imageURL = imageURL;
+                    return newMessageRef.set(messageData);
+                })
+                .then(() => {
+                    showAlert('Message sent successfully!', 'success');
+                    resetForm();
+                    loadUserMessages();
+                })
+                .catch(error => {
+                    console.error('Error uploading image:', error);
+                    showAlert('Failed to upload image. Please try again.', 'error');
+                });
+        } else {
+            // If no image, just save the message
+            newMessageRef.set(messageData, (error) => {
+                if (error) {
+                    console.error('Failed to save message:', error);
+                    showAlert('Failed to save message.', 'error');
+                } else {
+                    showAlert('Message sent successfully!', 'success');
+                    resetForm();
+                    loadUserMessages();
+                }
+            });
+        }
     });
 }
 
@@ -243,6 +345,7 @@ function sendMessageWithDefaultName() {
     const user = firebase.auth().currentUser;
     const showProfile = document.getElementById('showProfileToggle').checked;
     const spotifyTrack = getSelectedSpotifyTrack();
+    const imageInput = document.getElementById('imageInput').files[0];
     
     // Create a new message reference
     const newMessageRef = db.ref(dbConfig.messagesPath).push();
@@ -263,18 +366,38 @@ function sendMessageWithDefaultName() {
         messageData.userPhotoURL = user.photoURL || './images/suscat.jpg';
     }
 
-    newMessageRef.set(messageData, (error) => {
-        if (error) {
-            console.error('Failed to save message:', error);
-            showAlert('Failed to save message.', 'error');
-        } else {
-            showAlert('Message sent successfully!', 'success');
-            resetForm();
-            loadUserMessages();
-        }
-    });
+    // Handle image upload if an image is selected
+    if (imageInput) {
+        uploadImageToSupabase(imageInput, user.uid, newMessageRef.key)
+            .then(imageURL => {
+                messageData.imageURL = imageURL;
+                return newMessageRef.set(messageData);
+            })
+            .then(() => {
+                showAlert('Message sent successfully!', 'success');
+                resetForm();
+                loadUserMessages();
+            })
+            .catch(error => {
+                console.error('Error uploading image:', error);
+                showAlert('Failed to upload image. Please try again.', 'error');
+            });
+    } else {
+        // If no image, just save the message
+        newMessageRef.set(messageData, (error) => {
+            if (error) {
+                console.error('Failed to save message:', error);
+                showAlert('Failed to save message.', 'error');
+            } else {
+                showAlert('Message sent successfully!', 'success');
+                resetForm();
+                loadUserMessages();
+            }
+        });
+    }
 }
 
+// Make sendMessage available globally
 window.sendMessage = sendMessage;
 
 export function resetForm() {

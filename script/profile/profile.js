@@ -148,7 +148,7 @@ function updateNavbarUsername(userId) {
 function toggleAnonymous() {
     const user = auth.currentUser;
     if (!user) return;
-
+const db = firebase.database()
     const userRef = firebase.database().ref(`users/${user.uid}/anonymProperties/state`);
 
     userRef.once('value')
@@ -186,7 +186,6 @@ function toggleAnonymous() {
             }
         })
         .catch(error => {
-            console.error('❌ Error toggling anonymous mode:', error);
             showAlert('Failed to toggle anonymous mode', 'error');
         });
 }

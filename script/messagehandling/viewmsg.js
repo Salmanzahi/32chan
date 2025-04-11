@@ -4,6 +4,7 @@ import { dbConfig } from "../../config.js";
 import { sanitizeText } from "../santizeText/sanitize.js";
 import { loadReplies, replyToMessage, showReplyForm } from "./replyhandling.js";
 import { shareMessage } from "./share.js";
+import { getImageUrl } from "../config/supabase.js";
 // Global variables for lazy loading
 let allMessages = [];
 let currentDisplayedCount = 0;
@@ -40,7 +41,7 @@ export function createMessageElement(message, user) {
     const safeAdminName = message.adminName ? sanitizeText(message.adminName) : null;
     const safeMessageText = sanitizeText(message.text || 'No text provided');
     const timestamp = message.timestamp;
-    const imageUrl = message.imageUrl ? sanitizeText(message.imageUrl) : null;
+    const imageUrl = message.imageURL ? sanitizeText(message.imageURL) : null;
     const likes = message.likes || 0;
     
     // Check if current user has liked this message
@@ -87,7 +88,10 @@ export function createMessageElement(message, user) {
         </div>
         <div class="content">
             <div class="message-text" style="color:#ffff">${safeMessageText}</div>
-            ${imageUrl ? `<img src="${imageUrl}" alt="Message Image" style="max-width: 100%; height: auto;">` : ''}
+            ${imageUrl ? `
+            <div class="message-image" style="margin-top: 10px;">
+                <img src="${imageUrl}" alt="Message Image" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+            </div>` : ''}
             ${message.spotifyTrack ? `
             <div class="spotify-track-embed">
                 <iframe src="https://open.spotify.com/embed/track/${message.spotifyTrack.id}" 

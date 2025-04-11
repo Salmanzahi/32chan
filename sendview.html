@@ -25,17 +25,21 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Imported Scripts -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="./script/spotify/spotify.js"></script>
-  <script type="module" src="./mainalt.js" defer></script>
-  <script type="module" src="./script/Annoucement/announcement.js" defer></script>
-  <script src="./404.js" defer></script>
-  <script src="./role.js"defer ></script>
-  <script type="module" src="./script/auth/auth-init.js"></script>
-  <script type="module" src="./script/messagehandling/importmsg.js" defer></script>
-  <script type="module" src="script/nav.js" defer></script>
-  <script type="module" src="./script/alert/alert.js" ></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="./script/spotify/spotify.js"></script>
+    <script type="module" src="./mainalt.js" defer></script>
+    <script type="module" src="./script/Annoucement/announcement.js" defer></script>
+    <script src="./404.js" defer></script>
+    <script src="./role.js" defer></script>
+    <script type="module" src="./script/auth/auth-init.js"></script>
+    <script type="module" src="./script/messagehandling/sendmsg.js" defer></script>
+    <script type="module" src="./script/messagehandling/importmsg.js" defer></script>
+    <script type="module" src="script/nav.js" defer></script>
+    <script type="module" src="./script/alert/alert.js"></script>
+    <script type="module" src="./script/config/supabase.js" defer></script>
 
 </head>
 <body>
@@ -43,7 +47,7 @@
   <div class="preloader">
     <div class="preloader-logo">32CHAN</div>
     <span class="loader"></span>
-    <div class="preloader-text">Load a DOM...</div>
+    <div class="preloader-text">Setting up Properties...</div>
   </div>
    
    <!-- Admin Notification -->
@@ -136,7 +140,6 @@
                     <div id="selectedSpotifyTrack" class="selected-spotify-track" style="display: none;"></div>
                     <button type="button" id="spotifyAuthBtn" class="spotify-auth-btn" onclick="authorizeSpotify()">Connect to Spotify</button>
                 </div>
-                
                 <div class="profile-toggle-container">
                     <label for="showProfileToggle" class="toggle-label">Show profile in post</label>
                     <label class="switch">
@@ -144,7 +147,7 @@
                         <span class="slider round"></span>
                     </label>
                 </div>
-                
+
                 <button class="submit-btn" onclick="sendMessage()">Post</button>
             
                 <!-- User's Post History -->
@@ -210,5 +213,18 @@
             </div>
         </div>
     </div>
+</div>
+
+<!-- Footer -->
+<!-- <div id="footerContainer"></div>
+
+<script>
+    fetch('footer.html')
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('footerContainer').innerHTML = html;
+        })
+        .catch(error => console.error('Error loading footer:', error));
+</script> -->
 </body>
 </html>

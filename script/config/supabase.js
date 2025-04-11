@@ -6,10 +6,27 @@ const supabaseConfig = {
 };
 
 // Initialize Supabase client
-const supabase = window.supabase.createClient(supabaseConfig.url, supabaseConfig.anonKey);
+let supabase;
+
+// Wait for Supabase to be available
+function initSupabase() {
+    if (typeof window.supabase !== 'undefined') {
+        supabase = window.supabase.createClient(supabaseConfig.url, supabaseConfig.anonKey);
+    } else {
+        console.error('Supabase client not loaded yet. Retrying in 100ms...');
+        setTimeout(initSupabase, 100);
+    }
+}
+
+// Initialize when the script loads
+initSupabase();
 
 // Function to upload image to Supabase Storage
 export async function uploadImageToSupabase(file, userId, messageId) {
+    if (!supabase) {
+        throw new Error('Supabase client not initialized');
+    }
+
     try {
         // Create a unique file path using timestamp to avoid conflicts
         const timestamp = Date.now();
@@ -50,13 +67,16 @@ export async function uploadImageToSupabase(file, userId, messageId) {
         return publicUrl;
     } catch (error) {
         console.error('Error uploading to Supabase:', error);
-        // If Supabase fails, we could add a fallback method here
         throw error;
     }
 }
 
 // Function to get the public URL of an image from Supabase Storage
 export function getImageUrl(filePath) {
+    if (!supabase) {
+        throw new Error('Supabase client not initialized');
+    }
+
     try {
         // Get the public URL for the specified file path
         const { data: { publicUrl } } = supabase

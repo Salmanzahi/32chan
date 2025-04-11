@@ -1,6 +1,6 @@
 // Security measures to prevent right-click and console access
 const security = {
-    enabled: true,
+    enabled: false,
 
     init() {
         if (this.enabled) {

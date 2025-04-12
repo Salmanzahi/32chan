@@ -1,0 +1,43 @@
+@keyframes typing {
+  0% { width: 0; opacity: 0; }
+  5% { width: 0; opacity: 1; }
+  10% { width: 10%; opacity: 1; }
+  20% { width: 20%; opacity: 1; }
+  30% { width: 30%; opacity: 1; }
+  40% { width: 40%; opacity: 1; }
+  50% { width: 50%; opacity: 1; }
+  60% { width: 60%; opacity: 1; }
+  70% { width: 70%; opacity: 1; }
+  80% { width: 80%; opacity: 1; }
+  90% { width: 90%; opacity: 1; }
+  100% { width: 100%; opacity: 1; }
+}
+
+.typing-animation {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 0;
+  color: inherit;
+  animation: typing 2.8s steps(40, end) forwards;
+  font-family: inherit;
+  letter-spacing: 0.35px;
+  transform-origin: left center;
+  will-change: width, opacity;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+
+/* .typing-animation::after {
+  content: '|';
+  position: absolute;
+  right: -2px;
+  animation: blink 0.8s infinite;
+  opacity: 0;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+} */

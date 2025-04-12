@@ -1,5 +1,5 @@
-import { db, storage, isAdmin } from "../../mainalt.js";
-import { dbConfig } from "../../config.js";
+import { db, storage, isAdmin } from "../mainalt.js";
+import { dbConfig } from "../config/config.js";
 import { showAlert } from "../alert/alert.js";
 import { sanitizeText } from "../santizeText/sanitize.js";
 export function showReplyForm(messageId) {

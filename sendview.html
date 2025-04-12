@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="./styles/quora-theme.css">
     <link rel="stylesheet" href="./styles/spotify.css">
     <link rel="stylesheet" href="./styles/infinite-scroll.css">
+    <link rel="stylesheet" href="./styles/tab-toggle.css">
     
     <!-- Add Quill CSS -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.min.css" rel="stylesheet">
@@ -30,17 +31,16 @@
     <!-- Imported Scripts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="./script/spotify/spotify.js"></script>
-    <script type="module" src="./mainalt.js" defer></script>
+    <script type="module" src="./script/mainalt.js" defer></script>
     <script type="module" src="./script/Annoucement/announcement.js" defer></script>
     <script src="./404.js" defer></script>
     <script src="./role.js" defer></script>
     <script type="module" src="./script/auth/auth-init.js"></script>
-    <script type="module" src="./script/messagehandling/sendmsg.js" defer></script>
     <script type="module" src="./script/messagehandling/importmsg.js" defer></script>
     <script type="module" src="script/nav.js" defer></script>
     <script type="module" src="./script/alert/alert.js"></script>
-    <script type="module" src="./script/config/supabase.js" defer></script>
-
+    <script type="module" src="./script/messagehandling/tab-toggle.js"></script>
+    
 </head>
 <body>
   <!-- Preloader -->
@@ -89,8 +89,11 @@
         <p id="announcementText">No announcements at this time.</p>
     </div>
 
-            <!-- Main Action Button -->
-            <button id="toggleViewBtn" class="main-action-btn" onclick="toggleView()"></button>
+            <!-- Tab Toggle Bar -->
+            <div class="tab-toggle">
+                <button id="createPostTab" class="tab-toggle-btn active" onclick="switchTab('createPost')">Create Post</button>
+                <button id="messagesTab" class="tab-toggle-btn" onclick="switchTab('messages')">Messages</button>
+            </div>
             
             <!-- Send Message Form -->
             <div id="formContainer" class="form-container" style="display: block;">
@@ -124,7 +127,13 @@
             
                 <label for="imageInput">Add an image</label>
                 <input type="file" id="imageInput" accept="image/*" aria-label="Upload image" title="Upload an optional image">
-                
+                <div class="profile-toggle-container">
+                    <label for="showProfileToggle" class="toggle-label">Show profile in post</label>
+                    <label class="switch">
+                        <input type="checkbox" id="showProfileToggle" checked>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
                 <!-- Spotify Search Container -->
                 <div id="spotifySearchContainer" class="spotify-search-container">
                     <div class="spotify-search-header">
@@ -140,13 +149,7 @@
                     <div id="selectedSpotifyTrack" class="selected-spotify-track" style="display: none;"></div>
                     <button type="button" id="spotifyAuthBtn" class="spotify-auth-btn" onclick="authorizeSpotify()">Connect to Spotify</button>
                 </div>
-                <div class="profile-toggle-container">
-                    <label for="showProfileToggle" class="toggle-label">Show profile in post</label>
-                    <label class="switch">
-                        <input type="checkbox" id="showProfileToggle" checked>
-                        <span class="slider round"></span>
-                    </label>
-                </div>
+              
 
                 <button class="submit-btn" onclick="sendMessage()">Post</button>
             
@@ -186,6 +189,29 @@
                             </svg>
                             Most Popular
                         </button>
+                    </div>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="search-container">
+                    <div class="search-wrapper">
+                        <input type="text" id="postSearchInput" class="search-input" placeholder="Search posts...">
+                        <button id="searchButton" class="search-button">
+                            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                        </button>
+                        <button id="aiSearchToggle" class="ai-search-toggle" title="Toggle AI Search">
+                            <svg class="ai-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="search-info">
+                        <span id="aiSearchStatus" class="ai-status">AI Search: Off</span>
+                        <div id="aiSearchLoader" class="ai-loader" style="display: none;">
+                            <div class="spinner"></div>
+                        </div>
                     </div>
                 </div>
                 

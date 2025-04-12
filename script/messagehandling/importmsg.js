@@ -4,6 +4,7 @@ import { sendMessage, resetForm } from "./sendmsg.js"
 import { toggleView } from "./toggleview.js";
 import {showMessages} from "./viewmsg.js"
 import { initSpotify, initSpotifySearchUI } from "../spotify/spotify.js";
+import { performAISearch, highlightRelevantText, getScoreColor } from "./aiSearch.js";
 // Share post feature has been removed
 // import { shareMessage } from "./share.js";
 

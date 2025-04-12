@@ -1,4 +1,4 @@
-import { isAdmin } from "../../mainalt.js";
+import { isAdmin } from "../mainalt.js";
 
 // Export the isAdmin function that checks if a user is in the admin list
 // export function isAdmin() {

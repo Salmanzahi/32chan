@@ -3,7 +3,7 @@
 <head>
   <script src="./404.js" defer></script>
   <script src="./role.js" defer></script>
-  <script type="module" src="./mainalt.js"></script>
+  <script type="module" src="./script/mainalt.js"></script>
   <script type="module" src="./script/alert/indexalert/alert.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -20,11 +20,14 @@
   <link rel="stylesheet" href="./styles/hero.css">
   <link rel="stylesheet" href="./script/alert/alert.css">
   <link rel="stylesheet" href="./script/alert/indexalert/alert.css">
+  <link rel="stylesheet" href="./styles/typing-animation.css">
   <script  type= "module" src="./script/nav.js"></script>
   <script type="module" src="./script/page-transitions.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script type="module" src="./script/auth/auth-init.js"></script>
-  <script src="js/security.js"></script>
+  <script src="script/security.js"></script>
+  <!-- <link rel="stylesheet" href="./script/carousel/carousel.css"> -->
+  <script type="module" src="./script/hero-carousel.js"></script>
 </head>
 <body class="bg-index text-index min-h-screen">
   <!-- Preloader -->
@@ -47,16 +50,19 @@
 
   <!-- Hero Section -->
   <section class="hero-section">
-    <div class="hero-background"></div>
     <div class="hero-content">
       <h1 class="hero-title">Welcome to 32CHAN</h1>
-      <p class="hero-subtitle">A next-generation anonymous community platform pushing the boundaries of digital communication with military-grade encryption and total privacy.</p>
+      <p class="hero-subtitle typing-animation">Vanish or be recognized !</p>
+      <p class="hero-subtitle">(Preview)</p>
       <div class="hero-buttons">
         <a href="./sendview.html" class="hero-button hero-button-primary">Join the Forum</a>
         <a href="./private.html" class="hero-button hero-button-secondary">Private Rooms</a>
       </div>
     </div>
   </section>
+
+  <!-- Image Carousel -->
+  <div id="carousel-container"></div>
 
   <!-- Features Section -->
   <div class="container mx-auto px-4 features-section">
@@ -110,5 +116,7 @@
     })
     .catch(error => console.error('Error loading footer:', error));
 </script>
+
+<script type="module" src="./script/carousel/init.js"></script>
 </body>
 </html>

@@ -5,10 +5,10 @@
  */
 
 // Import the authentication functions from mainalt.js
-import { googleSignIn, anonymousSignIn, signOut } from '../../mainalt.js';
+import { googleSignIn, anonymousSignIn, signOut } from '../mainalt.js';
 
 // Import Firebase configuration
-import { dbConfig } from '../../config.js';
+import { dbConfig } from '../config/config.js';
 
 // Initialize Firebase auth and set up user state handling
 const auth = firebase.auth();

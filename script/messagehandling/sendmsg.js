@@ -1,9 +1,9 @@
-import { isAdmin, db, storage, loadUserMessages} from "../../mainalt.js";
-import { dbConfig } from "../../config.js";
+import { isAdmin, db, storage, loadUserMessages} from "../mainalt.js";
+import { dbConfig } from "../config/config.js";
 import { showAlert } from "../alert/alert.js";
 import { getSelectedSpotifyTrack } from "../spotify/spotify.js";
 import { getEditorContent, clearEditorContent } from "../richtext/editor.js";
-import { uploadImageToSupabase } from "../config/supabase.js";
+import { uploadImageToSupabase } from "./supabase.js";
 
 // Check for anonymous mode when page loads
 document.addEventListener('DOMContentLoaded', function() {

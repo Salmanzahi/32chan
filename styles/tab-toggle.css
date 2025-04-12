@@ -1,0 +1,49 @@
+/* Tab Toggle Styles */
+.tab-toggle {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+    border-radius: 25px;
+    overflow: hidden;
+    background-color: #1a2333;
+    border: 1px solid #334155;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 4px;
+}
+
+.tab-toggle-btn {
+    flex: 1;
+    padding: 12px 20px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    color: #666;
+    position: relative;
+    text-align: center;
+    outline: none;
+    border-radius: 20px;
+    transition: all 0.3s ease-in-out;
+}
+
+.tab-toggle-btn.active {
+    background-color: #e74c3c;
+    color: white;
+    box-shadow: 0 2px 4px rgba(231, 76, 60, 0.2);
+    transform: scale(1.02);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .tab-toggle {
+        max-width: 100%;
+        margin: 15px 0;
+    }
+    
+    .tab-toggle-btn {
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+}

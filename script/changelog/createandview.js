@@ -1,5 +1,5 @@
-import { isAdmin, db, storage } from "../../mainalt.js";
-import { dbConfig } from "../../config.js";
+import { isAdmin, db, storage } from "../mainalt.js";
+import { dbConfig } from "../config/config.js";
 import { showAlert } from "../alert/alert.js";
 
 export function addChangelog() {

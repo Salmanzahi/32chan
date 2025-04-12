@@ -1,6 +1,5 @@
 import { showAlert } from "../alert/alert.js";
-import { db } from "../../mainalt.js";
-import { dbConfig } from "../../config.js";
+import { db } from "../mainalt.js";
 
 // Function to save room to history when created or joined
 export function saveRoomToHistory(roomName, roomId, isCreator) {

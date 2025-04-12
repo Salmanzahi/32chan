@@ -1,10 +1,10 @@
-import { isAdmin, db, storage } from "../../mainalt.js";
-import { adminRoles } from "../../role.js";
-import { dbConfig } from "../../config.js";
+import { isAdmin, db, storage } from "../mainalt.js";
+import { adminRoles } from "../config/role.js";
+import { dbConfig } from "../config/config.js";
 import { sanitizeText } from "../santizeText/sanitize.js";
 import { loadReplies, replyToMessage, showReplyForm } from "./replyhandling.js";
 import { shareMessage } from "./share.js";
-import { getImageUrl } from "../config/supabase.js";
+import { performAISearch, highlightRelevantText } from "./aiSearch.js";
 // Global variables for lazy loading
 let allMessages = [];
 let currentDisplayedCount = 0;
@@ -12,6 +12,204 @@ let currentSortOrder = 'desc';
 const MESSAGES_PER_LOAD = 5;
 let isLazyLoadingEnabled = false; // New global variable for lazy loading toggle
 let lastScrollPosition = 0; // Track scroll position
+
+// Global variables for search
+let searchTimeout;
+let isAISearchEnabled = false;
+const searchInput = document.getElementById('postSearchInput');
+const searchButton = document.getElementById('searchButton');
+const aiSearchToggle = document.getElementById('aiSearchToggle');
+const aiSearchStatus = document.getElementById('aiSearchStatus');
+const aiSearchLoader = document.getElementById('aiSearchLoader');
+
+/**
+ * Performs search on messages using either regular or AI search
+ * @param {string} searchTerm - Search term
+ * @returns {Promise<void>}
+ */
+async function searchPosts(searchTerm) {
+    const messages = document.querySelectorAll('#messagesList li');
+    const searchTermLower = searchTerm.toLowerCase();
+    
+    if (!searchTerm.trim()) {
+        messages.forEach(message => message.style.display = 'block');
+        return;
+    }
+
+    if (isAISearchEnabled && searchTerm.trim()) {
+        try {
+            aiSearchLoader.style.display = 'block';
+            const relevantMessages = await performAISearch(searchTerm, Array.from(messages).map(m => ({
+                id: m.getAttribute('data-id'),
+                title: m.querySelector('.title')?.textContent || '',
+                text: m.querySelector('.message-text')?.textContent || '',
+                userDisplayName: m.querySelector('.user-name')?.textContent || ''
+            })));
+
+            if (relevantMessages === null) {
+                // AI search failed, fall back to regular search
+                performRegularSearch(messages, searchTermLower);
+            } else {
+                // Hide all messages first
+                messages.forEach(message => {
+                    message.style.display = 'none';
+                });
+
+                // Show and highlight relevant messages with their scores
+                relevantMessages.forEach(({ message: relevantMessage, score }) => {
+                    const messageElement = Array.from(messages).find(m => 
+                        m.getAttribute('data-id') === relevantMessage.id
+                    );
+
+                    if (messageElement) {
+                        messageElement.style.display = 'block';
+                        
+                        // Add similarity score and highlight text
+                        const titleEl = messageElement.querySelector('.title');
+                        const textEl = messageElement.querySelector('.message-text');
+                        
+                        if (titleEl) {
+                            titleEl.innerHTML = highlightRelevantText(
+                                titleEl.textContent,
+                                searchTerm,
+                                score
+                            );
+                        }
+                        
+                        if (textEl) {
+                            textEl.innerHTML = highlightRelevantText(
+                                textEl.textContent,
+                                searchTerm,
+                                score
+                            );
+                        }
+
+                        // Add a visual indicator for match quality
+                        messageElement.style.borderLeft = `4px solid ${getMatchQualityColor(score)}`;
+                        messageElement.style.transition = 'border-left-color 0.3s ease';
+                    }
+                });
+
+                // Show "no results" message if no messages are displayed
+                const visibleMessages = document.querySelectorAll('#messagesList li[style*="display: block"]').length;
+                if (visibleMessages === 0) {
+                    showNoResultsMessage("No exact matches found. Showing closest results:");
+                }
+            }
+        } catch (error) {
+            console.error('AI Search failed:', error);
+            performRegularSearch(messages, searchTermLower);
+        } finally {
+            aiSearchLoader.style.display = 'none';
+        }
+    } else {
+        performRegularSearch(messages, searchTermLower);
+    }
+
+    updateSearchResultsCount();
+}
+
+/**
+ * Performs regular keyword-based search
+ * @param {NodeList} messages - List of message elements
+ * @param {string} searchTerm - Lowercase search term
+ */
+function performRegularSearch(messages, searchTerm) {
+    messages.forEach(message => {
+        const title = message.querySelector('.title')?.textContent?.toLowerCase() || '';
+        const content = message.querySelector('.message-text')?.textContent?.toLowerCase() || '';
+        const author = message.querySelector('.user-name')?.textContent?.toLowerCase() || '';
+        
+        const matches = title.includes(searchTerm) || 
+                       content.includes(searchTerm) || 
+                       author.includes(searchTerm);
+        
+        message.style.display = matches ? 'block' : 'none';
+    });
+}
+
+/**
+ * Shows a message when no exact matches are found
+ * @param {string} message - Message to display
+ */
+function showNoResultsMessage(message) {
+    let noResultsEl = document.getElementById('no-results-message');
+    if (!noResultsEl) {
+        noResultsEl = document.createElement('div');
+        noResultsEl.id = 'no-results-message';
+        noResultsEl.className = 'no-results-message';
+        const messagesList = document.getElementById('messagesList');
+        messagesList.parentNode.insertBefore(noResultsEl, messagesList);
+    }
+    noResultsEl.textContent = message;
+    noResultsEl.style.display = 'block';
+}
+
+/**
+ * Updates the search results count display
+ */
+function updateSearchResultsCount() {
+    const visibleMessages = document.querySelectorAll('#messagesList li[style*="display: block"]').length;
+    const totalMessages = document.querySelectorAll('#messagesList li').length;
+    
+    let countEl = document.getElementById('search-results-count');
+    if (!countEl) {
+        countEl = document.createElement('div');
+        countEl.id = 'search-results-count';
+        countEl.className = 'search-results-count';
+        const searchContainer = document.querySelector('.search-info');
+        if (searchContainer) {
+            searchContainer.appendChild(countEl);
+        }
+    }
+    
+    countEl.textContent = `Showing ${visibleMessages} of ${totalMessages} posts`;
+}
+
+/**
+ * Gets color for match quality indicator
+ * @param {number} score - Similarity score
+ * @returns {string} - CSS color value
+ */
+function getMatchQualityColor(score) {
+    if (score >= 80) return '#4CAF50';
+    if (score >= 60) return '#FFC107';
+    return '#FF5722';
+}
+
+// Add event listeners for search
+if (searchInput && searchButton) {
+    searchInput.addEventListener('input', (e) => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            searchPosts(e.target.value);
+        }, 300);
+    });
+
+    searchButton.addEventListener('click', () => {
+        searchPosts(searchInput.value);
+    });
+
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            searchPosts(searchInput.value);
+        }
+    });
+}
+
+// Add event listener for AI search toggle
+if (aiSearchToggle) {
+    aiSearchToggle.addEventListener('click', () => {
+        isAISearchEnabled = !isAISearchEnabled;
+        aiSearchToggle.classList.toggle('active');
+        aiSearchStatus.textContent = `AI Search: ${isAISearchEnabled ? 'On' : 'Off'}`;
+        
+        // Re-run search with new mode if there's a search term
+        if (searchInput.value.trim()) {
+            searchPosts(searchInput.value);
+        }
+    });
+}
 
 /**
  * Preserves scroll position during DOM updates

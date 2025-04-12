@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="./styles/preload.css">
   <link rel="stylesheet" href="./script/alert/alert.css">
   <script src="./404.js" defer></script>
-  <script type="module" src="./mainalt.js"></script>
+  <script type="module" src="./script/mainalt.js"></script>
   <script type="module" src="./script/nav.js"></script>
   <link rel="stylesheet" href="./styles/adminbadge.css">
   <link rel="stylesheet" href="./styles/inputtext.css">
@@ -29,7 +29,7 @@
   <div class="preloader">
     <div class="preloader-logo">32CHAN</div>
     <span class="loader"></span>
-    <div class="preloader-text">Initializing secure connection...</div>
+    <div class="preloader-text">Setting up properties...</div>
   </div>
 
   <div id="navbarContainer"></div>
@@ -55,10 +55,10 @@
      <div id="private" class="container mx-auto mt-20 p-4">
       <section id="createRoom" class="bg-gray-800 p-6 rounded-lg mb-6">
         <h2 class="text-2xl text-white mb-2 no-select">Create a Private Room</h2>
-        <p class="text-gray-300 no-select">A next-generation anonymous community platform pushing the boundaries of digital communication...</p>
+        <p class="text-gray-300 no-select">Create your own private room !</p>
         <label for="roomCreateName">Room Name: </label>
      
-        <input type="text" id="roomCreateName" placeholder="Configured your room code" style="margin-bottom: 15px;">
+        <input type="text" id="roomCreateName" placeholder="Enter your room name" style="margin-bottom: 15px;">
         <label for="roomCreateCode" style="display: block" >Room Code:</label>
         
         <input type= "text" id="roomCreateCode" placeholder="Enter ur room code" style="margin-bottom: 15px;">
@@ -67,7 +67,7 @@
       </section>
       <section id="joinRoom" class="bg-gray-800 p-6 rounded-lg mb-6">
         <h2 class="text-2xl text-white mb-2 no-select">Join a Room</h2>
-        <p class="text-gray-300 no-select">Join the available room</p>
+        <p class="text-gray-300 no-select">Join available room that created by other users</p>
         <label for="titleInput">Room name</label>
         <input type="text" id="roomJoinName" placeholder="Enter the room name" style="margin-bottom: 15px;">
         <label for="titleInput">Room Code</label>

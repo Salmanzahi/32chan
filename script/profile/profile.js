@@ -4,9 +4,9 @@
  */
 
 // Import Firebase authentication and storage from mainalt.js
-import { db, storage, user } from '../../mainalt.js';
-import { dbConfig } from '../../config.js';
-import { isAdmin } from '../../mainalt.js';
+import { db, storage, user } from '../mainalt.js';
+import { dbConfig } from '../config/config.js';
+import { isAdmin } from '../mainalt.js';
 import { showAlert } from '../../script/alert/alert.js';
 const script = document.createElement('script');
 script.src = "../../p.js"

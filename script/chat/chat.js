@@ -3,8 +3,8 @@
  * Handles direct messaging functionality for 32chan
  */
 
-import { db, storage } from '../../mainalt.js';
-import { dbConfig } from '../../config.js';
+import { db, storage } from '../mainalt.js';
+import { dbConfig } from '../config/config.js';
 import { showAlert } from '../../script/alert/alert.js';
 
 // References to DOM elements

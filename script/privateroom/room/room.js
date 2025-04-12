@@ -1,5 +1,5 @@
-import { isAdmin, db, storage, loadUserMessages} from "../../../mainalt.js";
-import { dbConfig } from "../../../config.js";
+import { isAdmin, db, storage, loadUserMessages} from "../../mainalt.js";
+import { dbConfig } from "../../config/config.js";
 import { showAlert } from "../../alert/alert.js";
 import { getUrlParameter } from "../../fetchparam.js";
 import { saveRoomToHistory } from "../roomhistory.js";

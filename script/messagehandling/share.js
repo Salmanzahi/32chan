@@ -1,7 +1,7 @@
 import { getUrlParameter } from "../fetchparam.js";
-import { isAdmin, db, storage } from "../../mainalt.js";
-import { adminRoles } from "../../role.js";
-import { dbConfig } from "../../config.js";
+import { isAdmin, db, storage } from "../mainalt.js";
+import { adminRoles } from "../config/role.js";
+import { dbConfig } from "../config/config.js";
 import { sanitizeText } from "../santizeText/sanitize.js";
 import { loadReplies, replyToMessage, showReplyForm } from "./replyhandling.js";
 import { showMessages } from "./viewmsg.js";

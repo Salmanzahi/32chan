@@ -29,32 +29,45 @@ document.addEventListener('DOMContentLoaded', function() {
   /**
    * Initialize preloader with smooth transition
    */
-  function initPreloader() {
-    window.addEventListener('load', function() {
-      const preloader = document.querySelector('.preloader');
-      if (!preloader) return;
-      
-      // Add fade-out transition to preloader
-      preloader.style.transition = `opacity ${config.transitionDuration/1000}s cubic-bezier(0.4, 0, 0.2, 1)`;
-      
+function initPreloader() {
+  const maxLoadTime = 10000; // Maximum wait time of 10 seconds
+  let isLoaded = false;
+
+  // Function to handle preloader removal
+  const removePreloader = () => {
+    if (isLoaded) return;
+    isLoaded = true;
+
+    const preloader = document.querySelector('.preloader');
+    if (!preloader) return;
+    
+    // Add fade-out transition to preloader
+    preloader.style.transition = `opacity ${config.transitionDuration/1000}s cubic-bezier(0.4, 0, 0.2, 1)`;
+    
+    setTimeout(() => {
+      preloader.style.opacity = '0';
       setTimeout(() => {
-        preloader.style.opacity = '0';
+        preloader.classList.add('hidden');
+        // Trigger page content to fade in
+        document.body.classList.add('page-loaded');
+        
+        // Trigger staggered animations for features section
         setTimeout(() => {
-          preloader.classList.add('hidden');
-          // Trigger page content to fade in
-          document.body.classList.add('page-loaded');
-          
-          // Trigger staggered animations for features section
-          setTimeout(() => {
-            const featuresSection = document.querySelector('.features-section');
-            if (featuresSection) {
-              featuresSection.classList.add('active');
-            }
-          }, 300);
-        }, config.transitionDuration);
-      }, 600);
-    });
-  }
+          const featuresSection = document.querySelector('.features-section');
+          if (featuresSection) {
+            featuresSection.classList.add('active');
+          }
+        }, 300);
+      }, config.transitionDuration);
+    }, 600);
+  };
+
+  // Listen for normal load event
+  window.addEventListener('load', removePreloader);
+
+  // Force remove preloader after maxLoadTime
+  setTimeout(removePreloader, maxLoadTime);
+}
 
   /**
    * Initialize hero section transitions

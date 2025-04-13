@@ -1,0 +1,25 @@
+/* Transparent Navbar Styles for Index Page */
+.index-navbar {
+  background-color: transparent !important;
+  backdrop-filter: blur(4px) !important;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Add some shadow when scrolling for better readability */
+.index-navbar.scrolled {
+  background-color: rgba(17, 24, 39, 0.8) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+/* Ensure text is readable on transparent background */
+.index-navbar .text-gray-300 {
+  color: rgba(255, 255, 255, 0.9) !important;
+  transition: color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Adjust mobile menu background for index page */
+.index-navbar #mobile-menu {
+  background-color: rgba(17, 24, 39, 0.9) !important;
+  backdrop-filter: blur(8px) !important;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}

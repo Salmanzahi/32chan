@@ -12,7 +12,6 @@ export function addChangelog() {
         return;
     }
 
-    // Create a new message reference and set the data
     const newMessageRef = db.ref(dbConfig.changelogPath).push();
     const messageData = {
         title: changelogTitleInput || null,

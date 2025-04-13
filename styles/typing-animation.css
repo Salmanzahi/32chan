@@ -19,7 +19,7 @@
   white-space: nowrap;
   width: 0;
   color: inherit;
-  animation: typing 2.8s steps(40, end) forwards;
+  animation: typing 4s steps(40, end) forwards;
   font-family: inherit;
   letter-spacing: 0.35px;
   transform-origin: left center;

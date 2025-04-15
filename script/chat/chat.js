@@ -36,6 +36,7 @@ let currentChat = null;
 let conversations = {};
 let searchTimeout = null;
 let usersCache = {};
+let isAnonymousMode = false;
 
 // Add a session storage flag to track initial load
 let hasInitializedChat = false;
@@ -99,6 +100,9 @@ function setupEventListeners() {
             userSearchModal.classList.add('hidden');
         }
     });
+
+    // Set up anonymous toggle
+    setupAnonymousToggle();
 }
 
 // Load all available users
@@ -795,16 +799,43 @@ function addMessageToList(message) {
     // Format message time
     const messageTime = formatMessageTime(message.timestamp);
     
-    // Create the message bubble and time elements separately
+    // Handle anonymous messages
+    let senderName = 'Anonymous User';
+    let senderPhoto = './images/suscat.jpg';
+    
+    // If the message is not anonymous and it's from the current user, use their info
+    if (!message.isAnonymous || message.senderId === currentUser.uid) {
+        if (message.senderId === currentUser.uid) {
+            senderName = currentUser.displayName || 'You';
+            senderPhoto = currentUser.photoURL || './images/suscat.jpg';
+        } else {
+            // For received messages, use the chat header info if not anonymous
+            senderName = document.getElementById('chatUsername').textContent;
+            senderPhoto = document.getElementById('chatUserAvatar').src;
+        }
+    }
+    
+    // Create the message content
     const bubbleElement = document.createElement('div');
     bubbleElement.className = 'message-bubble';
+    
+    // Add sender info for received messages
+    if (message.senderId !== currentUser.uid) {
+        const senderInfo = document.createElement('div');
+        senderInfo.className = 'message-sender-info';
+        senderInfo.innerHTML = `
+            <img src="${senderPhoto}" alt="${senderName}" class="sender-avatar">
+            <span class="sender-name">${senderName}</span>
+        `;
+        messageElement.appendChild(senderInfo);
+    }
+    
     bubbleElement.textContent = message.text;
     
     const timeElement = document.createElement('div');
     timeElement.className = 'message-time';
     timeElement.textContent = messageTime;
     
-    // Append them to the message element
     messageElement.appendChild(bubbleElement);
     messageElement.appendChild(timeElement);
     
@@ -848,13 +879,22 @@ function sendMessage(conversationId, text) {
     // Get other user ID
     const otherUserId = conversation.participants.find(id => id !== currentUser.uid);
     
-    // Create message
+    // Create message with anonymous handling
     const message = {
         text: text,
         senderId: currentUser.uid,
         timestamp: firebase.database.ServerValue.TIMESTAMP,
-        read: false
+        read: false,
+        isAnonymous: isAnonymousMode
     };
+
+    // If anonymous mode is on, add anonymous user data
+    if (isAnonymousMode) {
+        message.anonymousData = {
+            displayName: 'Anonymous User',
+            photoURL: './images/suscat.jpg'
+        };
+    }
     
     // Add message to database
     db.ref(`messages/${conversationId}`).push(message)
@@ -1083,3 +1123,21 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+function setupAnonymousToggle() {
+    const anonymousToggle = document.getElementById('anonymousToggle');
+    if (anonymousToggle) {
+        // Load saved preference
+        const savedPreference = localStorage.getItem('anonymousMode');
+        if (savedPreference === 'true') {
+            anonymousToggle.checked = true;
+            isAnonymousMode = true;
+        }
+
+        // Handle toggle changes
+        anonymousToggle.addEventListener('change', (e) => {
+            isAnonymousMode = e.target.checked;
+            localStorage.setItem('anonymousMode', isAnonymousMode);
+        });
+    }
+}

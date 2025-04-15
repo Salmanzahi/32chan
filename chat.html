@@ -73,18 +73,29 @@
             <!-- Chat Area -->
             <div id="chatArea" class="chat-area flex-1 flex flex-col h-full md:block hidden">
                 <!-- Chat Header -->
-                <div id="chatHeader" class="chat-header p-3 border-b border-dark flex items-center">
-                    <button id="backToConversations" class="md:hidden mr-2 text-gray-300 hover:text-white p-2">
-                        <i class="fas fa-arrow-left"></i>
-                    </button>
+                <div id="chatHeader" class="chat-header p-3 border-b border-dark flex items-center justify-between">
                     <div class="flex items-center">
-                        <div class="user-avatar-container block">
-                            <img id="chatUserAvatar" src="./images/suscat.jpg" alt="User Avatar" class="w-10 h-10 rounded-full border-2 border-dark">
+                        <button id="backToConversations" class="md:hidden mr-2 text-gray-300 hover:text-white p-2">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <div class="flex items-center">
+                            <div class="user-avatar-container block">
+                                <img id="chatUserAvatar" src="./images/suscat.jpg" alt="User Avatar" class="w-10 h-10 rounded-full border-2 border-dark">
+                            </div>
+                            <div class="ml-3">
+                                <h3 id="chatUsername" class="text-lg font-medium text-white">Select a conversation</h3>
+                                <p id="chatUserStatus" class="text-xs text-gray-400">Online</p>
+                            </div>
                         </div>
-                        <div class="ml-3">
-                            <h3 id="chatUsername" class="text-lg font-medium text-white">Select a conversation</h3>
-                            <p id="chatUserStatus" class="text-xs text-gray-400">Online</p>
-                        </div>
+                    </div>
+                    
+                    <!-- Anonymous Toggle -->
+                    <div class="anonymous-toggle flex items-center">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="anonymousToggle" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-500"></div>
+                            <span class="ml-2 text-sm font-medium text-gray-300">Anonymous</span>
+                        </label>
                     </div>
                 </div>
                 

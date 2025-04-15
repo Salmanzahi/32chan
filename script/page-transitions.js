@@ -6,7 +6,7 @@
 document.addEventListener('DOMContentLoaded', function() {
   // Configuration
   const config = {
-    transitionDuration: 800, // in milliseconds
+    transitionDuration: 1200, // in milliseconds
     staggerDelay: 100,      // delay between staggered elements
     observerThreshold: 0.2  // intersection observer threshold
   };

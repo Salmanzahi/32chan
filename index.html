@@ -82,45 +82,88 @@
 
   <!-- Features Section -->
   <div class="container mx-auto px-4 features-section">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <!-- <img src="./images/hero/hero1.jpg" alt="32Chan Logo" class="mx-auto mb-8"> -->
+    <div class="flex flex-col gap-4">
       <!-- Feature 1 -->
-      <div class="feature-card">
-        <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-        </svg>
-        <h3 class="feature-title">Digital Sanctuary</h3>
-        <p class="feature-description">Secure anonymous communication infrastructure with military-grade encryption. No logs are kept of user activity. Total anonymity guaranteed.</p>
-      </div>
-      
-      <!-- Feature 2 -->
       <div class="feature-card">
         <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
         </svg>
         <h3 class="feature-title">Community Freedom</h3>
-        <p class="feature-description">Express yourself without fear of censorship or tracking. Our platform is built on the principles of free speech and digital liberty.</p>
+        <p class="feature-description">Express yourself freely without fear of censorship.
+          This platform is built on purpose of free speech. Or... u could be a recognized user (if u want that....).
+          </p>
+        
+        <!-- Message Form Preview -->
+        <div class="message-preview">
+          <div class="message-preview-header">
+            <div class="preview-user-profile">
+              <img src="./images/suscat.jpg" alt="Anonymous" class="preview-user-photo">
+              <span class="preview-username">Anonymous</span>
+            </div>
+            <span class="preview-timestamp">Just now</span>
+          </div>
+          <div class="preview-content">
+            <div class="preview-title">UU TNI</div>
+            <div class="preview-text">Undang undang ini perlu di audit lagi oleh pemerintah karena undang undang ini dapat membangkitkan dwifungsi TNI yang terjadi pada orde baru. Ini memberikan supremasi lebih angkatan bersenjata.</div>
+          </div>
+          <div class="preview-actions">
+            <button class="preview-action-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+              </svg>
+              4
+            </button>
+            <button class="preview-action-btn">Reply</button>
+            <button class="preview-action-btn">Share and View</button>
+          </div>
+        </div>
+        <div class="message-preview">
+          <div class="message-preview-header">
+            <div class="preview-user-profile">
+              <img src="https://lh3.googleusercontent.com/a/ACg8ocKIOb1y533YI3SjHbjDt2xt2jKCDMUdqd48Pp1F3UUgKny1pOU=s96-c" alt="Anonymous" class="preview-user-photo">
+              <span class="preview-username">Akiyama <span class="text-red-500">[ADMIN]</span></span>
+            </div>
+            <span class="preview-timestamp">4/9/2025, 8:23:53 AM</span>
+          </div>
+          <div class="preview-content">
+            <div class="preview-title">Apaseh</div>
+            <div class="preview-text">Yapping apa coba gak paham aku.. Kebanyakan gak perlu di omongin</div>
+          </div>
+          <div class="preview-actions">
+            <button class="preview-action-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+              </svg>
+              1
+            </button>
+            <button class="preview-action-btn">Reply</button>
+            <button class="preview-action-btn">Share and View</button>
+           
+          </div>
+          <div class="preview-replies">
+            <div class="preview-reply">
+              <div class="preview-text">just hear it and forget 'bout it :)</div>
+              <span class="preview-timestamp">4/9/2025, 2:34:43 PM</span>
+             
+            </div>
+          </div>
+        </div>
       </div>
       
-      <!-- Feature 3 -->
+      <!-- Feature 2 -->
       <div class="feature-card">
         <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
         </svg>
-        <h3 class="feature-title">Private Rooms</h3>
-        <p class="feature-description">Create invite-only discussion spaces for your trusted network. Share ideas and content with complete privacy and control.</p>
+        <h3 class="feature-title">Private Rooms (WIP)</h3>
+        <p class="feature-description">Create invite-only discussion spaces for your trusted person. Share ideas and content on a seperately from the main forum.</p>
       </div>
     </div>
   </div>
 
   <!-- About Section -->
-  <div class="container mx-auto px-4 about-section">
-    <div class="about-content">
-      <h2 class="about-title">Our History</h2>
-      <p class="about-description">Born from the ashes of traditional forums, 32chan emerged in 2023 as a revolutionary platform dedicated to preserving the original spirit of the internet: freedom, anonymity, and unfiltered expression. In an era of increasing digital surveillance and corporate control, we stand as a beacon for those who believe in the fundamental right to privacy online.</p>
-      <p class="about-description">Our platform is built with cutting-edge encryption technology and a strict no-logging policy, ensuring that your digital footprint remains yours alone. We're committed to providing a space where ideas can flow freely, without fear of censorship or tracking.</p>
-    </div>
-  </div>
-
+ 
 <!-- Footer -->
 <div id="footerContainer"></div>
 

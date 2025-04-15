@@ -4,8 +4,8 @@
       "modules": {
         "toolbar": [
           ["bold", "italic", "underline"],
-          [{ "list": "ordered" }, { "list": "bullet" }],
-          ["image"]
+          [{ "list": "ordered" }, { "list": "bullet" }]
+        
         ]
       },
       "theme": "snow",

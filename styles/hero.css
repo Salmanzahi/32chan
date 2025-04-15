@@ -2,6 +2,8 @@
 :root {
   --hero-overlay: rgba(15, 23, 42, 0.7);
   --hero-gradient: linear-gradient(to bottom, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.95));
+  --fade-height: 150px; /* Adjustable fade height */
+  --bg-index: #0f172a; /* Match your background color */
 }
 
 .hero-section {
@@ -15,6 +17,18 @@
   color: white;
   overflow: hidden;
   touch-action: pan-y pinch-zoom;
+}
+
+.hero-section::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: var(--fade-height);
+  background: linear-gradient(to bottom, transparent, var(--bg-index));
+  z-index: 1;
+  pointer-events: none;
 }
 
 /* Mobile view adjustments for hero section */
@@ -182,16 +196,19 @@
 
 /* Feature Cards Section */
 .features-section {
-  padding: 6rem 0;
+  padding: 2rem 0;
   position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+  z-index: 2; /* Ensure features appear above the fade */
 }
 
 .feature-card {
   background-color: var(--card-bg);
   border: 1px solid var(--card-border);
-  border-radius: 1rem;
-  padding: 2.5rem;
-  height: 100%;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  margin-bottom: 1rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   display: flex;
@@ -242,6 +259,131 @@
   color: var(--text-secondary);
   line-height: 1.7;
   font-size: 1.1rem;
+}
+
+/* Message Preview Styles */
+.message-preview {
+  margin-top: 1.5rem;
+  background: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.message-preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.preview-user-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.preview-user-photo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.preview-username {
+  font-weight: 500;
+  color: #fff;
+}
+
+.preview-timestamp {
+  color: #94a3b8;
+  font-size: 0.875rem;
+}
+
+.preview-content {
+  margin-bottom: 1rem;
+}
+
+.preview-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.preview-text {
+  color: #e2e8f0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.preview-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.preview-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  color: #e2e8f0;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: default;
+  transition: background-color 0.2s;
+}
+
+.preview-action-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.preview-replies {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #333;
+  padding-left: 1.25rem;
+}
+
+.preview-reply {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  position: relative;
+}
+
+.preview-reply .preview-text {
+  color: #e2e8f0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+}
+
+.preview-reply .preview-timestamp {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.preview-delete-btn {
+  background: rgba(220, 38, 38, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  cursor: default;
+  transition: background-color 0.2s;
+}
+
+.preview-delete-btn:hover {
+  background: rgba(220, 38, 38, 0.15);
 }
 
 /* About Section */

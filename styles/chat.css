@@ -77,12 +77,12 @@
 }
 
 .conversation-avatar {
-    width: 3rem;
-    height: 3rem;
+    width: 2.5rem;
+    height: 2.5rem;
     border-radius: 50%;
     margin-right: 0.75rem;
     object-fit: cover;
-    border: 2px solid #444;
+    border: 1px solid var(--card-border);
 }
 
 .conversation-info {
@@ -144,7 +144,7 @@
     border-radius: 50%;
     margin-right: 0.75rem;
     object-fit: cover;
-    border: 2px solid #444;
+    border: 1px solid var(--card-border);
 }
 
 .chat-user-info {
@@ -855,4 +855,46 @@
     font-size: 12px;
     padding: 0 6px;
     margin-left: 8px;
+}
+
+/* Message sender info styles */
+.message-sender-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.sender-avatar {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    object-fit: cover;
+    border: 1px solid var(--card-border);
+}
+
+.sender-name {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* Update conversation avatar size for consistency */
+.conversation-avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    margin-right: 0.75rem;
+    object-fit: cover;
+    border: 1px solid var(--card-border);
+}
+
+/* Update chat header avatar size */
+.chat-avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    margin-right: 0.75rem;
+    object-fit: cover;
+    border: 1px solid var(--card-border);
 }

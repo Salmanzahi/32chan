@@ -6,6 +6,28 @@
   --bg-index: #0f172a; /* Match your background color */
 }
 
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 .hero-section {
   position: relative;
   width: 100%;
@@ -17,6 +39,7 @@
   color: white;
   overflow: hidden;
   touch-action: pan-y pinch-zoom;
+  perspective: 1000px;
 }
 
 .hero-section::after {
@@ -56,12 +79,14 @@
   background-position: center;
   background-repeat: no-repeat;
   opacity: 0;
-  transition: opacity 1s ease-in-out;
+  transition: opacity 1s ease-in-out, transform 0.3s ease-out;
   z-index: -1;
+  will-change: transform;
 }
 
 .hero-background.active {
   opacity: 1;
+  transform: scale(1.05);
 }
 
 .hero-background::before {
@@ -72,6 +97,7 @@
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
+  transition: background-color 0.3s ease;
 }
 
 .hero-content {
@@ -80,6 +106,9 @@
   padding: 0 20px;
   position: relative;
   z-index: 1;
+  animation: fadeInUp 1s ease-out forwards;
+  opacity: 0;
+  animation-delay: 0.5s;
 }
 
 .hero-title {
@@ -88,6 +117,9 @@
   margin-bottom: 1rem;
   color: #fff;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  animation: scaleIn 0.8s ease-out forwards;
+  opacity: 0;
+  animation-delay: 1s;
 }
 
 .hero-subtitle {
@@ -95,19 +127,51 @@
   margin-bottom: 2rem;
   color: #fff;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  animation: fadeInUp 0.8s ease-out forwards;
+  opacity: 0;
+  animation-delay: 1.2s;
 }
 
 .hero-buttons {
   display: flex;
   gap: 1rem;
   justify-content: center;
+  animation: fadeInUp 0.8s ease-out forwards;
+  opacity: 0;
+  animation-delay: 1.4s;
 }
 
 .hero-button {
   padding: 0.75rem 1.5rem;
   border-radius: 0.375rem;
   font-weight: 500;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(0);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hero-button:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.hero-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 .hero-button-primary {
@@ -127,6 +191,7 @@
 
 .hero-button-secondary:hover {
   background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.8);
 }
 
 /* Hero Navigation Controls */

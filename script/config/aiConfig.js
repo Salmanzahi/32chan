@@ -2,12 +2,12 @@
 export const AI_CONFIG = {
     // API Configurations
     API_URL: 'https://openrouter.ai/api/v1/chat/completions',
-    API_KEY: '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',
+    API_KEY: ' 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',
     
     // Model Configuration
     MODELS: {
-        DEFAULT: 'mistralai/mistral-7b-instruct',
-        FALLBACK: 'google/gemini-2.0-flash-exp:free'
+        DEFAULT: 'qwen/qwen2.5-coder-7b-instruct',
+        FALLBACK: 'qwen/qwen2.5-coder-7b-instruct'
     },
     
     // Request Configuration

@@ -2,8 +2,7 @@
 export const AI_CONFIG = {
     // API Configurations
     API_URL: 'https://openrouter.ai/api/v1/chat/completions',
-    API_KEY: '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',
-    
+    API_KEY: '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',
     // Model Configuration
     MODELS: {
         DEFAULT: 'google/gemini-2.0-flash-exp:free',

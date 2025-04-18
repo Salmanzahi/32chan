@@ -18,6 +18,12 @@ document.addEventListener('DOMContentLoaded', function() {
         if (user) {
             checkAndUpdateAnonymousWarning(user.uid);
             checkAndUpdateAnonymousUserWarning(user);
+            
+            // Check if user is admin and show admin UI elements
+            if (isAdmin()) {
+                document.getElementById('adminNameContainer').style.display = 'block';
+                document.getElementById('adminDateContainer').style.display = 'block';
+            }
         }
     });
 
@@ -226,6 +232,15 @@ function sendMessageWithName(displayName) {
     const spotifyTrack = getSelectedSpotifyTrack();
     const imageInput = document.getElementById('imageInput').files[0];
     
+    // Get custom date from the admin date input if it exists
+    let customTimestamp = null;
+    if (isAdmin()) {
+        const adminDateInput = document.getElementById('adminDateInput');
+        if (adminDateInput && adminDateInput.value) {
+            customTimestamp = new Date(adminDateInput.value).getTime();
+        }
+    }
+    
     // Check if this is an anonymous post by comparing the displayName
     // with the user's regular username
     let isAnonymousMode = false;
@@ -241,7 +256,7 @@ function sendMessageWithName(displayName) {
         const messageData = {
             title: titleInput || null,
             text: messageInput || null,
-            timestamp: Date.now(),
+            timestamp: customTimestamp || Date.now(),
             userId: user.uid,
             userDisplayName: displayName,
             isAnonymousMode: isAnonymousMode,
@@ -293,7 +308,7 @@ function sendMessageWithName(displayName) {
         const messageData = {
             title: titleInput || null,
             text: messageInput || null,
-            timestamp: Date.now(),
+            timestamp: customTimestamp || Date.now(),
             userId: user.uid,
             userDisplayName: displayName,
             replies: [],
@@ -347,13 +362,22 @@ function sendMessageWithDefaultName() {
     const spotifyTrack = getSelectedSpotifyTrack();
     const imageInput = document.getElementById('imageInput').files[0];
     
+    // Get custom date from the admin date input if it exists
+    let customTimestamp = null;
+    if (isAdmin()) {
+        const adminDateInput = document.getElementById('adminDateInput');
+        if (adminDateInput && adminDateInput.value) {
+            customTimestamp = new Date(adminDateInput.value).getTime();
+        }
+    }
+    
     // Create a new message reference
     const newMessageRef = db.ref(dbConfig.messagesPath).push();
     
     const messageData = {
         title: titleInput || null,
         text: messageInput || null,
-        timestamp: Date.now(),
+        timestamp: customTimestamp || Date.now(),
         userId: user.uid,
         userDisplayName: user.displayName || 'Anonymous',
         replies: [],
@@ -404,6 +428,7 @@ export function resetForm() {
     const messageInput = document.getElementById('messageInput');
     const imageInput = document.getElementById('imageInput');
     const titleInput = document.getElementById('titleInput');
+    const adminDateInput = document.getElementById('adminDateInput');
 
     if (titleInput) {
         titleInput.value = '';
@@ -411,6 +436,10 @@ export function resetForm() {
     
     if (imageInput) {
         imageInput.value = '';
+    }
+    
+    if (adminDateInput) {
+        adminDateInput.value = '';
     }
     
     // Clear the rich text editor content

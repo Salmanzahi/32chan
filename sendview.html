@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="./styles/spotify.css">
     <link rel="stylesheet" href="./styles/infinite-scroll.css">
     <link rel="stylesheet" href="./styles/tab-toggle.css">
+    <link rel="stylesheet" href="./styles/richtext.css">
+    <link rel="stylesheet" href="./styles/richtext-wide-mode.css">
+    <link rel="stylesheet" href="./styles/ai-assistant.css">
     
     <!-- Add Quill CSS -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.min.css" rel="stylesheet">
@@ -40,6 +43,7 @@
     <script type="module" src="script/nav.js" defer></script>
     <script type="module" src="./script/alert/alert.js"></script>
     <script type="module" src="./script/messagehandling/tab-toggle.js"></script>
+    <script type="module" src="./script/ai/postAssistant.js"></script>
     
 </head>
 <body>
@@ -63,6 +67,11 @@
       setTimeout(() => {
         preloader.classList.add('hidden');
       }, 400);
+      
+      // Initialize AI post assistant if available
+      if (window.initAiPostAssistant) {
+        window.initAiPostAssistant();
+      }
     });
     
     fetch('nav.html')
@@ -114,6 +123,26 @@
                 <label for="titleInput">Title</label>
                 <input type="text" id="titleInput" placeholder="What do you want to ask or share?">
                 
+                <!-- AI Post Assistant Button -->
+                <div class="ai-assistant-container">
+                    <button id="aiAssistButton" class="ai-assist-btn" title="Get AI help with your post">
+                        <svg class="ai-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2a2 2 0 0 1 2 2v2h4a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h4V4a2 2 0 0 1 2-2z"/>
+                            <rect x="8" y="14" width="8" height="3"/>
+                            <circle cx="8" cy="9" r="1"/>
+                            <circle cx="16" cy="9" r="1"/>
+                        </svg>
+                        AI Assist
+                    </button>
+                    
+                    <div id="aiAssistOptions" class="ai-assist-options" style="display: none;">
+                        <button data-type="improve">✨ Improve my post</button>
+                        <button data-type="ideas">💡 Give me post ideas</button>
+                        <button data-type="expand">📝 Expand my post</button>
+                        <button data-type="summarize">📋 Make my post more concise</button>
+                    </div>
+                </div>
+                
                 <label for="messageInput">Details</label>
                 <div id="messageInputContainer">
                     <textarea id="messageInput" placeholder="Include all the information someone would need to answer your question or understand your post"></textarea>
@@ -122,6 +151,12 @@
                 <div id="adminNameContainer" class="admin-only" style="display: none;">
                     <label for="adminNameInput">Admin Name (optional)</label>
                     <input type="text" id="adminNameInput" placeholder="Enter your admin name">
+                </div>
+                
+                <div id="adminDateContainer" class="admin-only" style="display: none;">
+                    <label for="adminDateInput">Custom Post Date (optional)</label>
+                    <input type="datetime-local" id="adminDateInput">
+                    <small>Set a custom timestamp for this post</small>
                 </div>
             
                 <label for="imageInput">Add an image</label>

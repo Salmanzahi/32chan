@@ -713,10 +713,169 @@ export function getEditorContent() {
     return quill ? quill.root.innerHTML : '';
 }
 
-// Set editor content
+// Set editor content with proper formatting and line break preservation
 export function setEditorContent(content) {
-    if (quill) {
-        quill.root.innerHTML = content || '';
+    if (!quill || !content) {
+        if (quill && !content) {
+            quill.root.innerHTML = '';
+        }
+        return;
+    }
+    
+    // Check if content has HTML formatting
+    const containsHtml = /<[a-z][\s\S]*>/i.test(content);
+    
+    if (containsHtml) {
+        // If it's HTML content, convert to plain text with preserved line breaks
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = content;
+        
+        // Replace <br>, <p>, etc. with line breaks
+        const text = tempDiv.innerHTML
+            .replace(/<br\s*[\/]?>/gi, '\n')
+            .replace(/<\/p><p>/gi, '\n\n')
+            .replace(/<\/div><div>/gi, '\n')
+            .replace(/<\/li><li>/gi, '\n');
+            
+        tempDiv.innerHTML = text;
+        content = tempDiv.textContent || tempDiv.innerText || '';
+    }
+    
+    // Prepare to convert Markdown to rich text delta
+    const delta = { ops: [] };
+    
+    // First convert content into lines for processing
+    const lines = content.split('\n');
+    
+    // Process each line to handle markdown formatting
+    for (let i = 0; i < lines.length; i++) {
+        let line = lines[i];
+        let formats = {};
+        let lineFormats = {};
+        
+        // Handle markdown for headings (## Heading or ### Heading)
+        if (line.match(/^(#{2,3})\s+(.+)$/)) {
+            const headingText = line.replace(/^(#{2,3})\s+/, '');
+            delta.ops.push({ 
+                insert: headingText,
+                attributes: { bold: true, size: 'large' }
+            });
+            delta.ops.push({ insert: '\n', attributes: { align: 'left', header: 2 } });
+            continue; // Skip to next line after adding heading
+        }
+        
+        // Handle bullet points (* Item)
+        if (line.match(/^\*\s+(.+)$/)) {
+            const listText = line.replace(/^\*\s+/, '');
+            
+            // Check for bold and italic formatting within the list item
+            let formattedListText = processBoldAndItalic(listText);
+            
+            if (typeof formattedListText === 'string') {
+                // No formatting detected, insert as plain text
+                delta.ops.push({ insert: formattedListText });
+            } else {
+                // Formatting detected, insert with formats
+                delta.ops = delta.ops.concat(formattedListText);
+            }
+            
+            delta.ops.push({ insert: '\n', attributes: { list: 'bullet' } });
+            continue; // Skip to next line
+        }
+        
+        // Process remaining line text with bold and italic formatting
+        let processedOps = processBoldAndItalic(line);
+        
+        if (typeof processedOps === 'string') {
+            // No formatting detected
+            delta.ops.push({ insert: processedOps });
+        } else {
+            // Formatting was applied, concat the operations
+            delta.ops = delta.ops.concat(processedOps);
+        }
+        
+        // Add a newline if it's not the last line
+        if (i < lines.length - 1) {
+            delta.ops.push({ insert: '\n' });
+        }
+    }
+    
+    // If no content was added, ensure we have at least an empty line
+    if (delta.ops.length === 0) {
+        delta.ops.push({ insert: '' });
+    }
+    
+    // Set the content using Quill's setContents method
+    quill.setContents(delta);
+    
+    // Helper function to process bold and italic markdown in text
+    function processBoldAndItalic(text) {
+        if (!text) return text;
+        
+        // Check if the text contains any formatting markers
+        if (!text.includes('**') && !text.includes('*')) {
+            return text; // No formatting, return as is
+        }
+        
+        const ops = [];
+        let currentIndex = 0;
+        let boldRegex = /\*\*(.*?)\*\*/g;
+        let italicRegex = /(?<!\*)\*((?!\*).*?)\*(?!\*)/g;
+        let match;
+        
+        // First collect all matches and their positions
+        const matches = [];
+        
+        // Find all bold matches
+        while ((match = boldRegex.exec(text)) !== null) {
+            matches.push({
+                start: match.index,
+                end: match.index + match[0].length,
+                content: match[1],
+                format: 'bold'
+            });
+        }
+        
+        // Find all italic matches
+        while ((match = italicRegex.exec(text)) !== null) {
+            matches.push({
+                start: match.index,
+                end: match.index + match[0].length,
+                content: match[1],
+                format: 'italic'
+            });
+        }
+        
+        // Sort by start position
+        matches.sort((a, b) => a.start - b.start);
+        
+        // Process the matches in order
+        let lastIndex = 0;
+        
+        for (const match of matches) {
+            // Add any text before this match
+            if (match.start > lastIndex) {
+                ops.push({ insert: text.substring(lastIndex, match.start) });
+            }
+            
+            // Add the formatted text
+            const attributes = {};
+            attributes[match.format] = true;
+            
+            ops.push({
+                insert: match.content,
+                attributes
+            });
+            
+            lastIndex = match.end;
+        }
+        
+        // Add any remaining text after the last match
+        if (lastIndex < text.length) {
+            ops.push({ insert: text.substring(lastIndex) });
+        }
+        
+        return ops.length > 0 ? ops : text;
     }
 }
 

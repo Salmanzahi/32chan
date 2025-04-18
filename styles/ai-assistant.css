@@ -72,6 +72,43 @@
 }
 
 .ai-response:hover {
+
+/* Custom Input Styles */
+.ai-custom-input-container {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0;
+  align-items: center;
+}
+
+.ai-custom-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.ai-custom-input:focus {
+  outline: none;
+  border-color: #4285f4;
+  box-shadow: 0 0 0 2px rgba(66,133,244,0.2);
+}
+
+.ai-custom-submit {
+  padding: 10px 20px;
+  background-color: #4285f4;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.ai-custom-submit:hover {
+  background-color: #357abd;
+}
     box-shadow: var(--shadow-lg);
     transform: translateY(-2px);
 }
@@ -148,6 +185,58 @@
     border-radius: 4px;
 }
 
+/* Multiple options styling */
+.ai-options-heading {
+    margin-bottom: 20px;
+    color: var(--text);
+    font-weight: 600;
+    text-align: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--card-border);
+}
+
+.ai-options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.ai-option {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 15px;
+    position: relative;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.ai-option:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+    border-color: var(--button-hover);
+}
+
+.ai-option-number {
+    font-weight: 600;
+    color: var(--button-primary);
+    font-size: 1rem;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px dashed rgba(96, 165, 250, 0.2);
+}
+
+.ai-option-content {
+    margin-bottom: 15px;
+}
+
+.ai-option-apply {
+    margin-top: 10px;
+    width: 100%;
+    font-size: 0.9rem;
+    padding: 6px 12px;
+}
+
 /* Add small fade-in animation */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(5px); }
@@ -157,6 +246,18 @@
 .ai-response {
     animation: fadeIn 0.3s ease-out;
 }
+
+.ai-option {
+    animation: fadeIn 0.3s ease-out;
+    animation-fill-mode: both;
+}
+
+/* Add staggered animation delay for options */
+.ai-option:nth-child(1) { animation-delay: 0.1s; }
+.ai-option:nth-child(2) { animation-delay: 0.2s; }
+.ai-option:nth-child(3) { animation-delay: 0.3s; }
+.ai-option:nth-child(4) { animation-delay: 0.4s; }
+.ai-option:nth-child(5) { animation-delay: 0.5s; }
 
 /* Add error message styling */
 .ai-response.error {
@@ -226,4 +327,4 @@
         padding: 15px;
         margin: 10px 0;
     }
-} 
+}

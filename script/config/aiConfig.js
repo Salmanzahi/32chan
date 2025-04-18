@@ -15,7 +15,7 @@ export const AI_CONFIG = {
         max_tokens: 100,
         response_format: { type: "json_object" }
     },
-    
+    //sata
     // Search Configuration
     SEARCH_CONFIG: {
         max_messages: 5,

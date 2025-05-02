@@ -27,7 +27,7 @@ export const user = auth.currentUser;
 export function googleSignIn() {
     console.log('Google Sign-In button clicked');
     const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider)
+    auth.signInWithRedirect(provider)
         .then((result) => {
             // The signed-in user info.
             const user = result.user;

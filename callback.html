@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spotify Authentication - 32Chan</title>
+    <title>Spotify Authentication - FreeSekai</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -78,7 +78,7 @@
             <p>Processing authentication...</p>
             <div class="loader"></div>
         </div>
-        <button id="returnBtn" style="display: none;">Return to 32Chan</button>
+        <button id="returnBtn" style="display: none;">Return to FreeSekai</button>
     </div>
 
     <script>
@@ -90,7 +90,7 @@
             try {
                 const success = handleSpotifyCallback();
                 if (success) {
-                    statusDiv.innerHTML = '<p class="success">Authentication successful! You can now use Spotify features in 32Chan.</p>';
+                    statusDiv.innerHTML = '<p class="success">Authentication successful! You can now use Spotify features in FreeSekai.</p>';
                 } else {
                     statusDiv.innerHTML = '<p class="error">Authentication failed. Please try again.</p>';
                 }

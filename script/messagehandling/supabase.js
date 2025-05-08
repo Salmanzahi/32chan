@@ -1,4 +1,5 @@
 
+import { showAlert } from "../alert/alert.js";
 import { supabaseConfig } from "../config/supabaseConfig.js";
 // Initialize Supabase client
 let supabase = null;
@@ -104,3 +105,5 @@ export async function getImageUrl(filePath) {
 initSupabase().catch(error => {
     console.error('Initial Supabase initialization failed:', error);
 });
+
+

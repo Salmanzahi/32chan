@@ -6,7 +6,6 @@ export const AI_CONFIG = {
     // Model Configuration
     MODELS: {
         DEFAULT: 'google/gemini-2.0-flash-exp:free',
-        // FALLBACK: 'google/gemini-2.5-pro-exp-03-25:free'
     },
     
     // Request Configuration

@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="./styles/like-button.css">
   <link rel="stylesheet" href="./styles/spotify.css">
   <link rel="stylesheet" href="./styles/infinite-scroll.css">
-  
+
   <!-- Add Quill CSS -->
   <link href="https://cdn.quilljs.com/1.3.6/quill.snow.min.css" rel="stylesheet">
   <!-- Add Quill JS -->
@@ -37,13 +37,16 @@
 <script type="module" src="./script/messagehandling/importmsg.js" defer></script>
 <script type="module" src="script/nav.js" defer></script>
 <script type="module" src="./script/alert/alert.js" ></script>
+<script src="./script/preloader.js"></script>
 
 </head>
 <body >
   <!-- Preloader -->
   <div class="preloader">
     <div class="preloader-logo">FreeSekai</div>
-    <span class="loader"></span>
+    <div class="progress-container">
+      <div class="progress-bar"></div>
+    </div>
     <div class="preloader-text">Setting up the post...</div>
   </div>
 
@@ -56,7 +59,7 @@
         preloader.classList.add('hidden');
       }, 1000); // Hide after 1 second
     });
-    
+
     fetch('nav.html')
       .then(response => response.text())
       .then(html => {
@@ -80,7 +83,7 @@
 <div id="footerContainer"></div>
 
 <script>
-   
+
 </script>
 </body>
 </html>

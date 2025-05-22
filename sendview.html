@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="./styles/richtext.css">
     <link rel="stylesheet" href="./styles/richtext-wide-mode.css">
     <link rel="stylesheet" href="./styles/ai-assistant.css">
-    
+
     <!-- Add Quill CSS -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.min.css" rel="stylesheet">
     <!-- Add Quill JS -->
@@ -44,16 +44,19 @@
     <script type="module" src="./script/alert/alert.js"></script>
     <script type="module" src="./script/messagehandling/tab-toggle.js"></script>
     <script type="module" src="./script/ai/postAssistant.js"></script>
-    
+    <script src="./script/preloader.js"></script>
+
 </head>
 <body>
   <!-- Preloader -->
   <div class="preloader">
     <div class="preloader-logo">FreeSekai</div>
-    <span class="loader"></span>
+    <div class="progress-container">
+      <div class="progress-bar"></div>
+    </div>
     <div class="preloader-text">Setting up Properties...</div>
   </div>
-   
+
    <!-- Admin Notification -->
 <div id="adminNotification" style="display: none; position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background-color: red; color: white; padding: 5px 10px; border-radius: 5px;">
     Administrator
@@ -67,13 +70,13 @@
       setTimeout(() => {
         preloader.classList.add('hidden');
       }, 400);
-      
+
       // Initialize AI post assistant if available
       if (window.initAiPostAssistant) {
         window.initAiPostAssistant();
       }
     });
-    
+
     fetch('nav.html')
       .then(response => response.text())
       .then(html => {
@@ -103,26 +106,26 @@
                 <button id="createPostTab" class="tab-toggle-btn active" onclick="switchTab('createPost')">Create Post</button>
                 <button id="messagesTab" class="tab-toggle-btn" onclick="switchTab('messages')">Messages</button>
             </div>
-            
+
             <!-- Send Message Form -->
             <div id="formContainer" class="form-container" style="display: block;">
                 <h2>Create a New Post</h2>
-                
+
                 <!-- Anonymous Mode Warning -->
                 <div id="anonymousModeWarning" class="anonymous-mode-warning" style="display: none;">
                     <div class="warning-icon">⚠️</div>
                     <div class="warning-text">You are currently in <strong>Anonymous Mode</strong>. Your posts will show your anonymous username.</div>
                 </div>
-                
+
                 <!-- Anonymous User Warning -->
                 <div id="anonymousUserWarning" class="anonymous-mode-warning" style="display: none;">
                     <div class="warning-icon">⚠️</div>
                     <div class="warning-text">Please log in to your <strong>Google account</strong> to access more features.</div>
                 </div>
-                
+
                 <label for="titleInput">Title</label>
                 <input type="text" id="titleInput" placeholder="What do you want to ask or share?">
-                
+
                 <!-- AI Post Assistant Button -->
                 <div class="ai-assistant-container">
                     <button id="aiAssistButton" class="ai-assist-btn" title="Get AI help with your post">
@@ -134,7 +137,7 @@
                         </svg>
                         AI Assistant [BETA]
                     </button>
-                    
+
                     <div id="aiAssistOptions" class="ai-assist-options" style="display: none;">
                         <button data-type="improve">✨ Improve my post</button>
                         <button data-type="ideas">💡 Give me post ideas</button>
@@ -146,23 +149,23 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <label for="messageInput">Details</label>
                 <div id="messageInputContainer">
                     <textarea id="messageInput" placeholder="Include all the information someone would need to answer your question or understand your post"></textarea>
                 </div>
-                
+
                 <div id="adminNameContainer" class="admin-only" style="display: none;">
                     <label for="adminNameInput">Admin Name (optional)</label>
                     <input type="text" id="adminNameInput" placeholder="Enter your admin name">
                 </div>
-                
+
                 <div id="adminDateContainer" class="admin-only" style="display: none;">
                     <label for="adminDateInput">Custom Post Date (optional)</label>
                     <input type="datetime-local" id="adminDateInput">
                     <small>Set a custom timestamp for this post</small>
                 </div>
-            
+
                 <label for="imageInput">Add an image</label>
                 <input type="file" id="imageInput" accept="image/*" aria-label="Upload image" title="Upload an optional image">
                 <div class="profile-toggle-container">
@@ -187,10 +190,10 @@
                     <div id="selectedSpotifyTrack" class="selected-spotify-track" style="display: none;"></div>
                     <button type="button" id="spotifyAuthBtn" class="spotify-auth-btn" onclick="authorizeSpotify()">Connect to Spotify</button>
                 </div>
-              
+
 
                 <button class="submit-btn" onclick="sendMessage()">Post</button>
-            
+
                 <!-- User's Post History -->
                 <h2>Your Post History</h2>
                 <ul id="userMessagesList">
@@ -201,12 +204,12 @@
             </div>
 
             <!-- View Messages Section -->
-          
+
             <div id="messagesContainer" class="messages-container" style="display: none;">
                 <!-- Messages Header -->
                 <div class="messages-header">
                     <h2>Community Posts</h2>
-                    
+
                     <!-- Sorting Options - Visible on all devices -->
                     <div class="sorting-options">
                         <button id="sortAscBtn" onclick="showMessages('asc')" class="sort-btn">
@@ -252,24 +255,24 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Loading Indicator -->
                 <div id="notme" class="loading-indicator">
                     <p>
                         <span>Loading posts...</span>
                     </p>
                 </div>
-                
+
                 <!-- Messages List -->
                 <ul id="messagesList" class="messages-list">
                     <!-- Messages will be dynamically added here -->
                 </ul>
-                
+
                 <!-- Infinite Scroll Loader -->
                 <div id="infinite-scroll-loader" class="infinite-scroll-loader">
                     <div class="spinner"></div>
                 </div>
-                
+
                 <!-- No More Posts Message -->
                 <div id="no-more-posts" class="no-more-posts" style="display: none;">
                     No more posts to load

@@ -1,7 +1,7 @@
 import { AI_CONFIG } from '../config/aiConfig.js';
 
 /**
- * Performs semantic search using OpenRouter AI
+ * Performs semantic search using Gemini AI
  * @param {string} query - Search query
  * @param {Array} messages - Array of messages to search through
  * @returns {Promise<Array>} - Array of relevant messages with similarity scores
@@ -24,103 +24,104 @@ export async function performAISearch(query, messages) {
                 userDisplayName: m.userDisplayName
             }));
 
-        console.log('Sending request to OpenRouter API...');
-        const response = await fetch(AI_CONFIG.API_URL, {
+        // Construct the system prompt and user message for Gemini
+        const systemPrompt = "Analyze messages and return relevance scores as JSON array: [{\"index\":0,\"score\":95}]";
+        const userMessage = `Query: "${query}"\nMessages: ${JSON.stringify(messageData)}`;
+
+        // Combine prompts for Gemini (which uses a different format than OpenRouter)
+        const combinedPrompt = `${systemPrompt}\n\n${userMessage}`;
+
+        console.log('Sending request to Gemini API...');
+        // Add API key as query parameter for Gemini
+        const apiUrl = `${AI_CONFIG.API_URL}?key=${AI_CONFIG.API_KEY}`;
+
+        const response = await fetch(apiUrl, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${AI_CONFIG.API_KEY}`,
-                'HTTP-Referer': window.location.origin,
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                model: AI_CONFIG.MODELS.DEFAULT,
-                messages: [
+                contents: [
                     {
-                        role: 'system',
-                        content: `Analyze messages and return relevance scores as JSON array: [{"index":0,"score":95}]`
-                    },
-                    {
-                        role: 'user',
-                        content: `Query: "${query}"\nMessages: ${JSON.stringify(messageData)}`
+                        parts: [
+                            { text: combinedPrompt }
+                        ]
                     }
                 ],
-                ...AI_CONFIG.REQUEST_CONFIG
+                generationConfig: {
+                    temperature: AI_CONFIG.REQUEST_CONFIG.temperature,
+                    maxOutputTokens: AI_CONFIG.REQUEST_CONFIG.maxOutputTokens,
+                    topK: AI_CONFIG.REQUEST_CONFIG.topK,
+                    topP: AI_CONFIG.REQUEST_CONFIG.topP
+                }
             })
         });
 
         console.log('Received response from API:', response.status);
-        
+
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
             console.error('API Error:', errorData);
-            
-            // Handle credit limit error specifically
-            if (errorData.error?.code === 402) {
-                console.warn('Credit limit reached, falling back to basic search');
+
+            // Handle quota exceeded error specifically (Gemini API error code)
+            if (errorData.error?.code === 429 || errorData.error?.status === 'RESOURCE_EXHAUSTED') {
+                console.warn('API quota exceeded, falling back to basic search');
                 // Fall back to basic search by returning all messages
                 return messages.map((message, index) => ({
                     message,
                     score: AI_CONFIG.SEARCH_CONFIG.default_score
                 }));
             }
-            
+
             throw new Error(errorData.error?.message || `API request failed with status ${response.status}`);
         }
 
-        const responseText = await response.text();
-        console.log('Raw API response:', responseText);
-        
-        let data;
-        try {
-            data = JSON.parse(responseText);
-        } catch (parseError) {
-            console.error('Failed to parse API response:', parseError);
-            throw new Error('Invalid JSON response from API');
-        }
-
+        // Parse the response as JSON directly (Gemini returns JSON)
+        const data = await response.json();
         console.log('Parsed API response:', data);
-        
-        // Validate response structure
+
+        // Validate response structure for Gemini API
         if (!data) {
             console.error('Empty API response');
             throw new Error('Empty API response');
         }
 
-        if (!data.choices) {
-            console.error('Missing choices in API response:', data);
-            throw new Error('Missing choices in API response');
+        // Check for Gemini-specific response structure
+        if (!data.candidates || !Array.isArray(data.candidates)) {
+            console.error('Missing or invalid candidates in API response:', data);
+            throw new Error('Missing candidates in API response');
         }
 
-        if (!Array.isArray(data.choices)) {
-            console.error('Choices is not an array:', data.choices);
-            throw new Error('Choices is not an array');
+        if (data.candidates.length === 0) {
+            console.error('Empty candidates array in API response');
+            throw new Error('Empty candidates array in API response');
         }
 
-        if (data.choices.length === 0) {
-            console.error('Empty choices array');
-            throw new Error('Empty choices array');
+        const firstCandidate = data.candidates[0];
+        if (!firstCandidate) {
+            console.error('First candidate is undefined');
+            throw new Error('First candidate is undefined');
         }
 
-        const firstChoice = data.choices[0];
-        if (!firstChoice) {
-            console.error('First choice is undefined');
-            throw new Error('First choice is undefined');
+        if (!firstCandidate.content) {
+            console.error('Missing content in first candidate:', firstCandidate);
+            throw new Error('Missing content in first candidate');
         }
 
-        if (!firstChoice.message) {
-            console.error('Missing message in first choice:', firstChoice);
-            throw new Error('Missing message in first choice');
+        if (!firstCandidate.content.parts || !Array.isArray(firstCandidate.content.parts) || firstCandidate.content.parts.length === 0) {
+            console.error('Missing parts in content:', firstCandidate.content);
+            throw new Error('Missing parts in content');
         }
 
-        if (!firstChoice.message.content) {
-            console.error('Missing content in message:', firstChoice.message);
-            throw new Error('Missing content in message');
+        if (!firstCandidate.content.parts[0].text) {
+            console.error('Missing text in first part:', firstCandidate.content.parts[0]);
+            throw new Error('Missing text in first part');
         }
 
         // Extract and clean the response
-        const aiResponse = firstChoice.message.content;
+        const aiResponse = firstCandidate.content.parts[0].text;
         console.log('AI Response:', aiResponse);
-        
+
         const cleanResponse = aiResponse
             .replace(/```json\n|\n```|```/g, '') // Remove markdown
             .replace(/[\n\r]/g, '') // Remove newlines
@@ -179,7 +180,7 @@ export async function performAISearch(query, messages) {
 
         // Ensure we have at least the minimum number of results
         const minResults = Math.min(AI_CONFIG.SEARCH_CONFIG.min_results, messages.length);
-        const finalResults = validResults.length >= minResults 
+        const finalResults = validResults.length >= minResults
             ? validResults.slice(0, Math.max(minResults, validResults.filter(r => r.score > 50).length))
             : validResults;
 
@@ -207,18 +208,18 @@ export async function performAISearch(query, messages) {
  */
 export function highlightRelevantText(text, query, score) {
     if (!text) return '';
-    
+
     // Add similarity score indicator
     const scoreIndicator = `<span class="similarity-score" style="font-size: 0.8em; color: ${getScoreColor(score)};">
         ${score ? `${Math.round(score)}% match` : ''}
     </span>`;
-    
+
     try {
         // Escape special characters in the query for regex
         const safeQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         const regex = new RegExp(safeQuery, 'gi');
         const highlightedText = text.replace(regex, match => `<mark class="ai-highlight">${match}</mark>`);
-        
+
         return `${scoreIndicator} ${highlightedText}`;
     } catch (error) {
         console.error('Error highlighting text:', error);
@@ -236,4 +237,4 @@ export function getScoreColor(score) {
     if (score >= 80) return '#4CAF50';
     if (score >= 60) return '#FFC107';
     return '#FF5722';
-} 
+}

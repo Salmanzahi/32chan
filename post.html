@@ -17,12 +17,16 @@
     <link rel="stylesheet" href="./styles/quora-theme.css">
     <link rel="stylesheet" href="./styles/like-button.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./styles/preload.css">
+    <script src="./script/preloader.js"></script>
 </head>
 <body>
     <!-- Preloader -->
     <div class="preloader">
         <div class="preloader-logo">FreeSekai</div>
-        <span class="loader"></span>
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
         <div class="preloader-text">Setting up properties...</div>
     </div>
 
@@ -55,7 +59,7 @@
                 preloader.classList.add('hidden');
             }, 1000); // Hide after 1 second
         });
-        
+
         fetch('nav.html')
             .then(response => response.text())
             .then(html => {

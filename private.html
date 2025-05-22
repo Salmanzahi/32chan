@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- 
+
   <link rel="stylesheet" href="./styles/noselect.css">
   <link rel="stylesheet" href="./styles/preload.css">
   <link rel="stylesheet" href="./script/alert/alert.css">
@@ -23,12 +23,15 @@
   <script type="module" src="./script/privateroom/inputhandling.js"></script>
   <script type="module" src="./script/privateroom/room/room.js"></script>
   <script type="module" src="./script/privateroom/roomhistory.js"></script>
+  <script src="./script/preloader.js"></script>
 </head>
 <body class="bg-index text-index min-h-screen">
   <!-- Preloader -->
   <div class="preloader">
     <div class="preloader-logo">FreeSekai</div>
-    <span class="loader"></span>
+    <div class="progress-container">
+      <div class="progress-bar"></div>
+    </div>
     <div class="preloader-text">Setting up properties...</div>
   </div>
 
@@ -41,7 +44,7 @@
         preloader.classList.add('hidden');
       }, 1000); // Hide after 1 second
     });
-    
+
     fetch('nav.html')
       .then(response => response.text())
       .then(html => {
@@ -57,12 +60,12 @@
         <h2 class="text-2xl text-white mb-2 no-select">Create a Private Room</h2>
         <p class="text-gray-300 no-select">Create your own private room !</p>
         <label for="roomCreateName">Room Name: </label>
-     
+
         <input type="text" id="roomCreateName" placeholder="Enter your room name" style="margin-bottom: 15px;">
         <label for="roomCreateCode" style="display: block" >Room Code:</label>
-        
+
         <input type= "text" id="roomCreateCode" placeholder="Enter ur room code" style="margin-bottom: 15px;">
-      
+
         <button id="createRoom" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full text-center" onclick="createRoom()">Submit</button>
       </section>
       <section id="joinRoom" class="bg-gray-800 p-6 rounded-lg mb-6">
@@ -74,16 +77,16 @@
         <input type="text" id="roomJoinCode" placeholder="Enter the room code" style="margin-bottom: 15px;">
         <button id="submitChangelog" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full text-center" onclick="joinRoom()">Submit</button>
       </section>
-      
+
       <section id="roomHistory" class="bg-gray-800 p-6 rounded-lg mb-6">
         <h2 class="text-2xl text-white mb-2 no-select">Your Room History</h2>
         <p class="text-gray-300 no-select">Rooms you've created or joined</p>
         <!-- Room history will be displayed here -->
       </section>
       </div>
-  
-   
- 
+
+
+
   <div id="footer"></div>
   <script>
      fetch('footer.html')

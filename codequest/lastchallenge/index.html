@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Shop</title>
+    <style>
+      /* Accessible styling for users 50+ */
+      body {
+          font-family: Arial, sans-serif;
+          font-size: 18px;
+          line-height: 1.5;
+          background: #fff;
+          color: #000;
+      }
+      header, nav, section {
+          padding: 20px;
+          margin: 10px;
+      }
+      nav a {
+          margin: 0 10px;
+          text-decoration: none;
+          font-weight: bold;
+          color: #005;
+      }
+      img {
+          max-width: 100%;
+          height: auto;
+      }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#product">Product</a>
+            <a href="#checkout">Checkout</a>
+        </nav>
+    </header>
+    <main>
+        <section id="home">
+            <h1>Welcome to Our Shop</h1>
+            <p>Discover quality products with a simplified shopping experience designed for comfort.</p>
+        </section>
+        <section id="product">
+            <h2>Product Example</h2>
+            <img src="https://via.placeholder.com/400" alt="Classic Wristwatch">
+            <p><strong>Product Name:</strong> Classic Wristwatch</p>
+            <p><strong>Description:</strong> An easy-to-read wristwatch featuring large numbers and a simple, clear design.</p>
+            <p><strong>Price:</strong> $199.99</p>
+        </section>
+        <section id="checkout">
+            <h2>Checkout</h2>
+            <form>
+                <label for="fullname">Full Name:</label><br>
+                <input type="text" id="fullname" name="fullname" style="font-size: 18px;"><br><br>
+                <label for="address">Address:</label><br>
+                <input type="text" id="address" name="address" style="font-size: 18px;"><br><br>
+                <button type="submit" style="font-size: 18px;">Place Order</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>© 2023 Online Shop</p>
+    </footer>
+</body>
+</html>

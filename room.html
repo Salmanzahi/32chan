@@ -26,12 +26,15 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script type="module" src="./script/changelog/changelog.js"></script>
   <script type="module" src="./script/auth/auth-init.js"></script>
+  <script src="./script/preloader.js"></script>
 </head>
 <body >
   <!-- Preloader -->
   <div class="preloader">
     <div class="preloader-logo">FreeSekai</div>
-    <span class="loader"></span>
+    <div class="progress-container">
+      <div class="progress-bar"></div>
+    </div>
     <div class="preloader-text">Initializing secure connection...</div>
   </div>
 
@@ -44,7 +47,7 @@
         preloader.classList.add('hidden');
       }, 1000); // Hide after 1 second
     });
-    
+
     fetch('nav.html')
       .then(response => response.text())
       .then(html => {
@@ -66,37 +69,37 @@
           <p>To be developed !</p>
           <p id="announcement-content"></p>
       </header>
-  
-  
+
+
               <!-- Main Action Button -->
               <!-- <button id="toggleViewBtn" style="display: block;" class="main-action-btn" onclick="toggleView()">Send Message / View Messages</button> -->
-              
+
               <!-- Sorting Options -->
               <div class="buttons hidden md:flex">
                   <button id="sortAscBtn" style="display: none;" onclick="showMessages('asc')">Oldest First</button>
                   <button id="sortDescBtn" style="display: none;" onclick="showMessages('desc')">Newest First</button>
                   <button id="sortMostLikedBtn" style="display: none;" onclick="showMessages('mostLiked')">Most Popular</button>
               </div>
-              
-  
+
+
               <!-- Send Message Form -->
               <div id="formContainer" class="form-container" style="display: block;">
                   <h2>Create a New Post</h2>
-                  
+
                   <label for="titleInput">Title</label>
                   <input type="text" id="titleInput" placeholder="What do you want to ask or share?">
-                  
+
                   <label for="messageInput">Details</label>
                   <textarea id="messageInput" placeholder="Include all the information someone would need to answer your question or understand your post"></textarea>
-                  
+
                   <div id="adminNameContainer" class="admin-only" style="display: none;">
                       <label for="adminNameInput">Admin Name (optional)</label>
                       <input type="text" id="adminNameInput" placeholder="Enter your admin name">
                   </div>
-              
+
                   <label for="imageInput">Add an image</label>
                   <input type="file" id="imageInput" accept="image/*" aria-label="Upload image" title="Upload an optional image">
-                  
+
                   <!-- Spotify Search Container -->
                   <div id="spotifySearchContainer" class="spotify-search-container">
                       <div class="spotify-search-header">
@@ -112,7 +115,7 @@
                       <div id="selectedSpotifyTrack" class="selected-spotify-track" style="display: none;"></div>
                       <button type="button" id="spotifyAuthBtn" class="spotify-auth-btn" onclick="authorizeSpotify()">Connect to Spotify</button>
                   </div>
-                  
+
                   <div class="profile-toggle-container">
                       <label for="showProfileToggle" class="toggle-label">Show profile in post</label>
                       <label class="switch">
@@ -120,9 +123,9 @@
                           <span class="slider round"></span>
                       </label>
                   </div>
-                  
+
                   <button class="submit-btn" onclick="sendMessage()">Post</button>
-              
+
                   <!-- User's Post History -->
                   <h2>Your Post History</h2>
                   <ul id="userMessagesList">
@@ -131,9 +134,9 @@
                   </ul>
               </div>
               </div>
-  
+
               <!-- View Messages Section -->
-            
+
               <div id="messagesContainer" class="messages-container" style="display: none;">
                 <!-- Mobile Sorting Options -->
                 <div id="dropdown" class="block md:hidden flex justify-end space-x-4 mb-4">
@@ -160,10 +163,10 @@
                     </div>
                   </div>
                 </div>
-                
+
                 <!-- Messages Header -->
                 <h2>Community Posts</h2>
-                
+
                 <!-- Lazy Loading Toggle -->
                 <div class="lazy-loading-toggle">
                     <label for="lazyLoadingToggle" class="toggle-label">Lazy Loading</label>
@@ -172,14 +175,14 @@
                         <span class="slider round"></span>
                     </label>
                 </div>
-                
+
                 <!-- Loading Indicator -->
                 <div id="notme" class="loading-indicator">
                   <p>
                     <span>Loading posts...</span>
                   </p>
                 </div>
-                
+
                 <!-- Messages List -->
                 <ul id="messagesList">
                       <!-- Messages will be dynamically added here -->

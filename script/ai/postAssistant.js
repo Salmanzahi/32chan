@@ -24,7 +24,7 @@ export function setupClickOutside() {
     document.addEventListener('click', function(event) {
         const optionsMenu = document.getElementById('aiAssistOptions');
         const aiButton = document.getElementById('aiAssistButton');
-        
+
         if (optionsMenu && aiButton && !optionsMenu.contains(event.target) && !aiButton.contains(event.target)) {
             optionsMenu.style.display = 'none';
         }
@@ -46,30 +46,30 @@ function createResponseContainer() {
         responseContainer.className = 'ai-response';
         return responseContainer;
     }
-    
+
     // Create new container with all necessary elements
     responseContainer = document.createElement('div');
     responseContainer.id = 'aiResponseContainer';
     responseContainer.className = 'ai-response';
-    
+
     // Add close button
     const closeButton = document.createElement('button');
     closeButton.className = 'ai-response-close';
     closeButton.innerHTML = '×';
     closeButton.setAttribute('aria-label', 'Close');
     closeButton.addEventListener('click', () => responseContainer.remove());
-    
+
     // Create inner content wrapper
     const contentWrapper = document.createElement('div');
     contentWrapper.className = 'ai-response-content';
-    
+
     responseContainer.appendChild(closeButton);
     responseContainer.appendChild(contentWrapper);
-    
+
     // Add container after the message input area
     const messageContainer = document.getElementById('messageInputContainer');
     messageContainer.parentNode.insertBefore(responseContainer, messageContainer.nextSibling);
-    
+
     return responseContainer;
 }
 
@@ -80,13 +80,13 @@ function showLoading() {
     const container = createResponseContainer();
     const contentWrapper = container.querySelector('.ai-response-content');
     contentWrapper.innerHTML = '';
-    
+
     const loadingDiv = document.createElement('div');
     loadingDiv.className = 'ai-loading';
-    
+
     const spinner = document.createElement('div');
     spinner.className = 'ai-loading-spinner';
-    
+
     loadingDiv.appendChild(spinner);
     contentWrapper.appendChild(loadingDiv);
 }
@@ -103,14 +103,14 @@ function createApplyButton(content, container) {
     const applyButton = document.createElement('button');
     applyButton.textContent = 'Apply to Post';
     applyButton.className = 'submit-btn';
-    
+
     applyButton.addEventListener('click', () => {
         const plainText = stripHtml(content);
         setEditorContent(plainText);
         container.remove();
         showAlert('AI suggestion applied to your post', 'success');
     });
-    
+
     return applyButton;
 }
 
@@ -124,25 +124,25 @@ function createApplyButton(content, container) {
 function createOptionElement(option, index, container) {
     const optionContainer = document.createElement('div');
     optionContainer.className = 'ai-option';
-    
+
     // Option number
     const optionNumber = document.createElement('div');
     optionNumber.className = 'ai-option-number';
     optionNumber.textContent = `Option ${index + 1}`;
-    
+
     // Option content
     const optionContent = document.createElement('div');
     optionContent.className = 'ai-option-content';
     optionContent.innerHTML = formatResponseText(option);
-    
+
     // Apply button for this option
     const applyButton = createApplyButton(option, container);
     applyButton.className = 'submit-btn ai-option-apply';
-    
+
     optionContainer.appendChild(optionNumber);
     optionContainer.appendChild(optionContent);
     optionContainer.appendChild(applyButton);
-    
+
     return optionContainer;
 }
 
@@ -154,17 +154,17 @@ function createOptionElement(option, index, container) {
 function processResponse(response, actionType) {
     const container = document.getElementById('aiResponseContainer');
     if (!container) return;
-    
+
     const contentWrapper = container.querySelector('.ai-response-content') || container;
     contentWrapper.innerHTML = '';
-    
+
     try {
         // Parse the response if it's JSON
         let responseContent = parseResponseContent(response);
-        
+
         // Check if response has multiple options
         const options = splitMultipleOptions(responseContent);
-        
+
         // Create apply buttons for certain action types
         if (['improve', 'expand', 'summarize'].includes(actionType)) {
             if (options.length > 1) {
@@ -173,12 +173,12 @@ function processResponse(response, actionType) {
                 heading.textContent = 'Select one of these options:';
                 heading.className = 'ai-options-heading';
                 contentWrapper.appendChild(heading);
-                
+
                 // Create container for options
                 const optionsContainer = document.createElement('div');
                 optionsContainer.className = 'ai-options-container';
                 contentWrapper.appendChild(optionsContainer);
-                
+
                 // Add each option with its own apply button
                 options.forEach((option, index) => {
                     const optionElement = createOptionElement(option, index, container);
@@ -204,7 +204,7 @@ function processResponse(response, actionType) {
  */
 function parseResponseContent(response) {
     if (typeof response !== 'string') return response;
-    
+
     if (response.trim().startsWith('{')) {
         try {
             const parsedResponse = JSON.parse(response);
@@ -213,7 +213,7 @@ function parseResponseContent(response) {
             return response;
         }
     }
-    
+
     return response;
 }
 
@@ -231,29 +231,29 @@ function splitMultipleOptions(text) {
         /\n\s*Alternative \d+[:\)]\s*/gi,     // Alternative 1: or Alternative 1)
         /\n\s*Suggestion \d+[:\)]\s*/gi      // Suggestion 1: or Suggestion 1)
     ];
-    
+
     // Try to find a pattern that matches option separation in this text
     for (const pattern of optionPatterns) {
         const matches = [...text.matchAll(pattern)];
         if (matches.length > 1) {
             const options = [];
             const positions = matches.map(match => match.index);
-            
+
             // Extract each option using the separator positions
             for (let i = 0; i < positions.length; i++) {
                 const start = positions[i];
                 const end = i < positions.length - 1 ? positions[i + 1] : text.length;
-                
+
                 let option = text.substring(start, end).trim();
                 // Remove the option prefix (e.g., "Option 1:")
                 option = option.replace(pattern, '').trim();
                 options.push(option);
             }
-            
+
             return options;
         }
     }
-    
+
     // No valid separation pattern found, return full text as single option
     return [text];
 }
@@ -265,10 +265,10 @@ function splitMultipleOptions(text) {
  */
 function stripHtml(html) {
     if (!html) return '';
-    
+
     // Handle content with different paragraph/section structures
     let processedHtml = html;
-    
+
     // Convert HTML to appropriate markdown
     const htmlToMarkdownMap = [
         { pattern: /<h[1-6][^>]*>(.*?)<\/h[1-6]>/gi, replacement: '\n## $1\n' },
@@ -279,20 +279,20 @@ function stripHtml(html) {
         { pattern: /<(strong|b)[^>]*>(.*?)<\/(strong|b)>/gi, replacement: '**$2**' },
         { pattern: /<(em|i)[^>]*>(.*?)<\/(em|i)>/gi, replacement: '*$2*' }
     ];
-    
+
     // Apply all replacements
     htmlToMarkdownMap.forEach(({ pattern, replacement }) => {
         processedHtml = processedHtml.replace(pattern, replacement);
     });
-    
+
     // Extract plain text content
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = processedHtml;
     let text = tempDiv.textContent || tempDiv.innerText || '';
-    
+
     // Clean up multiple newlines but preserve the intentional ones
     text = text.replace(/\n{3,}/g, '\n\n');
-    
+
     // Fix any leftover HTML entities
     const htmlEntities = [
         { pattern: /&nbsp;/g, replacement: ' ' },
@@ -301,11 +301,11 @@ function stripHtml(html) {
         { pattern: /&gt;/g, replacement: '>' },
         { pattern: /&quot;/g, replacement: '"' }
     ];
-    
+
     htmlEntities.forEach(({ pattern, replacement }) => {
         text = text.replace(pattern, replacement);
     });
-    
+
     return text;
 }
 
@@ -316,10 +316,10 @@ function stripHtml(html) {
  */
 function formatResponseText(text) {
     if (!text) return '<p>No content available</p>';
-    
+
     // Replace newlines with paragraph breaks
     const paragraphs = text.split('\n\n');
-    
+
     const formattedParagraphs = paragraphs
         .map(para => para.trim())
         .filter(para => para)
@@ -331,7 +331,7 @@ function formatResponseText(text) {
                     return `<li>${listItem}</li>`;
                 }).join('')}</ul>`;
             }
-            
+
             // Check if this is a numbered list
             if (para.match(/^[\s]*\d+\.[\s]/)) {
                 return `<ol>${para.split(/\n/).map(item => {
@@ -339,31 +339,31 @@ function formatResponseText(text) {
                     return `<li>${listItem}</li>`;
                 }).join('')}</ol>`;
             }
-            
+
             // Check if this is a heading
             if (para.startsWith('# ')) {
                 return `<h3>${para.substring(2)}</h3>`;
             }
-            
+
             if (para.startsWith('## ')) {
                 return `<h4>${para.substring(3)}</h4>`;
             }
-            
+
             // Check for tip boxes
             if (para.toLowerCase().startsWith('tip:') || para.toLowerCase().startsWith('💡 tip:')) {
                 return `<div class="tip">${para}</div>`;
             }
-            
+
             // Check for warning boxes
             if (para.toLowerCase().startsWith('warning:') || para.toLowerCase().startsWith('⚠️ warning:')) {
                 return `<div class="warning">${para}</div>`;
             }
-            
+
             // Regular paragraph
             return `<p>${para.replace(/\n/g, '<br>')}</p>`;
         })
         .join('');
-    
+
     // Add bold and italic styling
     return formattedParagraphs
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
@@ -398,27 +398,27 @@ Title: ${titleInput}
 Content: ${messageContent}
 
 ${formattingInstructions}`,
-        
+
         ideas: `Generate 3-5 post ideas related to the following topic (or general ideas if no topic provided):
 ${titleInput || messageContent || 'General forum post ideas'}
 
 ${formattingInstructions}
 For each idea, provide a title and a brief description.`,
-        
+
         expand: `Expand the following post with more details, examples, and supporting points:
 
 Title: ${titleInput}
 Content: ${messageContent}
 
 ${formattingInstructions}`,
-        
+
         summarize: `Make the following post more concise while preserving the key points:
 
 Title: ${titleInput}
 Content: ${messageContent}
 
 ${formattingInstructions}`,
-        
+
         default: `Help improve the following forum post:
 
 Title: ${titleInput}
@@ -426,7 +426,7 @@ Content: ${messageContent}
 
 ${formattingInstructions}`
     };
-    
+
     // Use custom prompt if provided for 'custom' action type
     if (actionType === 'custom' && customPrompt) {
         return `${customPrompt}
@@ -442,43 +442,63 @@ ${formattingInstructions}`;
 }
 
 /**
- * Makes the API request to the AI service
+ * Makes the API request to the Gemini AI service
  * @param {string} prompt - The prompt to send to the AI
  * @returns {Promise<string>} The AI response
  */
 async function makeApiRequest(prompt) {
-    const response = await fetch(AI_CONFIG.API_URL, {
+    // Add API key as query parameter for Gemini
+    const apiUrl = `${AI_CONFIG.API_URL}?key=${AI_CONFIG.API_KEY}`;
+
+    const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${AI_CONFIG.API_KEY}`
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            model: AI_CONFIG.MODELS.DEFAULT,
-            messages: [{ role: "user", content: prompt }],
-            max_tokens: 10000,
-            temperature: 0.2,
-            stream: false
+            contents: [
+                {
+                    parts: [
+                        { text: prompt }
+                    ]
+                }
+            ],
+            generationConfig: {
+                temperature: 0.2,
+                maxOutputTokens: 10000,
+                topK: 40,
+                topP: 0.95
+            }
         })
     });
-    
+
     if (!response.ok) {
         // Create more user-friendly error messages based on status codes
         const errorMessages = {
+            400: "Bad request: The prompt may be too long or contain invalid content",
             401: "Authentication error: Please check API key settings",
             403: "Access forbidden: The API key doesn't have permission for this request",
-            429: "Too many requests: Rate limit exceeded, please try again later",
+            429: "Too many requests: API quota exceeded, please try again later",
             500: "Server error: The AI service is currently unavailable",
             502: "Server error: The AI service is currently unavailable",
             503: "Server error: The AI service is currently unavailable",
             504: "Server error: The AI service is currently unavailable"
         };
-        
+
         throw new Error(errorMessages[response.status] || `API responded with status: ${response.status}`);
     }
-    
+
     const data = await response.json();
-    return data.choices[0].message.content;
+
+    // Extract text from Gemini response format
+    if (data.candidates && data.candidates.length > 0 &&
+        data.candidates[0].content &&
+        data.candidates[0].content.parts &&
+        data.candidates[0].content.parts.length > 0) {
+        return data.candidates[0].content.parts[0].text;
+    } else {
+        throw new Error("Invalid response format from Gemini API");
+    }
 }
 
 /**
@@ -487,19 +507,19 @@ async function makeApiRequest(prompt) {
  */
 function handleAiError(error) {
     console.error('AI assist error:', error);
-    
+
     const container = document.getElementById('aiResponseContainer');
     if (!container) return;
-    
+
     container.className = 'ai-response error';
-    
+
     const contentWrapper = container.querySelector('.ai-response-content');
     if (contentWrapper) {
         contentWrapper.innerHTML = `<p>Error: ${error.message || 'Failed to get AI assistance'}</p>`;
     } else {
         // Fallback if content wrapper doesn't exist
         container.innerHTML = '';
-        
+
         // Add close button
         const closeButton = document.createElement('button');
         closeButton.className = 'ai-response-close';
@@ -507,14 +527,14 @@ function handleAiError(error) {
         closeButton.setAttribute('aria-label', 'Close');
         closeButton.addEventListener('click', () => container.remove());
         container.appendChild(closeButton);
-        
+
         // Add error message
         const errorDiv = document.createElement('div');
         errorDiv.className = 'ai-response-content';
         errorDiv.innerHTML = `<p>Error: ${error.message || 'Failed to get AI assistance'}</p>`;
         container.appendChild(errorDiv);
     }
-    
+
     showAlert('Failed to get AI assistance', 'error');
 }
 
@@ -526,19 +546,19 @@ function handleAiError(error) {
 export async function handleAiAction(actionType, customPrompt = '') { // Note: Function name changed here as per replace block's intent
     const titleInput = document.getElementById('titleInput').value;
     const messageContent = getEditorContent() || document.getElementById('messageInput').value;
-    
+
     // Hide options menu
     document.getElementById('aiAssistOptions').style.display = 'none';
-    
+
     // Validate input for certain action types
     if (['improve', 'expand', 'summarize'].includes(actionType) && !messageContent.trim()) {
         showAlert('Please enter some content in your post first', 'error');
         return;
     }
-    
+
     // Show loading indicator
     showLoading();
-    
+
     try {
         // Prepare the prompt based on action type, passing the custom prompt if available
         const prompt = preparePrompt(actionType, titleInput, messageContent, customPrompt);
@@ -551,7 +571,7 @@ export async function handleAiAction(actionType, customPrompt = '') { // Note: F
 
         // Make API request (moved from below)
         const aiResponse = await makeApiRequest(prompt);
-        
+
         // Process and display response
         processResponse(aiResponse, actionType);
     } catch (error) {
@@ -565,11 +585,11 @@ export async function handleAiAction(actionType, customPrompt = '') { // Note: F
 export function initAiPostAssistant() {
     const aiAssistButton = document.getElementById('aiAssistButton');
     const aiAssistOptions = document.getElementById('aiAssistOptions');
-    
+
     if (aiAssistButton && aiAssistOptions) {
         // Setup button click handler
         aiAssistButton.addEventListener('click', toggleAiAssistOptions);
-        
+
     // Add event listeners to AI assist option buttons
     const optionsMenu = document.getElementById('aiAssistOptions');
     const customInput = document.getElementById('aiCustomInput');
@@ -604,7 +624,7 @@ export function initAiPostAssistant() {
             customSubmit.click(); // Trigger the submit button click
         }
     });
-        
+
         // Setup click outside handler
         setupClickOutside();
     }

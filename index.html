@@ -23,7 +23,8 @@
   <link rel="stylesheet" href="./styles/typing-animation.css">
   <link rel="stylesheet" href="./styles/transparent-navbar.css">
   <link rel="stylesheet" href="./styles/ai-assistant.css">
-  <script  type= "module" src="./script/nav.js"></script>
+  <script src="./script/preloader.js"></script>
+  <script type="module" src="./script/nav.js"></script>
   <script type="module" src="./script/page-transitions.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script type="module" src="./script/auth/auth-init.js"></script>
@@ -35,7 +36,9 @@
   <!-- Preloader -->
   <div class="preloader">
     <div class="preloader-logo">FreeSekai</div>
-    <span class="loader"></span>
+    <div class="progress-container">
+      <div class="progress-bar"></div>
+    </div>
     <div class="preloader-text">Setting up properties....</div>
   </div>
 
@@ -46,12 +49,12 @@
       .then(response => response.text())
       .then(html => {
         document.getElementById('navbarContainer').innerHTML = html;
-        
+
         // Apply transparent navbar class for index page only
         const navbar = document.querySelector('nav');
         if (navbar) {
           navbar.classList.add('index-navbar');
-          
+
           // Add scroll event listener to change navbar background on scroll
           window.addEventListener('scroll', function() {
             if (window.scrollY > 50) {
@@ -94,7 +97,7 @@
         <p class="feature-description">Express yourself freely without fear of censorship.
           This website is built on purpose of free speech. ( There are 2 mode on this web. Anonymous or.. u could be a recognized  user (if u want that....)).
           </p>
-        
+
         <!-- Message Form Preview -->
         <div class="message-preview">
           <div class="message-preview-header">
@@ -140,18 +143,18 @@
             </button>
             <button class="preview-action-btn">Reply</button>
             <button class="preview-action-btn">Share and View</button>
-           
+
           </div>
           <div class="preview-replies">
             <div class="preview-reply">
               <div class="preview-text">just hear it and forget 'bout it :)</div>
               <span class="preview-timestamp">4/9/2025, 2:34:43 PM</span>
-             
+
             </div>
           </div>
         </div>
       </div>
-      
+
       <!-- Feature 2 -->
       <div class="feature-card">
         <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -168,7 +171,7 @@
         </svg>
         <h3 class="feature-title">AI-Powered Post Assistant [BETA]</h3>
         <p class="feature-description">Enhance your posts with real-time AI suggestions. ( It still on development )</p>
-        
+
         <!-- AI Response Demo -->
         <div class="ai-response" style="margin-top: 15px;">
           <div class="ai-response-content">
@@ -193,7 +196,7 @@
   </div>
 
   <!-- About Section -->
- 
+
 <!-- Footer -->
 <div id="footerContainer"></div>
 

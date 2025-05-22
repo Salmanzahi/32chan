@@ -41,85 +41,59 @@
 .preloader-logo {
     font-size: 2.5rem;
     font-weight: 800;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     letter-spacing: -0.025em;
     background: linear-gradient(45deg, var(--primary), var(--secondary));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    animation: pulse 2s infinite;
+    text-shadow: 0 2px 10px rgba(239, 68, 68, 0.2);
 }
 
-.loader {
-    width: 48px;
-    height: 48px;
-    border: 5px solid transparent;
-    border-radius: 50%;
-    display: inline-block;
-    box-sizing: border-box;
+.progress-container {
+    width: 280px;
+    height: 6px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
     position: relative;
-    animation: rotation 2s linear infinite;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-.loader::before {
-    content: '';
-    position: absolute;
-    top: -5px;
-    left: -5px;
-    right: -5px;
-    bottom: -5px;
-    border-radius: 50%;
-    border: 5px solid var(--card-border);
-    border-top-color: var(--primary);
-    border-bottom-color: var(--secondary);
-    animation: spin 3s linear infinite;
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    border-radius: 8px;
+    transition: width 0.4s cubic-bezier(0.1, 0.7, 0.6, 1);
+    position: relative;
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
 }
 
-.loader::after {
+.progress-bar::after {
     content: '';
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 16px;
-    height: 16px;
-    background: var(--primary);
-    border-radius: 50%;
-    animation: pulse 1.5s ease-in-out infinite;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.3) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    opacity: 0.6;
 }
 
 .preloader-text {
-    margin-top: 1rem;
-    font-size: 0.875rem;
+    font-size: 1rem;
     color: var(--text-secondary);
-    opacity: 0.8;
+    opacity: 0.9;
+    letter-spacing: 0.02em;
+    transition: opacity 0.3s ease;
+    min-height: 1.5rem;
+    text-align: center;
 }
 
-@keyframes rotation {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(720deg);
-    }
-}
-
-@keyframes pulse {
-    0%, 100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-    50% {
-        opacity: 0.7;
-        transform: scale(0.8);
-    }
-}

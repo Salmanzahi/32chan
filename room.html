@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="./styles/quora-theme.css">
     <link rel="stylesheet" href="./styles/like-button.css">
     <link rel="stylesheet" href="./styles/spotify.css">
+    <link rel="stylesheet" href="./styles/datetime-input.css">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FreeSekai - Room</title>
@@ -92,9 +93,12 @@
                   <label for="messageInput">Details</label>
                   <textarea id="messageInput" placeholder="Include all the information someone would need to answer your question or understand your post"></textarea>
 
-                  <div id="adminNameContainer" class="admin-only" style="display: none;">
-                      <label for="adminNameInput">Admin Name (optional)</label>
-                      <input type="text" id="adminNameInput" placeholder="Enter your admin name">
+
+
+                  <div id="adminDateContainer" class="admin-only admin-date-container" style="display: none;">
+                      <label for="adminDateInput">Custom Post Date (optional)</label>
+                      <input type="datetime-local" id="adminDateInput" class="custom-datetime">
+                      <small>Set a custom timestamp for this post</small>
                   </div>
 
                   <label for="imageInput">Add an image</label>

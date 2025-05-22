@@ -91,6 +91,8 @@
                 const success = handleSpotifyCallback();
                 if (success) {
                     statusDiv.innerHTML = '<p class="success">Authentication successful! You can now use Spotify features in FreeSekai.</p>';
+                    // Set a flag to indicate we're returning from Spotify auth
+                    localStorage.setItem('spotify_auth_return', 'true');
                 } else {
                     statusDiv.innerHTML = '<p class="error">Authentication failed. Please try again.</p>';
                 }

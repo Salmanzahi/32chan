@@ -1,12 +1,12 @@
 // AI Configuration
 export const AI_CONFIG = {
     // API Configurations
-    API_URL: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent',
+    API_URL: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',
     API_KEY: 'AIzaSyCk6ZkzIX-4e_ebVQvNWBmzo5w0X4J4C3k', // Replace with your actual Gemini API key
 
     // Model Configuration
     MODELS: {
-        DEFAULT: 'gemini-1.5-flash', // Gemini model name (used for logging)
+        DEFAULT: 'gemini-2.0-flash', // Gemini model name (used for logging)
     },
 
     // Request Configuration

@@ -2,7 +2,7 @@
 WHAT ARE U DOING IN HERE ?
 KASIHANI AKU PLS JANGAN DI HACK WEB KU PLS !!!
 
-*/ 
+*/
 import { adminRoles } from './config/role.js';
 import { firebaseConfig } from '../p.js';
 import { dbConfig } from './config/config.js';
@@ -32,7 +32,7 @@ export function googleSignIn() {
             // The signed-in user info.
             const user = result.user;
             console.log('User signed in:', user);
-            
+
             // Update user profile with Google data if not already set
             if (user.providerData[0].providerId === 'google.com') {
                 const googleProfile = user.providerData[0];
@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!user.isAnonymous) {
             syncCustomUsername(user);
         }
-        
+
         if (window.location.pathname) {
             document.getElementById('userProfile').style.display = 'flex';
             document.getElementById('googleSignInBtn').style.display = 'none';
@@ -85,17 +85,17 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById('signOutBtn').style.display = 'block';
             document.getElementById('mobilesignOutBtn').style.display = 'block';
             document.getElementById('mobileUserProfile').style.display = 'flex';
-            
+
             // Show/hide profile links based on anonymous status
             const mobileProfileLink = document.getElementById('mobileProfileLink');
             const userProfile = document.getElementById('userProfile');
             const profileLink = userProfile.querySelector('a');
             const mobileUserProfileContainer = document.getElementById('mobileUserProfile');
-            
+
             if (user.isAnonymous) {
                 // Hide profile links for anonymous users
                 if (mobileProfileLink) mobileProfileLink.style.display = 'none';
-                
+
                 // Show profile image but disable click functionality
                 if (userProfile) {
                     userProfile.style.display = 'flex';
@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         profileLink.classList.remove('hover:opacity-80', 'transition-all', 'duration-300');
                     }
                 }
-                
+
                 // Remove link functionality from mobile profile section
                 if (mobileUserProfileContainer) {
                     const mobileProfileLink = mobileUserProfileContainer.querySelector('a');
@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         mobileProfileLink.parentNode.replaceChild(div, mobileProfileLink);
                     }
                 }
-                
+
                 // Redirect if on profile page
                 if (window.location.pathname.includes('profile.html')) {
                     window.location.href = './index.html';
@@ -133,7 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         profileLink.classList.add('hover:opacity-80', 'transition-all', 'duration-300');
                     }
                 }
-                
+
                 // Remove link functionality from mobile profile section even for logged-in users
                 if (mobileUserProfileContainer) {
                     const mobileProfileLink = mobileUserProfileContainer.querySelector('a');
@@ -146,37 +146,37 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 }
             }
-            
+
             console.log("Redirecting to sendview.html");
         }
        } else {
-        if (window.location.pathname.includes('sendview.html') || 
+        if (window.location.pathname.includes('sendview.html') ||
             window.location.pathname.includes('profile.html')) {
             console.log("Redirecting to index.html");
             window.location.replace('index.html');
         }
         hideUserProfile();
         document.getElementById('userProfile').style.display = 'none';
-        document.getElementById('googleSignInBtn').style.display = 'block'; 
+        document.getElementById('googleSignInBtn').style.display = 'block';
         document.getElementById('mobilegoogleSignInBtn').style.display = 'block';
         document.getElementById('anonymousSignInBtn').style.display = 'block';
         document.getElementById('mobileanonymousSignInBtn').style.display = 'block';
         document.getElementById('signOutBtn').style.display = 'none';
         document.getElementById('mobilesignOutBtn').style.display = 'none';
         document.getElementById('mobileUserProfile').style.display = 'none';
-        
+
         // Hide profile link in mobile menu when logged out
         const mobileProfileLink = document.getElementById('mobileProfileLink');
         if (mobileProfileLink) {
             mobileProfileLink.style.display = 'none';
         }
-       }        
+       }
         loadUserMessages();
         displayUserProfile(user);
-     
+
     });
-    
-    
+
+
 });
 
 function showAlert(message, type = 'info') {
@@ -214,7 +214,7 @@ function showAlert(message, type = 'info') {
 export function signOut() {
     auth.signOut().then(() => {
         console.log('User signed out');
-      
+
         window.location.href = "index.html"; // Redirect to index.html after sign-out
     }).catch((error) => {
         console.error('Error during sign-out:', error);
@@ -248,7 +248,7 @@ function getstringdb(path) {
     return new Promise((resolve, reject) => {
       // Create reference to the specified path
       const dbRef = firebase.database().ref(path);
-      
+
       // Perform a one-time read
       dbRef.once('value')
         .then((snapshot) => {
@@ -263,7 +263,7 @@ function getstringdb(path) {
         });
     });
   }
-  
+
   // Example usage:
   // getstringdb('users/userId123/customDisplayName')
   //   .then(name => {
@@ -275,17 +275,17 @@ function getstringdb(path) {
   //   });
 function displayUserProfile(user) {
     if (!user) return;
-   
+
     const userPhoto = document.getElementById('userPhoto');
     const userName = document.getElementById('userName');
     const usernamediv = document.getElementById('usernamediv');
     const mobileUserPhoto = document.getElementById('mobileUserPhoto');
     const mobileUserProfile = document.getElementById('mobileUserProfile');
 
-    const photoURL = user.isAnonymous ? './images/suscat.jpg' : 
+    const photoURL = user.isAnonymous ? './images/suscat.jpg' :
                     (user && user.photoURL) ? user.photoURL :
                     user.photoURL || './images/suscat.jpg';
-    
+
     if (userPhoto) userPhoto.src = photoURL;
     if (mobileUserPhoto) mobileUserPhoto.src = photoURL;
 
@@ -295,7 +295,7 @@ function displayUserProfile(user) {
             const anonymData = anonymSnapshot.val();
             const isAnonymousMode = anonymData && anonymData.state === "true";
             const anonymUsername = anonymData && anonymData.username;
-            
+
             // Then check for custom display name in database
             return getstringdb(`users/${user.uid}/customDisplayName`).then(customName => {
                 // Set username - prioritize custom name over Google display name
@@ -303,19 +303,19 @@ function displayUserProfile(user) {
                                   customName ? customName :
                                   (user && user.displayName) ? user.displayName :
                                   'Anonymous User';
-                
+
                 // Determine final display name based on anonymous mode
                 let displayName = regularName;
-                
+
                 // If anonymous mode is active and we have an anonymous username, show both names
                 if (isAnonymousMode && anonymUsername && !user.isAnonymous) {
                     displayName = `${regularName} | ${anonymUsername}`;
                 }
-                
+
                 // Update UI elements
                 if (userName) userName.textContent = displayName;
                 if (usernamediv) usernamediv.textContent = displayName;
-                
+
                 // If we have a custom display name from the database that doesn't match the current Firebase Auth displayName,
                 // update the Firebase Auth profile to match
                 if (customName && user.displayName !== customName && !user.isAnonymous) {
@@ -337,7 +337,7 @@ function displayUserProfile(user) {
             const displayName = user.isAnonymous ? 'Anonymous User' :
                               (user && user.displayName) ? user.displayName :
                               'Anonymous User';
-            
+
             if (userName) userName.textContent = displayName;
             if (usernamediv) usernamediv.textContent = displayName;
         });
@@ -407,11 +407,10 @@ function toggleTheme() {
 //     showMessages();
 //     loadUserMessages();
 
-//     // Show admin name input field if the user is an admin
-//     // Show admin name input field if the user is an admin
+//     // Show admin date input field if the user is an admin
 //     auth.onAuthStateChanged((user) => {
 //         if (user && isAdmin()) {
-//             document.getElementById('adminNameContainer').style.display = 'block';
+//             document.getElementById('adminDateContainer').style.display = 'block';
 //         }
 //     });
 // });
@@ -432,7 +431,7 @@ export function loadUserMessages() {
     const userMessagesRef = db.ref(dbConfig.messagesPath).orderByChild('userId').equalTo(user.uid);
     userMessagesRef.on('value', (snapshot) => {
         userMessagesList.innerHTML = ''; // Clear existing messages before appending new ones
-        
+
         // Convert snapshot to array and sort by timestamp in descending order
         const messages = [];
         snapshot.forEach((childSnapshot) => {
@@ -441,7 +440,7 @@ export function loadUserMessages() {
                 ...childSnapshot.val()
             });
         });
-        
+
         messages.sort((a, b) => b.timestamp - a.timestamp);
 
         // Render sorted messages
@@ -517,7 +516,7 @@ window.deleteUserPost = deleteUserPost;
 // Function to sync custom username with Firebase Auth
 function syncCustomUsername(user) {
     if (!user || user.isAnonymous) return;
-    
+
     // Get custom username from database
     const userRef = firebase.database().ref(`users/${user.uid}/customDisplayName`);
     userRef.once('value')

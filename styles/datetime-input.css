@@ -1,0 +1,60 @@
+/* Datetime Input Styles */
+
+/* Base styles for datetime-local input */
+input[type="datetime-local"] {
+    width: 100%;
+    padding: 16px;
+    margin-bottom: 15px;
+    color: #ffffff;
+    border: 2px solid #3d444d;
+    background-color: #1a1f24;
+    border-radius: 8px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    font-size: 16px;
+    line-height: 1.5;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+/* Calendar icon color adjustment */
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    opacity: 0.7;
+    cursor: pointer;
+}
+
+/* Focus state */
+input[type="datetime-local"]:focus {
+    border-color: #3b82f6;
+    background-color: #1e2329;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+    outline: none;
+}
+
+/* Hover state */
+input[type="datetime-local"]:hover {
+    border-color: #4b5563;
+    background-color: #1e2329;
+}
+
+/* Admin container styles */
+.admin-date-container {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.admin-date-container small {
+    display: block;
+    color: #94a3b8;
+    font-size: 0.8rem;
+    margin-top: 5px;
+    font-style: italic;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    input[type="datetime-local"] {
+        padding: 14px;
+        font-size: 14px;
+    }
+}

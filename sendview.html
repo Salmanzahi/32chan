@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="./styles/richtext.css">
     <link rel="stylesheet" href="./styles/richtext-wide-mode.css">
     <link rel="stylesheet" href="./styles/ai-assistant.css">
+    <link rel="stylesheet" href="./styles/datetime-input.css">
 
     <!-- Add Quill CSS -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.min.css" rel="stylesheet">
@@ -155,14 +156,10 @@
                     <textarea id="messageInput" placeholder="Include all the information someone would need to answer your question or understand your post"></textarea>
                 </div>
 
-                <div id="adminNameContainer" class="admin-only" style="display: none;">
-                    <label for="adminNameInput">Admin Name (optional)</label>
-                    <input type="text" id="adminNameInput" placeholder="Enter your admin name">
-                </div>
 
-                <div id="adminDateContainer" class="admin-only" style="display: none;">
+                <div id="adminDateContainer" class="admin-only admin-date-container" style="display: none;">
                     <label for="adminDateInput">Custom Post Date (optional)</label>
-                    <input type="datetime-local" id="adminDateInput">
+                    <input type="datetime-local" id="adminDateInput" class="custom-datetime">
                     <small>Set a custom timestamp for this post</small>
                 </div>
 

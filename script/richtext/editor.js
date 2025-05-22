@@ -55,17 +55,17 @@ export async function initRichTextEditor() {
     if (!editorConfig) {
         await loadEditorConfig();
     }
-    
+
     // Find the messageInput textarea
     const messageInput = document.getElementById('messageInput');
     const messageInputContainer = document.getElementById('messageInputContainer');
-    
+
     // If neither exists, create the container
     if (!messageInput && !messageInputContainer) {
         console.error('Message input elements not found');
         return;
     }
-    
+
     // If messageInputContainer doesn't exist but messageInput does, wrap the input
     if (messageInput && !messageInputContainer) {
         const wrapper = document.createElement('div');
@@ -73,11 +73,11 @@ export async function initRichTextEditor() {
         messageInput.parentNode.insertBefore(wrapper, messageInput);
         wrapper.appendChild(messageInput);
     }
-    
+
     // Get the container (now guaranteed to exist)
     const container = document.getElementById('messageInputContainer');
     container.innerHTML = '';
-    
+
     // Create toggle button container with SVG icons
     const toggleContainer = document.createElement('div');
     toggleContainer.className = 'editor-mode-toggle';
@@ -111,17 +111,17 @@ export async function initRichTextEditor() {
         </div>
     `;
     container.appendChild(toggleContainer);
-    
+
     // Create editor container
     const editorContainer = document.createElement('div');
     editorContainer.id = 'editor-container';
     editorContainer.style.height = editorConfig.editorModes[currentMode].height;
     container.appendChild(editorContainer);
-    
+
     // Initialize Quill with current mode configuration
     setTimeout(() => {
         initializeQuill(currentMode);
-        
+
         // Add event listeners for toggle buttons with event prevention
         document.getElementById('simpleEditorBtn').addEventListener('click', (e) => {
             e.preventDefault();
@@ -129,14 +129,14 @@ export async function initRichTextEditor() {
             toggleEditorMode('simple');
             return false;
         });
-        
+
         document.getElementById('professionalEditorBtn').addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
             toggleEditorMode('professional');
             return false;
         });
-        
+
         document.getElementById('wideModeBtn').addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -155,22 +155,22 @@ function initializeQuill(mode) {
             console.error('Editor configuration not found for mode:', mode);
             return;
         }
-        
+
         // If there's an existing instance, destroy it
         if (quill) {
             try {
                 // Save content before destroying
                 const content = quill.root.innerHTML;
-                
+
                 // Safely remove UI elements
                 const toolbar = document.querySelector('.ql-toolbar');
                 if (toolbar) toolbar.remove();
-                
+
                 const container = document.querySelector('.ql-container');
                 if (container) container.remove();
-                
+
                 quill = null;
-                
+
                 // Recreate editor container
                 const editorContainer = document.getElementById('editor-container');
                 if (editorContainer) {
@@ -195,17 +195,17 @@ function initializeQuill(mode) {
                 // Continue with recreation even if cleanup fails
             }
         }
-        
+
         // Check if editor container exists
         const editorContainer = document.getElementById('editor-container');
         if (!editorContainer) {
             console.error('Editor container not found');
             return;
         }
-        
+
         // Ensure config and modules are properly initialized
         if (!config.modules) config.modules = {};
-        
+
         // Add sanitize configuration to ensure only allowed formats are used
         if (!config.modules.clipboard) {
             config.modules.clipboard = {
@@ -222,7 +222,7 @@ function initializeQuill(mode) {
                 }
             };
         }
-        
+
         // Create new Quill instance
         try {
             quill = new Quill('#editor-container', {
@@ -230,18 +230,18 @@ function initializeQuill(mode) {
                 theme: config.theme,
                 placeholder: config.placeholder
             });
-            
+
             // Ensure scrollbar is at the top position
             setTimeout(() => {
                 if (quill && quill.root) {
                     quill.root.scrollTop = 0;
                 }
             }, 0);
-            
+
             if (!quill) {
                 throw new Error('Failed to initialize Quill editor');
             }
-            
+
             if (!quill.clipboard) {
                 console.warn('Quill clipboard module not available');
             } else {
@@ -249,11 +249,11 @@ function initializeQuill(mode) {
                 quill.clipboard.addMatcher(Node.ELEMENT_NODE, function(node, delta) {
                     // Let Quill handle formatting, but make sure only allowed tags are kept
                     const allowedTags = [
-                        'p', 'br', 'strong', 'b', 'em', 'i', 'u', 'blockquote', 
+                        'p', 'br', 'strong', 'b', 'em', 'i', 'u', 'blockquote',
                         'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
                         'ol', 'ul', 'li', 'code', 'pre', 'img'
                     ];
-                    
+
                     // If node is not in allowed tags, convert to plain text
                     if (node.tagName && !allowedTags.includes(node.tagName.toLowerCase())) {
                         // Get only the text content
@@ -261,12 +261,12 @@ function initializeQuill(mode) {
                             ops: [{ insert: node.innerText || node.textContent }]
                         };
                     }
-                    
+
                     // Otherwise return it for Quill to handle
                     return delta;
                 });
             }
-            
+
             // Get existing textarea or create a hidden input
             let messageInput = document.getElementById('messageInput');
             if (!messageInput) {
@@ -283,10 +283,10 @@ function initializeQuill(mode) {
                 parent.replaceChild(newTextarea, messageInput);
                 messageInput = newTextarea;
             }
-            
+
             // Hide the textarea
             messageInput.style.display = 'none';
-            
+
             // Update hidden textarea when content changes
             quill.on('text-change', function() {
                 if (quill && quill.root) {
@@ -294,15 +294,15 @@ function initializeQuill(mode) {
                     messageInput.value = content;
                 }
             });
-            
+
             // If there was saved content in textarea, use it
             if (messageInput.value) {
                 quill.root.innerHTML = messageInput.value;
             }
-            
+
             // Custom image handler to bypass Quill's tooltip
             customizeImageHandler();
-            
+
             // Replace toolbar icons with custom SVG icons if available
             if (editorConfig && editorConfig.icons) {
                 // Wait for toolbar to be fully initialized
@@ -310,29 +310,29 @@ function initializeQuill(mode) {
                     replaceToolbarIcons();
                 }, 50);
             }
-            
+
             // Reset scroll position to top
             setTimeout(() => {
                 if (quill && quill.root) {
                     quill.root.scrollTop = 0;
-                    
+
                     // Also reset scroll for container elements
                     const container = document.querySelector('.ql-container');
                     if (container) container.scrollTop = 0;
                 }
             }, 100);
-            
+
             // Remove any tooltips that might appear
             suppressTooltips();
-            
+
             // Fix color picker behavior and positioning
             fixColorPickerPositioning();
-            
+
             // Add click handler to the editor to close any open pickers
             quill.root.addEventListener('click', function() {
                 resetPickerStates();
             });
-            
+
         } catch (quillInitError) {
             console.error('Error initializing Quill editor:', quillInitError);
         }
@@ -345,30 +345,30 @@ function initializeQuill(mode) {
 function customizeImageHandler() {
     // Get the image button
     const imageBtn = document.querySelector('.ql-image');
-    
+
     if (imageBtn) {
         // Remove default handler
         imageBtn.removeAttribute('data-value');
-        
+
         // Add custom click handler
         imageBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            
+
             // Create a file input
             const fileInput = document.createElement('input');
             fileInput.setAttribute('type', 'file');
             fileInput.setAttribute('accept', 'image/*');
             fileInput.style.display = 'none';
             document.body.appendChild(fileInput);
-            
+
             // Trigger click on the file input
             fileInput.click();
-            
+
             // Handle file selection
             fileInput.addEventListener('change', function() {
                 if (fileInput.files && fileInput.files[0]) {
                     const file = fileInput.files[0];
-                    
+
                     // Simple file reader to get image as data URL
                     const reader = new FileReader();
                     reader.onload = function(e) {
@@ -397,12 +397,12 @@ function suppressTooltips() {
         }
     `;
     document.head.appendChild(style);
-    
+
     // Remove any existing tooltips
     document.querySelectorAll('.ql-tooltip').forEach(tooltip => {
         tooltip.parentNode.removeChild(tooltip);
     });
-    
+
     // Observer to remove any new tooltips that might appear
     const observer = new MutationObserver(mutations => {
         mutations.forEach(mutation => {
@@ -415,7 +415,7 @@ function suppressTooltips() {
             }
         });
     });
-    
+
     // Start observing
     observer.observe(document.body, { childList: true, subtree: true });
 }
@@ -423,7 +423,7 @@ function suppressTooltips() {
 // Replace toolbar icons with custom SVG icons
 function replaceToolbarIcons() {
     const icons = editorConfig.icons;
-    
+
     // Replace each icon
     for (const [format, svg] of Object.entries(icons)) {
         const buttons = document.querySelectorAll(`.ql-${format}`);
@@ -435,7 +435,7 @@ function replaceToolbarIcons() {
                 const wrapper = document.createElement('span');
                 wrapper.classList.add('custom-icon');
                 wrapper.innerHTML = svg;
-                
+
                 // Replace the existing SVG with our custom one
                 existingSvg.parentNode.replaceChild(wrapper.firstChild, existingSvg);
             }
@@ -451,13 +451,13 @@ function fixColorPickerPositioning() {
         const backdrop = document.createElement('div');
         backdrop.className = 'color-picker-backdrop';
         document.body.appendChild(backdrop);
-        
+
         // Close dropdown when backdrop is clicked
         backdrop.addEventListener('click', () => {
             resetPickerStates();
             backdrop.classList.remove('show');
         });
-        
+
         // Get all pickers
         const allPickers = document.querySelectorAll('.ql-picker');
         let openPicker = null;
@@ -472,15 +472,15 @@ function fixColorPickerPositioning() {
                 backdrop.classList.remove('show');
             }
         });
-        
+
         // Detect if we're on a mobile device
         const isMobile = window.innerWidth <= 768;
-        
+
         allPickers.forEach(picker => {
             // Get the picker label (the clickable part)
             const pickerLabel = picker.querySelector('.ql-picker-label');
             if (!pickerLabel) return;
-            
+
             // Add mobile close button to each picker options
             const pickerOptions = picker.querySelector('.ql-picker-options');
             if (pickerOptions && (picker.classList.contains('ql-color') || picker.classList.contains('ql-background'))) {
@@ -496,31 +496,31 @@ function fixColorPickerPositioning() {
                 });
                 pickerOptions.appendChild(closeBtn);
             }
-            
+
             // Replace the original click handler
             pickerLabel.addEventListener('click', (e) => {
                 e.stopPropagation(); // Prevent immediate document click handling
-                
+
                 const isExpanded = picker.classList.contains('ql-expanded');
-                
+
                 // Special handling for color pickers
                 const isColorPicker = picker.classList.contains('ql-color') || picker.classList.contains('ql-background');
-                
+
                 // Close any open picker first
                 if (openPicker && openPicker !== picker) {
                     openPicker.classList.remove('ql-expanded');
                 }
-                
+
                 // Toggle current picker
                 if (!isExpanded) {
                     picker.classList.add('ql-expanded');
                     openPicker = picker;
-                    
+
                     // Show backdrop on mobile for color pickers
                     if (isMobile && isColorPicker) {
                         backdrop.classList.add('show');
                     }
-                    
+
                     // Position the dropdown to prevent overflow
                     const pickerOptions = picker.querySelector('.ql-picker-options');
                     if (pickerOptions) {
@@ -529,7 +529,7 @@ function fixColorPickerPositioning() {
                         pickerOptions.style.right = '';
                         pickerOptions.style.top = '';
                         pickerOptions.style.bottom = '';
-                        
+
                         // Mobile-specific positioning for color pickers
                         if (isMobile && isColorPicker) {
                             pickerOptions.style.top = '50%';
@@ -539,13 +539,13 @@ function fixColorPickerPositioning() {
                             // Desktop positioning - check for overflow
                             setTimeout(() => {
                                 const rect = pickerOptions.getBoundingClientRect();
-                                
+
                                 // Check for right overflow
                                 if (rect.right > window.innerWidth) {
                                     pickerOptions.style.left = 'auto';
                                     pickerOptions.style.right = '0';
                                 }
-                                
+
                                 // Check for bottom overflow
                                 if (rect.bottom > window.innerHeight) {
                                     pickerOptions.style.top = 'auto';
@@ -560,7 +560,7 @@ function fixColorPickerPositioning() {
                     backdrop.classList.remove('show');
                 }
             });
-            
+
             // For color pickers specifically, add item click handlers to close dropdown
             if (picker.classList.contains('ql-color') || picker.classList.contains('ql-background')) {
                 const pickerItems = picker.querySelectorAll('.ql-picker-item');
@@ -574,13 +574,13 @@ function fixColorPickerPositioning() {
                 });
             }
         });
-        
+
         // Special handling for color pickers to ensure they're properly positioned
         const colorPickers = document.querySelectorAll('.ql-color, .ql-background');
         colorPickers.forEach(picker => {
             // Style adjustments to ensure proper display
             picker.style.verticalAlign = 'middle';
-            
+
             // Make sure picker options have proper width
             const pickerOptions = picker.querySelector('.ql-picker-options');
             if (pickerOptions) {
@@ -593,17 +593,17 @@ function fixColorPickerPositioning() {
                 }
             }
         });
-        
+
         // Add window resize handler to update mobile detection
         window.addEventListener('resize', () => {
             const wasMobile = isMobile;
             const newIsMobile = window.innerWidth <= 768;
-            
+
             // If mobile state changed, reset pickers and update
             if (wasMobile !== newIsMobile) {
                 resetPickerStates();
                 backdrop.classList.remove('show');
-                
+
                 // Handle necessary repositioning
                 colorPickers.forEach(picker => {
                     const pickerOptions = picker.querySelector('.ql-picker-options');
@@ -614,7 +614,7 @@ function fixColorPickerPositioning() {
                         pickerOptions.style.top = '';
                         pickerOptions.style.bottom = '';
                         pickerOptions.style.transform = '';
-                        
+
                         // Update width based on new state
                         if (newIsMobile) {
                             pickerOptions.style.width = '240px';
@@ -627,7 +627,7 @@ function fixColorPickerPositioning() {
                 });
             }
         });
-        
+
     }, 300);
 }
 
@@ -636,7 +636,7 @@ function resetPickerStates() {
     document.querySelectorAll('.ql-picker.ql-expanded').forEach(picker => {
         picker.classList.remove('ql-expanded');
     });
-    
+
     // Hide backdrop
     const backdrop = document.querySelector('.color-picker-backdrop');
     if (backdrop) {
@@ -647,26 +647,26 @@ function resetPickerStates() {
 // Toggle between editor modes
 export function toggleEditorMode(mode) {
     if (mode === currentMode) return;
-    
+
     try {
         console.log('Switching to editor mode:', mode);
-        
+
         // Reset any open picker states
         resetPickerStates();
-        
+
         // Save current content
         let content = '';
         if (quill && quill.root) {
             content = quill.root.innerHTML;
         }
-        
+
         // Update active button
         const simpleBtn = document.getElementById('simpleEditorBtn');
         const professionalBtn = document.getElementById('professionalEditorBtn');
-        
+
         if (simpleBtn) simpleBtn.classList.toggle('active', mode === 'simple');
         if (professionalBtn) professionalBtn.classList.toggle('active', mode === 'professional');
-        
+
         // Check if editor container exists, if not recreate it
         const editorContainer = document.getElementById('editor-container');
         if (!editorContainer) {
@@ -678,20 +678,20 @@ export function toggleEditorMode(mode) {
                 messageInputContainer.appendChild(newEditorContainer);
             }
         }
-        
+
         // Switch mode
         currentMode = mode;
-        
+
         // Reinitialize the editor with the new mode
         setTimeout(() => {
             try {
                 initializeQuill(mode);
-                
+
                 // Restore content with delay to ensure Quill is fully initialized
                 setTimeout(() => {
                     if (quill && quill.root && content) {
                         quill.root.innerHTML = content;
-                        
+
                         // Update the hidden textarea
                         const messageInput = document.getElementById('messageInput');
                         if (messageInput) {
@@ -721,56 +721,56 @@ export function setEditorContent(content) {
         }
         return;
     }
-    
+
     // Check if content has HTML formatting
     const containsHtml = /<[a-z][\s\S]*>/i.test(content);
-    
+
     if (containsHtml) {
         // If it's HTML content, convert to plain text with preserved line breaks
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = content;
-        
+
         // Replace <br>, <p>, etc. with line breaks
         const text = tempDiv.innerHTML
             .replace(/<br\s*[\/]?>/gi, '\n')
             .replace(/<\/p><p>/gi, '\n\n')
             .replace(/<\/div><div>/gi, '\n')
             .replace(/<\/li><li>/gi, '\n');
-            
+
         tempDiv.innerHTML = text;
         content = tempDiv.textContent || tempDiv.innerText || '';
     }
-    
+
     // Prepare to convert Markdown to rich text delta
     const delta = { ops: [] };
-    
+
     // First convert content into lines for processing
     const lines = content.split('\n');
-    
+
     // Process each line to handle markdown formatting
     for (let i = 0; i < lines.length; i++) {
         let line = lines[i];
         let formats = {};
         let lineFormats = {};
-        
+
         // Handle markdown for headings (## Heading or ### Heading)
         if (line.match(/^(#{2,3})\s+(.+)$/)) {
             const headingText = line.replace(/^(#{2,3})\s+/, '');
-            delta.ops.push({ 
+            delta.ops.push({
                 insert: headingText,
                 attributes: { bold: true, size: 'large' }
             });
             delta.ops.push({ insert: '\n', attributes: { align: 'left', header: 2 } });
             continue; // Skip to next line after adding heading
         }
-        
+
         // Handle bullet points (* Item)
         if (line.match(/^\*\s+(.+)$/)) {
             const listText = line.replace(/^\*\s+/, '');
-            
+
             // Check for bold and italic formatting within the list item
             let formattedListText = processBoldAndItalic(listText);
-            
+
             if (typeof formattedListText === 'string') {
                 // No formatting detected, insert as plain text
                 delta.ops.push({ insert: formattedListText });
@@ -778,14 +778,14 @@ export function setEditorContent(content) {
                 // Formatting detected, insert with formats
                 delta.ops = delta.ops.concat(formattedListText);
             }
-            
+
             delta.ops.push({ insert: '\n', attributes: { list: 'bullet' } });
             continue; // Skip to next line
         }
-        
+
         // Process remaining line text with bold and italic formatting
         let processedOps = processBoldAndItalic(line);
-        
+
         if (typeof processedOps === 'string') {
             // No formatting detected
             delta.ops.push({ insert: processedOps });
@@ -793,39 +793,39 @@ export function setEditorContent(content) {
             // Formatting was applied, concat the operations
             delta.ops = delta.ops.concat(processedOps);
         }
-        
+
         // Add a newline if it's not the last line
         if (i < lines.length - 1) {
             delta.ops.push({ insert: '\n' });
         }
     }
-    
+
     // If no content was added, ensure we have at least an empty line
     if (delta.ops.length === 0) {
         delta.ops.push({ insert: '' });
     }
-    
+
     // Set the content using Quill's setContents method
     quill.setContents(delta);
-    
+
     // Helper function to process bold and italic markdown in text
     function processBoldAndItalic(text) {
         if (!text) return text;
-        
+
         // Check if the text contains any formatting markers
         if (!text.includes('**') && !text.includes('*')) {
             return text; // No formatting, return as is
         }
-        
+
         const ops = [];
         let currentIndex = 0;
         let boldRegex = /\*\*(.*?)\*\*/g;
         let italicRegex = /(?<!\*)\*((?!\*).*?)\*(?!\*)/g;
         let match;
-        
+
         // First collect all matches and their positions
         const matches = [];
-        
+
         // Find all bold matches
         while ((match = boldRegex.exec(text)) !== null) {
             matches.push({
@@ -835,7 +835,7 @@ export function setEditorContent(content) {
                 format: 'bold'
             });
         }
-        
+
         // Find all italic matches
         while ((match = italicRegex.exec(text)) !== null) {
             matches.push({
@@ -845,36 +845,36 @@ export function setEditorContent(content) {
                 format: 'italic'
             });
         }
-        
+
         // Sort by start position
         matches.sort((a, b) => a.start - b.start);
-        
+
         // Process the matches in order
         let lastIndex = 0;
-        
+
         for (const match of matches) {
             // Add any text before this match
             if (match.start > lastIndex) {
                 ops.push({ insert: text.substring(lastIndex, match.start) });
             }
-            
+
             // Add the formatted text
             const attributes = {};
             attributes[match.format] = true;
-            
+
             ops.push({
                 insert: match.content,
                 attributes
             });
-            
+
             lastIndex = match.end;
         }
-        
+
         // Add any remaining text after the last match
         if (lastIndex < text.length) {
             ops.push({ insert: text.substring(lastIndex) });
         }
-        
+
         return ops.length > 0 ? ops : text;
     }
 }
@@ -883,8 +883,15 @@ export function setEditorContent(content) {
 export function clearEditorContent() {
     if (quill) {
         quill.setText('');
+
+        // Ensure the editor is properly updated
+        setTimeout(() => {
+            if (quill) {
+                quill.root.innerHTML = '';
+            }
+        }, 10);
     }
-    
+
     // Also clear the textarea
     const messageInput = document.getElementById('messageInput');
     if (messageInput) {
@@ -896,20 +903,20 @@ export function clearEditorContent() {
 export function toggleWideMode() {
     try {
         console.log('Toggling wide mode:', !isWideMode);
-        
+
         // Toggle wide mode state
         isWideMode = !isWideMode;
-        
+
         // Update button state
         const wideModeBtn = document.getElementById('wideModeBtn');
         if (wideModeBtn) {
             wideModeBtn.classList.toggle('active', isWideMode);
         }
-        
+
         // Get the editor container and its parent container
         const editorContainer = document.getElementById('editor-container');
         const messageInputContainer = document.getElementById('messageInputContainer');
-        
+
         if (isWideMode) {
             // Apply wide mode styles
             if (messageInputContainer) {
@@ -925,7 +932,7 @@ export function toggleWideMode() {
             overlay.id = 'editor-overlay';
             overlay.className = 'editor-overlay';
             document.body.appendChild(overlay);
-            
+
             // Add close button
             const closeBtn = document.createElement('button');
             closeBtn.id = 'close-wide-mode';
@@ -938,7 +945,7 @@ export function toggleWideMode() {
             `;
             closeBtn.addEventListener('click', toggleWideMode);
             messageInputContainer.appendChild(closeBtn);
-            
+
             // Prevent body scrolling
             document.body.style.overflow = 'hidden';
         } else {
@@ -964,7 +971,7 @@ export function toggleWideMode() {
             // Restore body scrolling
             document.body.style.overflow = '';
         }
-        
+
         // Refocus the editor
         if (quill) {
             setTimeout(() => {
@@ -977,7 +984,7 @@ export function toggleWideMode() {
 }
 
 let editorInitialized = false;
-    
+
 function initEditor() {
     if (!editorInitialized) {
         setTimeout(() => {
@@ -991,7 +998,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize the rich text editor when the form container is shown
     const toggleViewBtn = document.getElementById('toggleViewBtn');
     const formContainer = document.getElementById('formContainer');
-    
+
     if (toggleViewBtn) {
         toggleViewBtn.addEventListener('click', function() {
             if (formContainer && formContainer.style.display === 'block') {
@@ -999,7 +1006,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
+
     // Also initialize if the form is already visible (page refresh)
     if (formContainer && formContainer.style.display === 'block') {
         initEditor();

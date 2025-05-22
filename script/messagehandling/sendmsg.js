@@ -259,9 +259,12 @@ function sendMessageWithName(displayName) {
             spotifyTrack: spotifyTrack
         };
 
-        // Add user profile data if toggle is checked
-        if (showProfile) {
+        // Add user profile data if toggle is checked and not in anonymous mode
+        if (showProfile && !isAnonymousMode) {
             messageData.userPhotoURL = user.photoURL || './images/suscat.jpg';
+        } else if (showProfile && isAnonymousMode) {
+            // If in anonymous mode, use a default anonymous avatar
+            messageData.userPhotoURL = './images/anonymous-avatar.jpg';
         }
 
         // Handle image upload if an image is selected
@@ -311,8 +314,15 @@ function sendMessageWithName(displayName) {
         };
 
         // Add user profile data if toggle is checked
-        if (showProfile) {
+        // Since we couldn't determine anonymous mode in the error case,
+        // we'll check if the displayName is different from the user's display name
+        const isLikelyAnonymous = displayName !== user.displayName;
+
+        if (showProfile && !isLikelyAnonymous) {
             messageData.userPhotoURL = user.photoURL || './images/suscat.jpg';
+        } else if (showProfile && isLikelyAnonymous) {
+            // If likely in anonymous mode, use a default anonymous avatar
+            messageData.userPhotoURL = './images/anonymous-avatar.jpg';
         }
 
         // Handle image upload if an image is selected
@@ -380,6 +390,7 @@ function sendMessageWithDefaultName() {
     };
 
     // Add user profile data if toggle is checked
+    // Default mode is not anonymous since we're using the user's default name
     if (showProfile) {
         messageData.userPhotoURL = user.photoURL || './images/suscat.jpg';
     }

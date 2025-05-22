@@ -30,7 +30,7 @@ const aiSearchLoader = document.getElementById('aiSearchLoader');
 async function searchPosts(searchTerm) {
     const messages = document.querySelectorAll('#messagesList li');
     const searchTermLower = searchTerm.toLowerCase();
-    
+
     if (!searchTerm.trim()) {
         messages.forEach(message => message.style.display = 'block');
         return;
@@ -57,17 +57,17 @@ async function searchPosts(searchTerm) {
 
                 // Show and highlight relevant messages with their scores
                 relevantMessages.forEach(({ message: relevantMessage, score }) => {
-                    const messageElement = Array.from(messages).find(m => 
+                    const messageElement = Array.from(messages).find(m =>
                         m.getAttribute('data-id') === relevantMessage.id
                     );
 
                     if (messageElement) {
                         messageElement.style.display = 'block';
-                        
+
                         // Add similarity score and highlight text
                         const titleEl = messageElement.querySelector('.title');
                         const textEl = messageElement.querySelector('.message-text');
-                        
+
                         if (titleEl) {
                             titleEl.innerHTML = highlightRelevantText(
                                 titleEl.textContent,
@@ -75,7 +75,7 @@ async function searchPosts(searchTerm) {
                                 score
                             );
                         }
-                        
+
                         if (textEl) {
                             textEl.innerHTML = highlightRelevantText(
                                 textEl.textContent,
@@ -119,11 +119,11 @@ function performRegularSearch(messages, searchTerm) {
         const title = message.querySelector('.title')?.textContent?.toLowerCase() || '';
         const content = message.querySelector('.message-text')?.textContent?.toLowerCase() || '';
         const author = message.querySelector('.user-name')?.textContent?.toLowerCase() || '';
-        
-        const matches = title.includes(searchTerm) || 
-                       content.includes(searchTerm) || 
+
+        const matches = title.includes(searchTerm) ||
+                       content.includes(searchTerm) ||
                        author.includes(searchTerm);
-        
+
         message.style.display = matches ? 'block' : 'none';
     });
 }
@@ -151,7 +151,7 @@ function showNoResultsMessage(message) {
 function updateSearchResultsCount() {
     const visibleMessages = document.querySelectorAll('#messagesList li[style*="display: block"]').length;
     const totalMessages = document.querySelectorAll('#messagesList li').length;
-    
+
     let countEl = document.getElementById('search-results-count');
     if (!countEl) {
         countEl = document.createElement('div');
@@ -162,7 +162,7 @@ function updateSearchResultsCount() {
             searchContainer.appendChild(countEl);
         }
     }
-    
+
     countEl.textContent = `Showing ${visibleMessages} of ${totalMessages} posts`;
 }
 
@@ -203,7 +203,7 @@ if (aiSearchToggle) {
         isAISearchEnabled = !isAISearchEnabled;
         aiSearchToggle.classList.toggle('active');
         aiSearchStatus.textContent = `AI Search: ${isAISearchEnabled ? 'On' : 'Off'}`;
-        
+
         // Re-run search with new mode if there's a search term
         if (searchInput.value.trim()) {
             searchPosts(searchInput.value);
@@ -218,10 +218,10 @@ if (aiSearchToggle) {
 function preserveScrollPosition(callback) {
     // Save current scroll position
     lastScrollPosition = window.scrollY;
-    
+
     // Execute the callback
     callback();
-    
+
     // Restore scroll position after a short delay to allow DOM to update
     setTimeout(() => {
         window.scrollTo(0, lastScrollPosition);
@@ -241,7 +241,7 @@ export function createMessageElement(message, user) {
     const timestamp = message.timestamp;
     const imageUrl = message.imageURL ? sanitizeText(message.imageURL) : null;
     const likes = message.likes || 0;
-    
+
     // Check if current user has liked this message
     const isLiked = user && message.likedBy && message.likedBy[user.uid];
     const likedClass = isLiked ? 'liked' : '';
@@ -261,21 +261,24 @@ export function createMessageElement(message, user) {
     const showProfile = message.showProfile;
     const userDisplayName = message.userDisplayName ? sanitizeText(message.userDisplayName) : null;
     const userPhotoURL = message.userPhotoURL ? sanitizeText(message.userPhotoURL) : null;
-    
+
     // Check if the message is from an admin user
     const isUserAdmin = message.userId && adminRoles && adminRoles.admins && adminRoles.admins.includes(message.userId);
-    
+
     // Check if message was posted in anonymous mode
     // The condition: if anonymous username is different from the regular username
     // This specific check will be performed when displaying user messages
     const isAnonymousMode = message.isAnonymousMode === true;
-    const displayName = userDisplayName + (isAnonymousMode ? ' [Anonymous Mode]' : '');
+    const displayName = userDisplayName + (isAnonymousMode ? ' <span style="color: gray;">[Anonymous]</span>' : '');
 
     li.innerHTML = `
         <div class="header">
             ${showProfile && userDisplayName ? `
             <div class="user-profile">
-                <img src="${userPhotoURL || './images/suscat.jpg'}" alt="User Photo">
+                ${isAnonymousMode ?
+                    `<img src="./images/suscat.jpg" alt="Anonymous User">` :
+                    `<img src="${userPhotoURL || './images/suscat.jpg'}" alt="User Photo">`
+                }
                 <div>
                     <div class="user-name">${displayName}</div>
                     ${isUserAdmin ? `<div class="admin-tag">[ADMIN]</div>` : ''}
@@ -292,8 +295,8 @@ export function createMessageElement(message, user) {
             </div>` : ''}
             ${message.spotifyTrack ? `
             <div class="spotify-track-embed">
-                <iframe src="https://open.spotify.com/embed/track/${message.spotifyTrack.id}" 
-                width="100%" height="80" frameborder="0" allowtransparency="true" 
+                <iframe src="https://open.spotify.com/embed/track/${message.spotifyTrack.id}"
+                width="100%" height="80" frameborder="0" allowtransparency="true"
                 allow="encrypted-media"></iframe>
             </div>` : ''}
         </div>
@@ -347,7 +350,7 @@ export function createMessageElement(message, user) {
             </div>
         </div>
     `;
-    
+
     return li;
 }
 
@@ -372,7 +375,7 @@ function displayMessages(messages) {
 function updateUIElements() {
     const noMorePostsMessage = document.getElementById('no-more-posts');
     const infiniteScrollLoader = document.getElementById('infinite-scroll-loader');
-    
+
     if (currentDisplayedCount >= allMessages.length && noMorePostsMessage) {
         noMorePostsMessage.style.display = 'block';
         if (infiniteScrollLoader) {
@@ -413,10 +416,10 @@ function sortMessages(messages, sortOrder) {
  */
 function updateSortButtons(sortOrder) {
     const sortButtons = document.querySelectorAll('.sort-btn');
-    
+
     // Remove active class from all buttons
     sortButtons.forEach(button => button.classList.remove('active'));
-    
+
     // Add active class to the selected button
     if (sortOrder === 'asc') {
         document.getElementById('sortAscBtn').classList.add('active');
@@ -439,7 +442,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
-    
+
     // Initialize the scroll listener
     setupScrollListener();
 });
@@ -447,18 +450,18 @@ document.addEventListener('DOMContentLoaded', () => {
 export function showMessages(sortOrder = 'desc') {
     // Track if this is a sort change rather than initial load
     const isSortChange = sortOrder !== currentSortOrder && currentDisplayedCount > 0;
-    
+
     // Only allow scrolling on initial load, not when changing sort
     const shouldScrollToMessage = !isSortChange && window.scrollToMessageAfterLoad;
-    
+
     // If this is a sort change, we don't want to scroll again
     if (isSortChange) {
         window.scrollToMessageAfterLoad = null;
     }
-    
+
     preserveScrollPosition(() => {
         const messagesList = document.getElementById('messagesList');
-        
+
         // Show loading indicator
         const loader = document.getElementById('notme');
         if (loader) {
@@ -471,7 +474,7 @@ export function showMessages(sortOrder = 'desc') {
         if (messagesList) {
             // Update sort buttons
             updateSortButtons(sortOrder);
-            
+
             // Update current sort order for lazy loading
             currentSortOrder = sortOrder;
 
@@ -487,7 +490,7 @@ export function showMessages(sortOrder = 'desc') {
                     const messageData = childSnapshot.val();
                     messages.push({ id: childSnapshot.key, ...messageData });
                 });
-                
+
                 // Store all messages for lazy loading
                 allMessages = messages;
 
@@ -496,7 +499,7 @@ export function showMessages(sortOrder = 'desc') {
 
                 // Reset the displayed count
                 currentDisplayedCount = 0;
-                
+
                 // If lazy loading is disabled, show all messages at once
                 if (!isLazyLoadingEnabled) {
                     currentDisplayedCount = sortedMessages.length;
@@ -507,15 +510,15 @@ export function showMessages(sortOrder = 'desc') {
                     currentDisplayedCount = initialMessages.length;
                     displayMessages(initialMessages);
                 }
-                
+
                 // Update UI elements
                 updateUIElements();
-                
+
                 // Only scroll to message if this is not a sort change
                 if (shouldScrollToMessage) {
                     const messageIdToScrollTo = window.scrollToMessageAfterLoad;
                     window.scrollToMessageAfterLoad = null; // Clear the flag
-                    
+
                     // Give time for the messages to render
                     setTimeout(() => {
                         scrollToMessage(messageIdToScrollTo);
@@ -539,7 +542,7 @@ export function toggleLazyLoading() {
 function setupScrollListener() {
     // Remove any existing scroll event listener first
     window.removeEventListener('scroll', handleScroll);
-    
+
     // Add the scroll event listener
     window.addEventListener('scroll', handleScroll);
 }
@@ -548,29 +551,29 @@ function setupScrollListener() {
 function handleScroll() {
     const infiniteScrollLoader = document.getElementById('infinite-scroll-loader');
     const messagesList = document.getElementById('messagesList');
-    
+
     if (!messagesList || currentDisplayedCount >= allMessages.length) return;
-    
+
     // Calculate if we're near the bottom of the page
     const lastMessage = messagesList.lastElementChild;
     if (!lastMessage) return;
-    
+
     const lastMessageRect = lastMessage.getBoundingClientRect();
     const isNearBottom = lastMessageRect.bottom <= window.innerHeight + 200; // 200px threshold
-    
+
     if (isNearBottom) {
         // Remove scroll listener to prevent multiple triggers
         window.removeEventListener('scroll', handleScroll);
-        
+
         // Show the loader
         if (infiniteScrollLoader) {
             infiniteScrollLoader.style.display = 'block';
         }
-        
+
         // Load more messages after a small delay to show the loader
         setTimeout(() => {
             loadMoreMessages();
-            
+
             // Only reattach the scroll listener if there are more messages to load
             if (currentDisplayedCount < allMessages.length) {
                 setupScrollListener();
@@ -584,46 +587,46 @@ function loadMoreMessages() {
     const messagesList = document.getElementById('messagesList');
     const infiniteScrollLoader = document.getElementById('infinite-scroll-loader');
     const noMorePostsMessage = document.getElementById('no-more-posts');
-    
+
     if (!messagesList || currentDisplayedCount >= allMessages.length) {
         // Hide the loader
         if (infiniteScrollLoader) {
             infiniteScrollLoader.style.display = 'none';
         }
-        
+
         // Show the no more posts message
         if (noMorePostsMessage) {
             noMorePostsMessage.style.display = 'block';
         }
         return;
     }
-    
+
     // Calculate the start and end indices for the next batch
     const startIndex = currentDisplayedCount;
     const endIndex = Math.min(startIndex + MESSAGES_PER_LOAD, allMessages.length);
     console.log(`Loading posts from ${startIndex} to ${endIndex} of ${allMessages.length} total posts`);
-    
+
     // Get the next batch of messages
     const nextBatch = allMessages.slice(startIndex, endIndex);
-    
+
     // Get current user
     const user = firebase.auth().currentUser;
-    
+
     // Append the next batch of messages to the list
     nextBatch.forEach(message => {
         const messageElement = createMessageElement(message, user);
         messagesList.appendChild(messageElement);
         loadReplies(message.id);
     });
-    
+
     // Update the count of displayed messages
     currentDisplayedCount = endIndex;
-    
+
     // Hide the loader
     if (infiniteScrollLoader) {
         infiniteScrollLoader.style.display = 'none';
     }
-    
+
     // Show the no more posts message if we've loaded all messages
     if (currentDisplayedCount >= allMessages.length && noMorePostsMessage) {
         noMorePostsMessage.style.display = 'block';

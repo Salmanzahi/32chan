@@ -50,6 +50,19 @@
     background: #333;
 }
 
+.spotify-auth-btn.spotify-authenticated {
+    background-color: #1DB954; /* Spotify Green */
+    color: white;
+    cursor: default;
+    opacity: 0.8;
+}
+
+.spotify-auth-btn.spotify-authenticated:hover {
+    background-color: #1DB954; /* Keep same color on hover */
+    opacity: 0.8;
+}
+}
+
 .spotify-track-info {
     margin-left: 1rem;
 }

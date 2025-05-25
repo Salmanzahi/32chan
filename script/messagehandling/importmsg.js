@@ -3,7 +3,7 @@ import { replyToMessage,  toggleViewToMessages, loadReplies, hideReplyForm, show
 import { sendMessage, resetForm } from "./sendmsg.js"
 import { toggleView } from "./toggleview.js";
 import {showMessages} from "./viewmsg.js"
-import { initSpotify, initSpotifySearchUI } from "../spotify/spotify.js";
+import { initSpotify, initSpotifySearchUI, hasValidSpotifyToken, authorizeSpotify } from "../spotify/spotify.js";
 import { performAISearch, highlightRelevantText, getScoreColor } from "./aiSearch.js";
 // Share post feature has been removed
 // import { shareMessage } from "./share.js";
@@ -27,13 +27,34 @@ window.resetForm = resetForm;
 window.showMessages = showMessages;
 window.showReplyForm = showReplyForm;
 
+// Function to update Spotify button based on auth status
+function updateSpotifyAuthButton() {
+    const authButton = document.getElementById('spotifyAuthBtn');
+    if (!authButton) return;
+
+    if (hasValidSpotifyToken()) {
+        authButton.textContent = 'Spotify Authenticated';
+        authButton.disabled = true;
+        // Optionally, add a class to style it as authenticated
+        authButton.classList.add('spotify-authenticated'); 
+    } else {
+        authButton.textContent = 'Connect to Spotify';
+        authButton.disabled = false;
+        authButton.onclick = authorizeSpotify; // Ensure it calls authorizeSpotify when clicked
+        authButton.classList.remove('spotify-authenticated');
+    }
+}
+
 // Initialize Spotify functionality when the page loads
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize Spotify authentication
-    initSpotify();
+    initSpotify(); 
     
     // Initialize Spotify search UI in the message form
     initSpotifySearchUI();
+
+    // Update the Spotify auth button status
+    updateSpotifyAuthButton();
 });
 
 document.addEventListener('DOMContentLoaded', function() {

@@ -16,7 +16,22 @@ let spotifyToken = null;
 let tokenExpiry = null;
 
 // Check if we have a valid token
-function hasValidToken() {
+export function hasValidSpotifyToken() {
+    // Prioritize checking localStorage directly as spotifyToken and tokenExpiry might not be initialized yet
+    // if initSpotify() hasn't been called or completed fully across page loads.
+    const savedToken = localStorage.getItem('spotify_token');
+    const savedExpiry = localStorage.getItem('spotify_token_expiry');
+    if (savedToken && savedExpiry && new Date() < new Date(savedExpiry)) {
+        // Update module-level variables if they are out of sync
+        if (!spotifyToken || spotifyToken !== savedToken) {
+            spotifyToken = savedToken;
+        }
+        if (!tokenExpiry || tokenExpiry.toISOString() !== savedExpiry) {
+            tokenExpiry = new Date(savedExpiry);
+        }
+        return true;
+    }
+    // Fallback to in-memory variables if localStorage is somehow cleared but app is still running
     return spotifyToken && tokenExpiry && new Date() < tokenExpiry;
 }
 

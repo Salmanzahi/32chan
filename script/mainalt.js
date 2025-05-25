@@ -9,7 +9,9 @@ import { dbConfig } from './config/config.js';
 import { adminAnnouncement } from './config/config.js';
 import { showMessages, createMessageElement } from './messagehandling/viewmsg.js'
 import { sanitizeText } from './santizeText/sanitize.js';
-import { toggleLike } from './messagehandling/CRUDpost.js';
+// import { toggleLike } from './messagehandling/CRUDpost.js';
+// import { loadReplies } from './messagehandling/replyhandling.js';
+
 const script = document.createElement('script');
 script.src = "./role.js"
 script.src = "./p.js"
@@ -18,8 +20,134 @@ document.head.appendChild(script);
 const auth = firebase.auth();
 export const user = auth.currentUser;
 
+export function creatusermsg(message, user) {
+    const safeTitle = sanitizeText(message.title || 'Legacy Post');
+    const safeAdminName = message.adminName ? sanitizeText(message.adminName) : null;
+    const safeMessageText = sanitizeText(message.text || 'No text provided');
+    const timestamp = message.timestamp;
+    const imageUrl = message.imageURL ? sanitizeText(message.imageURL) : null;
+    const likes = message.likes || 0;
 
-/*  */
+    // Check if current user has liked this message
+    const isLiked = user && message.likedBy && message.likedBy[user.uid];
+    const likedClass = isLiked ? 'liked' : '';
+
+    // Create message list item
+    const li = document.createElement('li');
+    li.setAttribute('data-id', message.id);
+    li.style.backgroundColor = "#1e1e1e";
+    li.style.padding = "15px";
+    li.style.border = "1px solid #333";
+    li.style.borderRadius = "8px";
+    li.style.marginBottom = "10px";
+    li.style.boxShadow = "0 2px 4px rgba(0, 0, 0, 0.5)";
+    li.style.transition = "box-shadow 0.3s ease-in-out";
+    li.style.listStyle = "none";
+    // Check if profile should be displayed
+    const showProfile = message.showProfile;
+    const userDisplayName = message.userDisplayName ? sanitizeText(message.userDisplayName) : null;
+    const userPhotoURL = message.userPhotoURL ? sanitizeText(message.userPhotoURL) : null;
+
+    // Check if the message is from an admin user
+    const isUserAdmin = message.userId && adminRoles && adminRoles.admins && adminRoles.admins.includes(message.userId);
+
+    // Check if message was posted in anonymous mode
+    // The condition: if anonymous username is different from the regular username
+    // This specific check will be performed when displaying user messages
+    const isAnonymousMode = message.isAnonymousMode === true;
+    const displayName = userDisplayName + (isAnonymousMode ? ' <span style="color: gray;">[Anonymous]</span>' : '');
+
+    li.innerHTML = `
+        <div class="header">
+            ${showProfile && userDisplayName ? `
+            <div class="user-profile">
+                ${isAnonymousMode ?
+                    `<img src="./images/suscat.jpg" alt="Anonymous User">` :
+                    `<img src="${userPhotoURL || './images/suscat.jpg'}" alt="User Photo">`
+                }
+                <div>
+                    <div class="user-name">${displayName}</div>
+                    ${isUserAdmin ? `<div class="admin-tag">[ADMIN]</div>` : ''}
+                </div>
+            </div>` : ''}
+            <div class="title">${safeTitle}</div>
+            <div class="timestamp">${new Date(timestamp).toLocaleString()}</div>
+        </div>
+        <div class="content">
+            <div class="message-text" style="color:#ffff">${safeMessageText}</div>
+            ${imageUrl ? `
+            <div class="message-image" style="margin-top: 10px;">
+                <img src="${imageUrl}" alt="Message Image" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+            </div>` : ''}
+            ${message.spotifyTrack ? `
+            <div class="spotify-track-embed">
+                <iframe src="https://open.spotify.com/embed/track/${message.spotifyTrack.id}"
+                width="100%" height="80" frameborder="0" allowtransparency="true"
+                allow="encrypted-media"></iframe>
+            </div>` : ''}
+        </div>
+        <div class="actions">
+            <button onclick="toggleLike('${message.id}')" class="action-btn ${likedClass}">
+                <svg class="like-icon" width="16" height="16" viewBox="0 0 24 24" fill="${isLiked ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+                ${likes}
+            </button>
+            <button onclick="replyToMessage('${message.id}', event)" class="action-btn">
+                <svg class="reply-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 10h10a5 5 0 0 1 5 5v6M3 10l6 6m-6-6l6-6"/>
+                </svg>
+                Reply
+            </button>
+            <button onclick="shareMessage('${message.id}')" class="action-btn">
+                <svg class="share-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="18" cy="5" r="3"/>
+                    <circle cx="6" cy="12" r="3"/>
+                    <circle cx="18" cy="19" r="3"/>
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                </svg>
+                Share and View
+            </button>
+            ${isAdmin() ? `
+                <button onclick="editPost('${message.id}')" class="action-btn">
+                    <svg class="edit-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                    </svg>
+                    Edit
+                </button>
+                <button onclick="deletePost('${message.id}')" class="action-btn">
+                    <svg class="delete-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                        <line x1="10" y1="11" x2="10" y2="17"/>
+                        <line x1="14" y1="11" x2="14" y2="17"/>
+                    </svg>
+                    Delete
+                </button>
+            ` : ''}
+            ${(user && message.userId === user.uid && !isAdmin()) ? `
+                <button onclick="editUserPost('${message.id}')" class="action-btn">
+                    <svg class="edit-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                    </svg>
+                    Edit
+                </button>
+                <button onclick="deleteUserPost('${message.id}')" class="action-btn">
+                    <svg class="delete-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                        <line x1="10" y1="11" x2="10" y2="17"/>
+                        <line x1="14" y1="11" x2="14" y2="17"/>
+                    </svg>
+                    Delete
+                </button>
+            ` : ''}
+        </div>
+    `;
+
+    return li;
+}
 
 
 
@@ -426,8 +554,9 @@ export function loadUserMessages() {
         messages.forEach((message) => {
             // Use the createMessageElement function from viewmsg.js
            const user = firebase.auth().currentUser
-            const messageElement = createMessageElement(message, user);
+            const messageElement = creatusermsg(message, user);
             userMessagesList.appendChild(messageElement);
+            loadReplies(message.id);
         });
 
         // Add refresh button after messages

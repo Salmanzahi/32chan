@@ -99,59 +99,33 @@ function showLoading() {
  * @param {HTMLElement} container - The container element to remove after applying
  * @returns {HTMLButtonElement} The created button
  */
-function createApplyButton(content, container) {
+function createApplyButton(content, container, isIndonesian = false) {
     const applyButton = document.createElement('button');
-    applyButton.textContent = 'Apply to Post';
+    applyButton.textContent = isIndonesian ? 'Terapkan ke Postingan' : 'Apply to Post';
     applyButton.className = 'submit-btn';
 
     applyButton.addEventListener('click', () => {
         const plainText = stripHtml(content);
         setEditorContent(plainText);
         container.remove();
-        showAlert('AI suggestion applied to your post', 'success');
+        const successMessage = isIndonesian ?
+            'Saran AI telah diterapkan ke postingan Anda' :
+            'AI suggestion applied to your post';
+        showAlert(successMessage, 'success');
     });
 
     return applyButton;
 }
 
-/**
- * Creates an option element for multiple AI suggestions
- * @param {string} option - The option content
- * @param {number} index - The option index
- * @param {HTMLElement} container - The parent container
- * @returns {HTMLElement} The created option element
- */
-function createOptionElement(option, index, container) {
-    const optionContainer = document.createElement('div');
-    optionContainer.className = 'ai-option';
 
-    // Option number
-    const optionNumber = document.createElement('div');
-    optionNumber.className = 'ai-option-number';
-    optionNumber.textContent = `Option ${index + 1}`;
-
-    // Option content
-    const optionContent = document.createElement('div');
-    optionContent.className = 'ai-option-content';
-    optionContent.innerHTML = formatResponseText(option);
-
-    // Apply button for this option
-    const applyButton = createApplyButton(option, container);
-    applyButton.className = 'submit-btn ai-option-apply';
-
-    optionContainer.appendChild(optionNumber);
-    optionContainer.appendChild(optionContent);
-    optionContainer.appendChild(applyButton);
-
-    return optionContainer;
-}
 
 /**
  * Processes and displays the AI response
  * @param {string} response - The AI response text
  * @param {string} actionType - The type of AI action performed
+ * @param {boolean} isIndonesian - Whether the response should be in Indonesian
  */
-function processResponse(response, actionType) {
+function processResponse(response, actionType, isIndonesian = false) {
     const container = document.getElementById('aiResponseContainer');
     if (!container) return;
 
@@ -162,38 +136,18 @@ function processResponse(response, actionType) {
         // Parse the response if it's JSON
         let responseContent = parseResponseContent(response);
 
-        // Check if response has multiple options
-        const options = splitMultipleOptions(responseContent);
+        // Display the response content
+        contentWrapper.innerHTML = formatResponseText(responseContent);
 
-        // Create apply buttons for certain action types
+        // Create apply button for certain action types
         if (['improve', 'expand', 'summarize'].includes(actionType)) {
-            if (options.length > 1) {
-                // Create a heading for multiple options
-                const heading = document.createElement('h4');
-                heading.textContent = 'Select one of these options:';
-                heading.className = 'ai-options-heading';
-                contentWrapper.appendChild(heading);
-
-                // Create container for options
-                const optionsContainer = document.createElement('div');
-                optionsContainer.className = 'ai-options-container';
-                contentWrapper.appendChild(optionsContainer);
-
-                // Add each option with its own apply button
-                options.forEach((option, index) => {
-                    const optionElement = createOptionElement(option, index, container);
-                    optionsContainer.appendChild(optionElement);
-                });
-            } else {
-                // Single option response
-                contentWrapper.innerHTML = formatResponseText(responseContent);
-                contentWrapper.appendChild(createApplyButton(responseContent, container));
-            }
-        } else {
-            contentWrapper.innerHTML = formatResponseText(responseContent);
+            contentWrapper.appendChild(createApplyButton(responseContent, container, isIndonesian));
         }
     } catch (error) {
-        contentWrapper.innerHTML = `<p>Error processing AI response: ${error.message}</p>`;
+        const errorMessage = isIndonesian ?
+            `Kesalahan memproses respons AI: ${error.message}` :
+            `Error processing AI response: ${error.message}`;
+        contentWrapper.innerHTML = `<p>${errorMessage}</p>`;
     }
 }
 
@@ -217,46 +171,7 @@ function parseResponseContent(response) {
     return response;
 }
 
-/**
- * Splits response into multiple options if they exist
- * @param {string} text - The text to split into options
- * @returns {Array<string>} Array of option texts
- */
-function splitMultipleOptions(text) {
-    // Common option separators in AI responses
-    const optionPatterns = [
-        /Option \d+[:\)]\s*/gi,             // Option 1: or Option 1)
-        /\n\s*\d+[.:\)]\s*/g,                // Numbered lists: 1. or 1: or 1)
-        /\n\s*[A-Z]\)\s*/g,                   // Letter options: A) B) C)
-        /\n\s*Alternative \d+[:\)]\s*/gi,     // Alternative 1: or Alternative 1)
-        /\n\s*Suggestion \d+[:\)]\s*/gi      // Suggestion 1: or Suggestion 1)
-    ];
 
-    // Try to find a pattern that matches option separation in this text
-    for (const pattern of optionPatterns) {
-        const matches = [...text.matchAll(pattern)];
-        if (matches.length > 1) {
-            const options = [];
-            const positions = matches.map(match => match.index);
-
-            // Extract each option using the separator positions
-            for (let i = 0; i < positions.length; i++) {
-                const start = positions[i];
-                const end = i < positions.length - 1 ? positions[i + 1] : text.length;
-
-                let option = text.substring(start, end).trim();
-                // Remove the option prefix (e.g., "Option 1:")
-                option = option.replace(pattern, '').trim();
-                options.push(option);
-            }
-
-            return options;
-        }
-    }
-
-    // No valid separation pattern found, return full text as single option
-    return [text];
-}
 
 /**
  * Strips HTML from text but preserves formatting and line breaks
@@ -372,6 +287,87 @@ function formatResponseText(text) {
         .replace(/_(.*?)_/g, '<em>$1</em>');
 }
 
+// Language Detection
+
+/**
+ * Detects if the text is primarily in Indonesian language
+ * @param {string} text - The text to analyze
+ * @returns {boolean} True if the text appears to be in Indonesian
+ */
+function detectIndonesian(text) {
+    if (!text || text.trim().length === 0) return false;
+
+    // Common Indonesian words and patterns
+    const indonesianWords = [
+        // Common words
+        'dan', 'atau', 'yang', 'ini', 'itu', 'adalah', 'dengan', 'untuk', 'dari', 'ke', 'di', 'pada', 'akan', 'sudah', 'telah', 'dapat', 'bisa', 'tidak', 'juga', 'saya', 'kamu', 'dia', 'mereka', 'kita', 'kami',
+        // Pronouns
+        'aku', 'gue', 'gw', 'lo', 'lu', 'dia', 'beliau', 'mereka',
+        // Common verbs
+        'makan', 'minum', 'pergi', 'datang', 'lihat', 'dengar', 'bicara', 'kerja', 'belajar', 'main', 'tidur', 'bangun',
+        // Common adjectives
+        'bagus', 'jelek', 'besar', 'kecil', 'tinggi', 'rendah', 'panjang', 'pendek', 'lebar', 'sempit',
+        // Time words
+        'hari', 'minggu', 'bulan', 'tahun', 'jam', 'menit', 'detik', 'pagi', 'siang', 'sore', 'malam',
+        // Question words
+        'apa', 'siapa', 'dimana', 'kapan', 'mengapa', 'kenapa', 'bagaimana', 'gimana',
+        // Common expressions
+        'selamat', 'terima', 'kasih', 'maaf', 'permisi', 'tolong', 'silakan', 'mohon'
+    ];
+
+    // Indonesian-specific patterns
+    const indonesianPatterns = [
+        /\b(me|ber|ter|pe|per|se)\w+/gi,  // Indonesian prefixes
+        /\w+(kan|an|nya|lah|kah)\b/gi,    // Indonesian suffixes
+        /\b\w+nya\b/gi,                   // -nya suffix
+        /\bdi\s+\w+/gi,                   // "di" preposition
+        /\bke\s+\w+/gi,                   // "ke" preposition
+    ];
+
+    const words = text.toLowerCase().split(/\s+/);
+    let indonesianScore = 0;
+    let totalWords = words.length;
+
+    // Check for Indonesian words
+    words.forEach(word => {
+        // Remove punctuation for checking
+        const cleanWord = word.replace(/[^\w]/g, '');
+        if (indonesianWords.includes(cleanWord)) {
+            indonesianScore += 2; // Higher weight for exact matches
+        }
+    });
+
+    // Check for Indonesian patterns
+    indonesianPatterns.forEach(pattern => {
+        const matches = text.match(pattern);
+        if (matches) {
+            indonesianScore += matches.length;
+        }
+    });
+
+    // Calculate percentage
+    const percentage = (indonesianScore / totalWords) * 100;
+
+    // Consider it Indonesian if score is above threshold
+    return percentage > 15; // Adjust threshold as needed
+}
+
+/**
+ * Determines the appropriate language for AI response
+ * @param {string} titleInput - The post title
+ * @param {string} messageContent - The post content
+ * @returns {string} Language code ('id' for Indonesian, 'en' for English)
+ */
+function detectLanguage(titleInput, messageContent) {
+    const combinedText = `${titleInput} ${messageContent}`.trim();
+
+    if (detectIndonesian(combinedText)) {
+        return 'id'; // Indonesian
+    }
+
+    return 'en'; // Default to English
+}
+
 // API Interaction
 
 /**
@@ -383,7 +379,20 @@ function formatResponseText(text) {
  * @returns {string} The formatted prompt
  */
 function preparePrompt(actionType, titleInput, messageContent, customPrompt = '') {
-    const formattingInstructions = `Use markdown formatting to make your response readable:
+    // Detect the language of the input
+    const detectedLanguage = detectLanguage(titleInput, messageContent);
+    const isIndonesian = detectedLanguage === 'id';
+
+    // Language-specific formatting instructions
+    const formattingInstructions = isIndonesian ?
+        `Gunakan format markdown untuk membuat respons yang mudah dibaca:
+- Gunakan **tebal** atau __tebal__ untuk penekanan
+- Gunakan *miring* atau _miring_ untuk penekanan halus
+- Gunakan poin-poin (- atau *) untuk daftar
+- Gunakan daftar bernomor (1., 2., dll.) jika diperlukan
+- Mulai paragraf dengan "Tips:" atau "Peringatan:" untuk catatan khusus
+Atur respons Anda dengan bagian yang jelas dan spasi yang baik.` :
+        `Use markdown formatting to make your response readable:
 - Use **bold** or __bold__ for emphasis
 - Use *italic* or _italic_ for subtle emphasis
 - Use bullet points (- or *) for lists
@@ -391,25 +400,72 @@ function preparePrompt(actionType, titleInput, messageContent, customPrompt = ''
 - Start paragraphs with "Tip:" or "Warning:" for special callouts
 Organize your response with clear sections and good spacing.`;
 
-    const prompts = {
+    // Language instruction for AI
+    const languageInstruction = isIndonesian ?
+        `PENTING: Respons harus dalam Bahasa Indonesia yang natural dan mudah dipahami.` :
+        `IMPORTANT: Respond in English.`;
+
+    const prompts = isIndonesian ? {
+        improve: `Perbaiki konten postingan berikut. Buat lebih menarik, jelas, dan terstruktur dengan baik:
+
+Judul: ${titleInput}
+Konten: ${messageContent}
+
+${languageInstruction}
+${formattingInstructions}`,
+
+        ideas: `Buatkan ide-ide postingan yang berkaitan dengan topik berikut (atau ide umum jika tidak ada topik yang diberikan):
+${titleInput || messageContent || 'Ide postingan forum umum'}
+
+${languageInstruction}
+${formattingInstructions}
+Berikan ide-ide kreatif dan menarik dengan judul dan deskripsi singkat.`,
+
+        expand: `Kembangkan postingan berikut dengan lebih detail, contoh, dan poin-poin pendukung:
+
+Judul: ${titleInput}
+Konten: ${messageContent}
+
+${languageInstruction}
+${formattingInstructions}`,
+
+        summarize: `Buat postingan berikut lebih ringkas sambil mempertahankan poin-poin utama:
+
+Judul: ${titleInput}
+Konten: ${messageContent}
+
+${languageInstruction}
+${formattingInstructions}`,
+
+        default: `Bantu perbaiki postingan forum berikut:
+
+Judul: ${titleInput}
+Konten: ${messageContent}
+
+${languageInstruction}
+${formattingInstructions}`
+    } : {
         improve: `Improve the following post content. Make it more engaging, clear, and well-structured:
 
 Title: ${titleInput}
 Content: ${messageContent}
 
+${languageInstruction}
 ${formattingInstructions}`,
 
-        ideas: `Generate 3-5 post ideas related to the following topic (or general ideas if no topic provided):
+        ideas: `Generate post ideas related to the following topic (or general ideas if no topic provided):
 ${titleInput || messageContent || 'General forum post ideas'}
 
+${languageInstruction}
 ${formattingInstructions}
-For each idea, provide a title and a brief description.`,
+Provide creative and engaging post ideas with titles and brief descriptions.`,
 
         expand: `Expand the following post with more details, examples, and supporting points:
 
 Title: ${titleInput}
 Content: ${messageContent}
 
+${languageInstruction}
 ${formattingInstructions}`,
 
         summarize: `Make the following post more concise while preserving the key points:
@@ -417,6 +473,7 @@ ${formattingInstructions}`,
 Title: ${titleInput}
 Content: ${messageContent}
 
+${languageInstruction}
 ${formattingInstructions}`,
 
         default: `Help improve the following forum post:
@@ -424,17 +481,23 @@ ${formattingInstructions}`,
 Title: ${titleInput}
 Content: ${messageContent}
 
+${languageInstruction}
 ${formattingInstructions}`
     };
 
     // Use custom prompt if provided for 'custom' action type
     if (actionType === 'custom' && customPrompt) {
+        const contextLabel = isIndonesian ? 'Konteks:' : 'Context:';
+        const titleLabel = isIndonesian ? 'Judul:' : 'Title:';
+        const contentLabel = isIndonesian ? 'Konten:' : 'Content:';
+
         return `${customPrompt}
 
-Context:
-Title: ${titleInput}
-Content: ${messageContent}
+${contextLabel}
+${titleLabel} ${titleInput}
+${contentLabel} ${messageContent}
 
+${languageInstruction}
 ${formattingInstructions}`;
     }
 
@@ -504,8 +567,9 @@ async function makeApiRequest(prompt) {
 /**
  * Handles errors in the AI assist process
  * @param {Error} error - The error that occurred
+ * @param {boolean} isIndonesian - Whether to show error in Indonesian
  */
-function handleAiError(error) {
+function handleAiError(error, isIndonesian = false) {
     console.error('AI assist error:', error);
 
     const container = document.getElementById('aiResponseContainer');
@@ -513,9 +577,13 @@ function handleAiError(error) {
 
     container.className = 'ai-response error';
 
+    const errorPrefix = isIndonesian ? 'Kesalahan:' : 'Error:';
+    const defaultErrorMessage = isIndonesian ? 'Gagal mendapatkan bantuan AI' : 'Failed to get AI assistance';
+    const errorMessage = `${errorPrefix} ${error.message || defaultErrorMessage}`;
+
     const contentWrapper = container.querySelector('.ai-response-content');
     if (contentWrapper) {
-        contentWrapper.innerHTML = `<p>Error: ${error.message || 'Failed to get AI assistance'}</p>`;
+        contentWrapper.innerHTML = `<p>${errorMessage}</p>`;
     } else {
         // Fallback if content wrapper doesn't exist
         container.innerHTML = '';
@@ -524,18 +592,19 @@ function handleAiError(error) {
         const closeButton = document.createElement('button');
         closeButton.className = 'ai-response-close';
         closeButton.innerHTML = '×';
-        closeButton.setAttribute('aria-label', 'Close');
+        closeButton.setAttribute('aria-label', isIndonesian ? 'Tutup' : 'Close');
         closeButton.addEventListener('click', () => container.remove());
         container.appendChild(closeButton);
 
         // Add error message
         const errorDiv = document.createElement('div');
         errorDiv.className = 'ai-response-content';
-        errorDiv.innerHTML = `<p>Error: ${error.message || 'Failed to get AI assistance'}</p>`;
+        errorDiv.innerHTML = `<p>${errorMessage}</p>`;
         container.appendChild(errorDiv);
     }
 
-    showAlert('Failed to get AI assistance', 'error');
+    const alertMessage = isIndonesian ? 'Gagal mendapatkan bantuan AI' : 'Failed to get AI assistance';
+    showAlert(alertMessage, 'error');
 }
 
 /**
@@ -547,12 +616,19 @@ export async function handleAiAction(actionType, customPrompt = '') { // Note: F
     const titleInput = document.getElementById('titleInput').value;
     const messageContent = getEditorContent() || document.getElementById('messageInput').value;
 
+    // Detect language for user feedback
+    const detectedLanguage = detectLanguage(titleInput, messageContent);
+    const isIndonesian = detectedLanguage === 'id';
+
     // Hide options menu
     document.getElementById('aiAssistOptions').style.display = 'none';
 
     // Validate input for certain action types
     if (['improve', 'expand', 'summarize'].includes(actionType) && !messageContent.trim()) {
-        showAlert('Please enter some content in your post first', 'error');
+        const errorMessage = isIndonesian ?
+            'Silakan masukkan konten di postingan Anda terlebih dahulu' :
+            'Please enter some content in your post first';
+        showAlert(errorMessage, 'error');
         return;
     }
 
@@ -565,7 +641,10 @@ export async function handleAiAction(actionType, customPrompt = '') { // Note: F
 
         // Validate prompt for custom actions
         if (actionType === 'custom' && !customPrompt) {
-            showAlert('Please enter your custom request in the text field.', 'warning');
+            const warningMessage = isIndonesian ?
+                'Silakan masukkan permintaan khusus Anda di kolom teks.' :
+                'Please enter your custom request in the text field.';
+            showAlert(warningMessage, 'warning');
             return;
         }
 
@@ -573,9 +652,9 @@ export async function handleAiAction(actionType, customPrompt = '') { // Note: F
         const aiResponse = await makeApiRequest(prompt);
 
         // Process and display response
-        processResponse(aiResponse, actionType);
+        processResponse(aiResponse, actionType, isIndonesian);
     } catch (error) {
-        handleAiError(error);
+        handleAiError(error, isIndonesian);
     }
 }
 
@@ -632,3 +711,13 @@ export function initAiPostAssistant() {
 
 // Make initialization function available globally
 window.initAiPostAssistant = initAiPostAssistant;
+
+// Debug function to test language detection
+window.testLanguageDetection = function(text) {
+    console.log(`Testing language detection for: "${text}"`);
+    const isIndonesian = detectIndonesian(text);
+    const language = detectLanguage('', text);
+    console.log(`Indonesian detected: ${isIndonesian}`);
+    console.log(`Language code: ${language}`);
+    return { isIndonesian, language };
+};

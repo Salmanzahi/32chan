@@ -19,9 +19,9 @@ export const AI_CONFIG = {
 
     // Search Configuration
     SEARCH_CONFIG: {
-        max_messages: 5,
-        max_text_length: 200,
-        min_results: 3,
+        max_results: 5,          // Return top 5 most relevant posts
+        max_text_length: 500,    // Increased for better keyword matching
+        min_score_threshold: 10, // Minimum score to be considered relevant
         default_score: 50
     },
 

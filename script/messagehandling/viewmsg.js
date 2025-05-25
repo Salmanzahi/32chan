@@ -307,7 +307,7 @@ export function createMessageElement(message, user) {
                 </svg>
                 ${likes}
             </button>
-            <button onclick="replyToMessage('${message.id}')" class="action-btn">
+            <button onclick="replyToMessage('${message.id}', event)" class="action-btn">
                 <svg class="reply-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M3 10h10a5 5 0 0 1 5 5v6M3 10l6 6m-6-6l6-6"/>
                 </svg>
@@ -370,7 +370,7 @@ export function createMessageElement(message, user) {
 
     return li;
 }
-
+window.replyToMessage = replyToMessage;
 /**
  * Displays a list of messages in the messages list
  * @param {Array} messages - Array of message objects to display
@@ -531,15 +531,26 @@ export function showMessages(sortOrder = 'desc') {
                 // Update UI elements
                 updateUIElements();
 
+                // Dispatch a custom event to indicate messages have been loaded
+                document.dispatchEvent(new CustomEvent('messagesLoaded', {
+                    detail: { messageCount: allMessages.length }
+                }));
+
                 // Only scroll to message if this is not a sort change
                 if (shouldScrollToMessage) {
                     const messageIdToScrollTo = window.scrollToMessageAfterLoad;
                     window.scrollToMessageAfterLoad = null; // Clear the flag
 
+                    console.log(`Messages loaded, attempting to scroll to: ${messageIdToScrollTo}`);
+
                     // Give time for the messages to render
                     setTimeout(() => {
-                        scrollToMessage(messageIdToScrollTo);
-                    }, 500);
+                        if (typeof window.scrollToMessage === 'function') {
+                            window.scrollToMessage(messageIdToScrollTo);
+                        } else {
+                            console.error('scrollToMessage function not available');
+                        }
+                    }, 1000); // Increased delay to ensure DOM is ready
                 }
             });
         }
@@ -600,7 +611,7 @@ function handleScroll() {
 }
 
 // Function to load more messages when scrolling
-function loadMoreMessages() {
+function loadMoreMessages(callback) {
     const messagesList = document.getElementById('messagesList');
     const infiniteScrollLoader = document.getElementById('infinite-scroll-loader');
     const noMorePostsMessage = document.getElementById('no-more-posts');
@@ -615,6 +626,9 @@ function loadMoreMessages() {
         if (noMorePostsMessage) {
             noMorePostsMessage.style.display = 'block';
         }
+
+        // Call callback if provided
+        if (callback) callback(false); // false indicates no more messages to load
         return;
     }
 
@@ -648,6 +662,9 @@ function loadMoreMessages() {
     if (currentDisplayedCount >= allMessages.length && noMorePostsMessage) {
         noMorePostsMessage.style.display = 'block';
     }
+
+    // Call callback if provided
+    if (callback) callback(true); // true indicates messages were loaded successfully
 }
 
 // // Add a global function to handle like button clicks

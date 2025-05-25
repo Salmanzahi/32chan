@@ -131,7 +131,7 @@
 }
 
 /* Add styled text elements */
-.ai-response strong, 
+.ai-response strong,
 .ai-response b {
     color: #f59e0b;
     font-weight: 600;
@@ -185,57 +185,7 @@
     border-radius: 4px;
 }
 
-/* Multiple options styling */
-.ai-options-heading {
-    margin-bottom: 20px;
-    color: var(--text);
-    font-weight: 600;
-    text-align: center;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--card-border);
-}
 
-.ai-options-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.ai-option {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 8px;
-    padding: 15px;
-    position: relative;
-    transition: all 0.2s ease;
-    box-shadow: var(--shadow-sm);
-}
-
-.ai-option:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
-    border-color: var(--button-hover);
-}
-
-.ai-option-number {
-    font-weight: 600;
-    color: var(--button-primary);
-    font-size: 1rem;
-    margin-bottom: 10px;
-    padding-bottom: 5px;
-    border-bottom: 1px dashed rgba(96, 165, 250, 0.2);
-}
-
-.ai-option-content {
-    margin-bottom: 15px;
-}
-
-.ai-option-apply {
-    margin-top: 10px;
-    width: 100%;
-    font-size: 0.9rem;
-    padding: 6px 12px;
-}
 
 /* Add small fade-in animation */
 @keyframes fadeIn {
@@ -247,17 +197,7 @@
     animation: fadeIn 0.3s ease-out;
 }
 
-.ai-option {
-    animation: fadeIn 0.3s ease-out;
-    animation-fill-mode: both;
-}
 
-/* Add staggered animation delay for options */
-.ai-option:nth-child(1) { animation-delay: 0.1s; }
-.ai-option:nth-child(2) { animation-delay: 0.2s; }
-.ai-option:nth-child(3) { animation-delay: 0.3s; }
-.ai-option:nth-child(4) { animation-delay: 0.4s; }
-.ai-option:nth-child(5) { animation-delay: 0.5s; }
 
 /* Add error message styling */
 .ai-response.error {
@@ -322,7 +262,7 @@
         width: 100%;
         left: 0;
     }
-    
+
     .ai-response {
         padding: 15px;
         margin: 10px 0;

@@ -9,6 +9,14 @@ import { createMessageElement } from "./viewmsg.js";
 import { toggleView } from "./toggleview.js";
 
 export function shareMessage(messageId) {
+    // Show a brief loading indicator or feedback
+    if (typeof showAlert === 'function') {
+        showAlert('Opening shared post...', 'info');
+    }
+
+    // Store the current page context for better back navigation
+    localStorage.setItem('shareOriginPage', window.location.href);
+
     window.location.href = `../../share.html?id=${messageId}`;
 }
 
@@ -32,7 +40,7 @@ export function goBackToMessage(messageId) {
 document.addEventListener('DOMContentLoaded', () => {
     const roomId = getUrlParameter('id');
     document.getElementById('roomIdDisplay').textContent = roomId;
-    
+
     // Setup back button
     const backButton = document.getElementById('backToMessageBtn');
     if (backButton) {
@@ -40,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
             goBackToMessage(roomId);
         });
     }
-    
+
     loadSharedMessage(roomId);
 });
 
@@ -51,22 +59,22 @@ export function loadSharedMessage(messageId) {
     if (messageContainer) {
         // Clear any existing content
         messageContainer.innerHTML = '';
-        
+
         // Reference to the specific message in Firebase
         const messageRef = db.ref(`${dbConfig.messagesPath}/${messageId}`);
-        
+
         // Use on() instead of once() to listen for real-time updates
         messageRef.on('value', (snapshot) => {
             if (snapshot.exists()) {
                 const messageData = snapshot.val();
                 const message = { id: snapshot.key, ...messageData };
-                
+
                 // Get current user for like status
                 const user = firebase.auth().currentUser;
-                
+
                 // Clear existing content before updating
                 messageContainer.innerHTML = '';
-                
+
                 // Create the back button header
                 const backButtonHeader = document.createElement('div');
                 backButtonHeader.className = 'back-button-header';
@@ -75,17 +83,17 @@ export function loadSharedMessage(messageId) {
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
                         </svg>
-                        Back to original post
+                        Return to dashboard & scroll to post
                     </button>
                 `;
                 messageContainer.appendChild(backButtonHeader);
-                
+
                 // Add click event to the back button
                 const backButton = backButtonHeader.querySelector('#backToMessageBtn');
                 backButton.addEventListener('click', () => {
                     goBackToMessage(message.id);
                 });
-                
+
                 // Create and append the message element
                 const messageElement = createMessageElement(message, user);
 
@@ -100,12 +108,12 @@ export function loadSharedMessage(messageId) {
                 `;
                 whatsappButton.onclick = () => shareViaWhatsApp(message.id);
                 messageElement.querySelector('.actions').appendChild(whatsappButton);
-                
+
                 messageContainer.appendChild(messageElement);
-                
+
                 // Load replies for this message
                 loadReplies(messageId);
-                
+
                 // Set page title to include message title
                 if (message.title) {
                     document.title = `Shared: ${sanitizeText(message.title)}`;

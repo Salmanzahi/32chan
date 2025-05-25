@@ -1,7 +1,7 @@
 import { AI_CONFIG } from '../config/aiConfig.js';
 
 /**
- * Performs semantic search using Gemini AI
+ * Performs keyword-based search with relevance scoring
  * @param {string} query - Search query
  * @param {Array} messages - Array of messages to search through
  * @returns {Promise<Array>} - Array of relevant messages with similarity scores
@@ -13,190 +13,178 @@ export async function performAISearch(query, messages) {
             throw new Error('Invalid input parameters');
         }
 
-        // Prepare messages for analysis using config values
-        const messageData = messages
-            .slice(0, AI_CONFIG.SEARCH_CONFIG.max_messages)
-            .map((m, index) => ({
-                index,
-                id: m.id,
-                title: m.title,
-                text: m.text?.substring(0, AI_CONFIG.SEARCH_CONFIG.max_text_length),
-                userDisplayName: m.userDisplayName
-            }));
+        console.log('Performing keyword-based search for:', query);
 
-        // Construct the system prompt and user message for Gemini
-        const systemPrompt = "Analyze messages and return relevance scores as JSON array: [{\"index\":0,\"score\":95}]";
-        const userMessage = `Query: "${query}"\nMessages: ${JSON.stringify(messageData)}`;
+        // Normalize the search query
+        const normalizedQuery = normalizeText(query);
+        const queryWords = extractKeywords(normalizedQuery);
 
-        // Combine prompts for Gemini (which uses a different format than OpenRouter)
-        const combinedPrompt = `${systemPrompt}\n\n${userMessage}`;
+        if (queryWords.length === 0) {
+            console.warn('No valid keywords found in query');
+            return [];
+        }
 
-        console.log('Sending request to Gemini API...');
-        // Add API key as query parameter for Gemini
-        const apiUrl = `${AI_CONFIG.API_URL}?key=${AI_CONFIG.API_KEY}`;
-
-        const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                contents: [
-                    {
-                        parts: [
-                            { text: combinedPrompt }
-                        ]
-                    }
-                ],
-                generationConfig: {
-                    temperature: AI_CONFIG.REQUEST_CONFIG.temperature,
-                    maxOutputTokens: AI_CONFIG.REQUEST_CONFIG.maxOutputTokens,
-                    topK: AI_CONFIG.REQUEST_CONFIG.topK,
-                    topP: AI_CONFIG.REQUEST_CONFIG.topP
-                }
-            })
+        // Score all messages based on keyword relevance
+        const scoredMessages = messages.map((message, index) => {
+            const score = calculateRelevanceScore(message, queryWords, query);
+            return {
+                message,
+                score,
+                index
+            };
         });
 
-        console.log('Received response from API:', response.status);
-
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            console.error('API Error:', errorData);
-
-            // Handle quota exceeded error specifically (Gemini API error code)
-            if (errorData.error?.code === 429 || errorData.error?.status === 'RESOURCE_EXHAUSTED') {
-                console.warn('API quota exceeded, falling back to basic search');
-                // Fall back to basic search by returning all messages
-                return messages.map((message, index) => ({
-                    message,
-                    score: AI_CONFIG.SEARCH_CONFIG.default_score
-                }));
-            }
-
-            throw new Error(errorData.error?.message || `API request failed with status ${response.status}`);
-        }
-
-        // Parse the response as JSON directly (Gemini returns JSON)
-        const data = await response.json();
-        console.log('Parsed API response:', data);
-
-        // Validate response structure for Gemini API
-        if (!data) {
-            console.error('Empty API response');
-            throw new Error('Empty API response');
-        }
-
-        // Check for Gemini-specific response structure
-        if (!data.candidates || !Array.isArray(data.candidates)) {
-            console.error('Missing or invalid candidates in API response:', data);
-            throw new Error('Missing candidates in API response');
-        }
-
-        if (data.candidates.length === 0) {
-            console.error('Empty candidates array in API response');
-            throw new Error('Empty candidates array in API response');
-        }
-
-        const firstCandidate = data.candidates[0];
-        if (!firstCandidate) {
-            console.error('First candidate is undefined');
-            throw new Error('First candidate is undefined');
-        }
-
-        if (!firstCandidate.content) {
-            console.error('Missing content in first candidate:', firstCandidate);
-            throw new Error('Missing content in first candidate');
-        }
-
-        if (!firstCandidate.content.parts || !Array.isArray(firstCandidate.content.parts) || firstCandidate.content.parts.length === 0) {
-            console.error('Missing parts in content:', firstCandidate.content);
-            throw new Error('Missing parts in content');
-        }
-
-        if (!firstCandidate.content.parts[0].text) {
-            console.error('Missing text in first part:', firstCandidate.content.parts[0]);
-            throw new Error('Missing text in first part');
-        }
-
-        // Extract and clean the response
-        const aiResponse = firstCandidate.content.parts[0].text;
-        console.log('AI Response:', aiResponse);
-
-        const cleanResponse = aiResponse
-            .replace(/```json\n|\n```|```/g, '') // Remove markdown
-            .replace(/[\n\r]/g, '') // Remove newlines
-            .trim();
-
-        console.log('Cleaned response:', cleanResponse);
-
-        // Parse and validate the response
-        let parsedResponse;
-        try {
-            parsedResponse = JSON.parse(cleanResponse);
-        } catch (parseError) {
-            console.error('Failed to parse AI response:', cleanResponse);
-            throw new Error('Invalid JSON response from AI');
-        }
-
-        console.log('Parsed AI response:', parsedResponse);
-
-        // Handle different response formats and ensure we get an array
-        let results;
-        if (Array.isArray(parsedResponse)) {
-            results = parsedResponse;
-        } else if (typeof parsedResponse === 'object') {
-            // Try to extract array from different possible locations
-            if (Array.isArray(parsedResponse.results)) {
-                results = parsedResponse.results;
-            } else if (Array.isArray(parsedResponse.matches)) {
-                results = parsedResponse.matches;
-            } else if (Array.isArray(parsedResponse.data)) {
-                results = parsedResponse.data;
-            } else {
-                // If we can't find an array, try to convert the object to an array
-                results = Object.entries(parsedResponse)
-                    .filter(([key, value]) => typeof value === 'object' && 'index' in value && 'score' in value)
-                    .map(([_, value]) => value);
-            }
-        }
-
-        // If we still don't have an array, create one from the parsed response
-        if (!Array.isArray(results)) {
-            console.warn('Converting non-array response to array format');
-            results = [{
-                index: 0,
-                score: 100
-            }];
-        }
-
-        // Validate and process results
-        const validResults = results
-            .filter(r => r && typeof r.index === 'number' && typeof r.score === 'number')
-            .map(r => ({
-                index: Math.min(Math.max(0, r.index), messages.length - 1),
-                score: Math.min(Math.max(0, r.score), 100)
-            }))
+        // Filter out messages with zero score and sort by relevance
+        const relevantMessages = scoredMessages
+            .filter(item => item.score > 0)
             .sort((a, b) => b.score - a.score);
 
-        // Ensure we have at least the minimum number of results
-        const minResults = Math.min(AI_CONFIG.SEARCH_CONFIG.min_results, messages.length);
-        const finalResults = validResults.length >= minResults
-            ? validResults.slice(0, Math.max(minResults, validResults.filter(r => r.score > 50).length))
-            : validResults;
+        // Return top 5 most relevant messages
+        const topResults = relevantMessages.slice(0, AI_CONFIG.SEARCH_CONFIG.max_results);
 
-        // Map to final message format
-        return finalResults.map(result => ({
-            message: messages[result.index],
-            score: result.score
-        }));
+        console.log(`Found ${relevantMessages.length} relevant messages, returning top ${topResults.length}`);
+
+        return topResults;
+
     } catch (error) {
-        console.error('AI Search Error:', error);
-        // Return all messages with default score if AI search fails
-        return messages.map((message, index) => ({
-            message,
-            score: AI_CONFIG.SEARCH_CONFIG.default_score
-        }));
+        console.error('Keyword Search Error:', error);
+        // Return empty array on error instead of all messages
+        return [];
     }
+}
+
+/**
+ * Normalizes text for better matching
+ * @param {string} text - Text to normalize
+ * @returns {string} - Normalized text
+ */
+function normalizeText(text) {
+    if (!text) return '';
+
+    return text
+        .toLowerCase()
+        .trim()
+        // Remove extra whitespace
+        .replace(/\s+/g, ' ')
+        // Remove special characters but keep spaces and basic punctuation
+        .replace(/[^\w\s\-_.]/g, ' ')
+        .trim();
+}
+
+/**
+ * Extracts meaningful keywords from text
+ * @param {string} text - Text to extract keywords from
+ * @returns {Array} - Array of keywords
+ */
+function extractKeywords(text) {
+    if (!text) return [];
+
+    // Common stop words to filter out
+    const stopWords = new Set([
+        'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by',
+        'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'do', 'does', 'did',
+        'will', 'would', 'could', 'should', 'may', 'might', 'can', 'this', 'that', 'these', 'those',
+        'i', 'you', 'he', 'she', 'it', 'we', 'they', 'me', 'him', 'her', 'us', 'them', 'my', 'your',
+        'his', 'her', 'its', 'our', 'their', 'what', 'when', 'where', 'why', 'how', 'who', 'which',
+        // Indonesian stop words
+        'yang', 'dan', 'di', 'ke', 'dari', 'untuk', 'dengan', 'pada', 'dalam', 'adalah', 'ini', 'itu',
+        'atau', 'juga', 'tidak', 'ada', 'akan', 'sudah', 'telah', 'bisa', 'dapat', 'harus', 'saya',
+        'anda', 'dia', 'mereka', 'kita', 'kami', 'nya', 'mu', 'ku', 'se', 'ter', 'ber', 'me'
+    ]);
+
+    return text
+        .split(/\s+/)
+        .filter(word => word.length > 2 && !stopWords.has(word))
+        .filter(word => !/^\d+$/.test(word)); // Remove pure numbers
+}
+
+/**
+ * Calculates relevance score for a message based on keyword matching
+ * @param {Object} message - Message object with title, text, userDisplayName
+ * @param {Array} queryWords - Array of search keywords
+ * @param {string} originalQuery - Original search query
+ * @returns {number} - Relevance score (0-100)
+ */
+function calculateRelevanceScore(message, queryWords, originalQuery) {
+    if (!message || queryWords.length === 0) return 0;
+
+    // Extract and normalize message content
+    const title = normalizeText(message.title || '');
+    const text = normalizeText(message.text || '');
+    const author = normalizeText(message.userDisplayName || '');
+    const fullContent = `${title} ${text} ${author}`;
+
+    if (!fullContent.trim()) return 0;
+
+    let totalScore = 0;
+    let matchedWords = 0;
+
+    // Check for exact phrase match (highest priority)
+    const normalizedQuery = normalizeText(originalQuery);
+    if (fullContent.includes(normalizedQuery)) {
+        totalScore += 50; // Bonus for exact phrase match
+    }
+
+    // Score individual keywords
+    queryWords.forEach(keyword => {
+        let keywordScore = 0;
+
+        // Title matches (highest weight)
+        const titleMatches = countMatches(title, keyword);
+        if (titleMatches > 0) {
+            keywordScore += titleMatches * 15; // 15 points per title match
+            matchedWords++;
+        }
+
+        // Content matches (medium weight)
+        const textMatches = countMatches(text, keyword);
+        if (textMatches > 0) {
+            keywordScore += textMatches * 8; // 8 points per content match
+            matchedWords++;
+        }
+
+        // Author matches (lower weight)
+        const authorMatches = countMatches(author, keyword);
+        if (authorMatches > 0) {
+            keywordScore += authorMatches * 5; // 5 points per author match
+            matchedWords++;
+        }
+
+        // Bonus for exact word match vs partial match
+        if (title.includes(` ${keyword} `) || title.startsWith(`${keyword} `) || title.endsWith(` ${keyword}`)) {
+            keywordScore += 10; // Exact word match bonus in title
+        }
+        if (text.includes(` ${keyword} `) || text.startsWith(`${keyword} `) || text.endsWith(` ${keyword}`)) {
+            keywordScore += 5; // Exact word match bonus in content
+        }
+
+        totalScore += keywordScore;
+    });
+
+    // Calculate match percentage
+    const matchPercentage = (matchedWords / queryWords.length) * 100;
+
+    // Apply match percentage bonus
+    totalScore = totalScore * (0.5 + (matchPercentage / 200)); // 50% base + up to 50% bonus
+
+    // Normalize score to 0-100 range
+    const finalScore = Math.min(100, Math.max(0, Math.round(totalScore)));
+
+    return finalScore;
+}
+
+/**
+ * Counts occurrences of a keyword in text (case-insensitive, partial matches)
+ * @param {string} text - Text to search in
+ * @param {string} keyword - Keyword to search for
+ * @returns {number} - Number of matches
+ */
+function countMatches(text, keyword) {
+    if (!text || !keyword) return 0;
+
+    const regex = new RegExp(keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+    const matches = text.match(regex);
+    return matches ? matches.length : 0;
 }
 
 /**

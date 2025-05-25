@@ -13,11 +13,11 @@ export function switchTab(tabName) {
     const sortAscBtn = document.getElementById('sortAscBtn');
     const sortDescBtn = document.getElementById('sortDescBtn');
     const sortMostLikedBtn = document.getElementById('sortMostLikedBtn');
-    
+
     // Reset all tabs
     createPostTab.classList.remove('active');
     messagesTab.classList.remove('active');
-    
+
     if (tabName === 'createPost') {
         // Activate Create Post tab
         createPostTab.classList.add('active');
@@ -36,7 +36,7 @@ export function switchTab(tabName) {
         sortAscBtn.style.display = 'inline-block';
         sortDescBtn.style.display = 'inline-block';
         sortMostLikedBtn.style.display = 'inline-block';
-        
+
         // Load messages when switching to messages tab
         if (typeof showMessages === 'function') {
             showMessages();
@@ -51,9 +51,21 @@ window.switchTab = switchTab;
 document.addEventListener("DOMContentLoaded", function() {
     // Check if we should show messages view based on localStorage flag
     if (localStorage.getItem('showMessagesView') === 'true') {
+        console.log('Switching to messages tab due to showMessagesView flag');
+
         // Switch to messages tab
         switchTab('messages');
+
         // Clear the flag
         localStorage.removeItem('showMessagesView');
+
+        // Also clear the scrollToMessageId after a delay to ensure the scroll functionality has time to use it
+        setTimeout(() => {
+            const scrollToMessageId = localStorage.getItem('scrollToMessageId');
+            if (scrollToMessageId) {
+                console.log(`Clearing scrollToMessageId: ${scrollToMessageId}`);
+                localStorage.removeItem('scrollToMessageId');
+            }
+        }, 5000); // Clear after 5 seconds to give scroll functionality time to work
     }
 });

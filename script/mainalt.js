@@ -8,7 +8,7 @@ import { firebaseConfig } from '../p.js';
 import { dbConfig } from './config/config.js';
 // Import adminAnnouncement from config.js - used in loadAdminAnnouncement function
 import { adminAnnouncement } from './config/config.js';
-import { showMessages } from './messagehandling/viewmsg.js'
+import { showMessages, createMessageElement } from './messagehandling/viewmsg.js'
 // x
 const script = document.createElement('script');
 script.src = "./role.js"
@@ -445,28 +445,9 @@ export function loadUserMessages() {
 
         // Render sorted messages
         messages.forEach((messageData) => {
-            const messageTitle = messageData.title || 'No title';
-            const messageText = messageData.text || 'No text provided';
-            const timestamp = messageData.timestamp;
-            const imageUrl = messageData.imageUrl || null;
-
-            // Create message list item
-            const li = document.createElement('li');
-            li.innerHTML = `
-                 <div class="header">
-                    <div class="title" style="font-weight: bold; font-size: 1.2em;">${messageTitle}</div>
-                    <div class="timestamp">${new Date(timestamp).toLocaleString()}</div>
-                </div>
-                <div class="content">
-                    <p class="message-text">${messageText.replace(/\n/g, '<br>')}</p>
-                    ${imageUrl ? `<img src="${imageUrl}" alt="Message Image" style="max-width: 100%; height: auto;">` : ''}
-                </div>
-                <div class="actions">
-                    <button onclick="editUserPost('${messageData.key}')">Edit</button>
-                    <button onclick="deleteUserPost('${messageData.key}')">Delete</button>
-                </div>
-            `;
-            userMessagesList.appendChild(li);
+            // Use the createMessageElement function from viewmsg.js
+            const messageElement = createMessageElement(messageData, user);
+            userMessagesList.appendChild(messageElement);
         });
     });
 }

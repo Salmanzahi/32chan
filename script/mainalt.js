@@ -6,10 +6,10 @@ KASIHANI AKU PLS JANGAN DI HACK WEB KU PLS !!!
 import { adminRoles } from './config/role.js';
 import { firebaseConfig } from '../p.js';
 import { dbConfig } from './config/config.js';
-// Import adminAnnouncement from config.js - used in loadAdminAnnouncement function
 import { adminAnnouncement } from './config/config.js';
 import { showMessages, createMessageElement } from './messagehandling/viewmsg.js'
-// x
+import { sanitizeText } from './santizeText/sanitize.js';
+import { toggleLike } from './messagehandling/CRUDpost.js';
 const script = document.createElement('script');
 script.src = "./role.js"
 script.src = "./p.js"
@@ -378,7 +378,7 @@ document.addEventListener("DOMContentLoaded", () => {
         { id: "mobileanonymousSignInBtn", handler: anonymousSignIn },
         { id: "signOutBtn", handler: signOut },
         { id: "mobilesignOutBtn", handler: signOut },
-        { id: "themeToggleBtn", handler: toggleTheme }
+        // { id: "themeToggleBtn", handler: toggleTheme }
     ];
 
     elements.forEach(({ id, handler }) => {
@@ -393,27 +393,6 @@ document.addEventListener("DOMContentLoaded", () => {
 // References to Firebase services
 export const db = firebase.database();
 export const storage = firebase.storage();
-
-
-//window.loadReplies = loadReplies;
-// Function to toggle dark/light mode
-function toggleTheme() {
-    const body = document.body;
-    body.classList.toggle('dark-mode');
-}
-
-// Load messages on page load
-// document.addEventListener('DOMContentLoaded', (event) => {
-//     showMessages();
-//     loadUserMessages();
-
-//     // Show admin date input field if the user is an admin
-//     auth.onAuthStateChanged((user) => {
-//         if (user && isAdmin()) {
-//             document.getElementById('adminDateContainer').style.display = 'block';
-//         }
-//     });
-// });
 
 export function loadUserMessages() {
     const user = firebase.auth().currentUser;
@@ -436,7 +415,7 @@ export function loadUserMessages() {
         const messages = [];
         snapshot.forEach((childSnapshot) => {
             messages.push({
-                key: childSnapshot.key,
+                id: childSnapshot.key,  // Use 'id' instead of 'key' for consistency
                 ...childSnapshot.val()
             });
         });
@@ -444,13 +423,23 @@ export function loadUserMessages() {
         messages.sort((a, b) => b.timestamp - a.timestamp);
 
         // Render sorted messages
-        messages.forEach((messageData) => {
+        messages.forEach((message) => {
             // Use the createMessageElement function from viewmsg.js
-            const messageElement = createMessageElement(messageData, user);
+           const user = firebase.auth().currentUser
+            const messageElement = createMessageElement(message, user);
             userMessagesList.appendChild(messageElement);
         });
+
+        // Add refresh button after messages
+        const refreshButton = document.createElement('button');
+        refreshButton.textContent = 'Refresh';
+        refreshButton.onclick = loadUserMessages;
+        refreshButton.className = 'action-btn';
+        refreshButton.style.marginTop = '10px';
+        userMessagesList.appendChild(refreshButton);
     });
 }
+window.loadUserMessages = loadUserMessages;
 
 function editUserPost(messageId) {
     const newText = prompt("Enter the new text for the post:");

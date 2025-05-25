@@ -32,10 +32,8 @@ export function initSpotify() {
         // Clear the flag
         localStorage.removeItem('spotify_auth_return');
 
-        // Reset the form
-        if (window.resetForm) {
-            window.resetForm();
-        }
+        // Don't reset the form to preserve user input
+        // Form will only be reset after successful message submission
     }
 
     if (savedToken && savedExpiry && new Date() < new Date(savedExpiry)) {
@@ -236,11 +234,9 @@ export function initSpotifySearchUI() {
         // Clear the flag
         localStorage.removeItem('spotify_auth_return');
 
-        // Reset the form
-        if (window.resetForm) {
-            console.log('Resetting form after Spotify authentication');
-            window.resetForm();
-        }
+        // Don't reset the form to preserve user input
+        // Form will only be reset after successful message submission
+        console.log('Preserving form data after Spotify authentication');
     }
 
     // Handle search input

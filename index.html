@@ -86,10 +86,11 @@
 
   <!-- Features Section -->
   <div class="container mx-auto px-4 features-section">
-    <h1 class="text-3xl font-bold text-left mb-8">What is FreeSekai?</h1>
-    <p class="text-left mb-8">FreeSekai is from word "sekai" it means world on japanese. So, it mean this website is free world that people could express and give their opinion. without fear of their identity</p>
+    <div class="feature-card">
+      <h1 class="feature-title">What is FreeSekai?</h1>
+      <p class="feature-description">FreeSekai combines two powerful concepts: <strong>"sekai"</strong> (世界), the Japanese word for "world," and "free," representing unrestricted expression. This platform serves as a digital sanctuary where individuals can freely share their thoughts, ideas, and perspectives without the burden of identity disclosure. Whether you're discussing social issues, sharing creative works, or engaging in meaningful debates, FreeSekai provides a space where your voice matters more than your identity. Our commitment to freedom of expression is balanced with community guidelines to ensure respectful discourse.</p>
+    </div>
 
-    <!-- <img src="./images/hero/hero1.jpg" alt="FreeSekai Logo" class="mx-auto mb-8"> -->
     <div class="flex flex-col gap-4">
       <!-- Feature 1 -->
       <div class="feature-card">
@@ -198,7 +199,6 @@
     </div>
   </div>
 
-  <!-- About Section -->
 
 <!-- Footer -->
 <div id="footerContainer"></div>
@@ -211,7 +211,6 @@
     })
     .catch(error => console.error('Error loading footer:', error));
 </script>
-
 <script type="module" src="./script/carousel/init.js"></script>
 </body>
 </html>

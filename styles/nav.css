@@ -234,6 +234,12 @@ nav {
     font-weight: 600;
 }
 
+.user-profile .exclusive-tag {
+    color: #a807de;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
 /* Override for nav.html buttons */
 /* Ensure all buttons have consistent width and spacing */
 @media (min-width: 768px) {

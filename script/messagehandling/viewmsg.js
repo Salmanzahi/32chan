@@ -264,7 +264,7 @@ export function createMessageElement(message, user) {
 
     // Check if the message is from an admin user
     const isUserAdmin = message.userId && adminRoles && adminRoles.admins && adminRoles.admins.includes(message.userId);
-
+    const isUserExclusive = message.userId && adminRoles && adminRoles.exclusive && adminRoles.exclusive.includes(message.userId);
     // Check if message was posted in anonymous mode
     // The condition: if anonymous username is different from the regular username
     // This specific check will be performed when displaying user messages
@@ -282,6 +282,7 @@ export function createMessageElement(message, user) {
                 <div>
                     <div class="user-name">${displayName}</div>
                     ${isUserAdmin ? `<div class="admin-tag">[ADMIN]</div>` : ''}
+                   ${isUserExclusive? `<div class="exclusive-tag">[EXCLUSIVE]</div>` : ''}
                 </div>
             </div>` : ''}
             <div class="title">${safeTitle}</div>

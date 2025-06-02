@@ -6,7 +6,7 @@
 // Import Firebase authentication and storage from mainalt.js
 import { db, storage, user } from '../mainalt.js';
 import { dbConfig } from '../config/config.js';
-import { isAdmin } from '../mainalt.js';
+import { isAdmin, isExclusive } from '../mainalt.js';
 import { showAlert } from '../../script/alert/alert.js';
 const script = document.createElement('script');
 script.src = "../../p.js"
@@ -281,6 +281,8 @@ db.ref(dbConfig.messagesPath).orderByChild('userId').equalTo(user.uid).once('val
 
     if(isAdmin()) {
         userRole.textContent = 'Gweh Atmin Coy'
+    } else if (isExclusive()) {
+        userRole.textContent = 'Exclusive User'
     }
 
             // Set email

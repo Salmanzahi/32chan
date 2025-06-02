@@ -5,6 +5,7 @@ export const adminRoles = {
         "atek34BlFTcQgTq8sMHYhLBvQUB3" // Ratol
     ],
     exclusive: [
-        "a2IXqghZe3TN7f38EnYoC5y4oxs1"
+        "a2IXqghZe3TN7f38EnYoC5y4oxs1",
+        "6a4fV7tvKxUEyl5TFwq4gVSWkbp2"
     ]
 };

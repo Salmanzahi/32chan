@@ -11,17 +11,14 @@ export function editPost(messageId) {
     messageRef.update({
         text: newText
     }).then(() => {
-        showAlert('Post updated successfully!', 'success');
-        if (isAdmin()) {
-          showMessages()
-        }
+        showAlert('Post updated successfullyfdsjfjpo!', 'success');
+        
     }).catch((error) => {
         console.error('Failed to update post:', error);
         showAlert('Failed to update post.', 'error');
     });
 }
 window.editPost = editPost;
-// Function to delete a post
 export function deletePost(messageId) {
     const confirmDelete = confirm("Are you sure you want to delete this post?");
     if (!confirmDelete) return;
@@ -43,7 +40,7 @@ export function toggleLike(messageId) {
         return;
     }
     
-    // Check if user is anonymous and prevent liking
+ 
     if (user.isAnonymous) {
         showAlert("Please log in with your Google account to like posts.", "error");
         return;

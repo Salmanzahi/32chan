@@ -611,7 +611,10 @@ window.deleteUserPost = deleteUserPost;
     const user = firebase.auth().currentUser;
     return user && adminRoles.admins.includes(user.uid);
 }
-
+export function isExclusive() {
+    const user = firebase.auth().currentUser;
+    return user && adminRoles.exclusive.includes(user.uid);
+}
 // Function to sync custom username with Firebase Auth
 function syncCustomUsername(user) {
     if (!user || user.isAnonymous) return;

@@ -444,23 +444,13 @@ window.replyToMessage = replyToMessage;
  * Displays a list of messages in the messages list
  * @param {Array} messages - Array of message objects to display
  */
-function displayMessages(messagesToDisplay) {
+function displayMessages(messages) {
     const messagesList = document.getElementById('messagesList');
-    if (!messagesList) return;
 
-    const fragment = document.createDocumentFragment();
-    const currentUser = firebase.auth().currentUser;
-
-    messagesToDisplay.forEach(message => {
-        const messageElement = createMessageElement(message, currentUser);
-        fragment.appendChild(messageElement);
-        // It's generally better to load replies after all messages are in the DOM
-        // or consider a more targeted approach if performance is an issue.
-    });
-    messagesList.appendChild(fragment);
-
-    // Load replies after appending all messages
-    messagesToDisplay.forEach(message => {
+    messages.forEach(message => {
+        const user = firebase.auth().currentUser;
+        const messageElement = createMessageElement(message, user);
+        messagesList.appendChild(messageElement);
         loadReplies(message.id);
     });
 }
@@ -472,20 +462,20 @@ function updateUIElements() {
     const noMorePostsMessage = document.getElementById('no-more-posts');
     const infiniteScrollLoader = document.getElementById('infinite-scroll-loader');
 
-    const allMessagesLoaded = currentDisplayedCount >= allMessages.length;
-
-    if (noMorePostsMessage) {
-        noMorePostsMessage.style.display = allMessagesLoaded ? 'block' : 'none';
-    }
-
-    if (infiniteScrollLoader) {
-        infiniteScrollLoader.style.display = allMessagesLoaded ? 'none' : (isLazyLoadingEnabled ? 'block' : 'none');
-    }
-
-    if (!allMessagesLoaded && isLazyLoadingEnabled) {
-        setupScrollListener(); // Ensure listener is active if more posts and lazy loading is on
+    if (currentDisplayedCount >= allMessages.length && noMorePostsMessage) {
+        noMorePostsMessage.style.display = 'block';
+        if (infiniteScrollLoader) {
+            infiniteScrollLoader.style.display = 'none';
+        }
     } else {
-        removeScrollListener(); // Remove listener if all posts loaded or lazy loading off
+        // Hide the no more posts message
+        if (noMorePostsMessage) {
+            noMorePostsMessage.style.display = 'none';
+        }
+        // Set up the scroll listener for lazy loading only if it's enabled
+        if (isLazyLoadingEnabled) {
+            setupScrollListener();
+        }
     }
 }
 
@@ -526,109 +516,113 @@ function updateSortButtons(sortOrder) {
     }
 }
 
-// Initialize lazy loading toggle and other DOM dependent features
+// Initialize lazy loading toggle
 document.addEventListener('DOMContentLoaded', () => {
-    initializeSearchEventListeners(); // Moved from global scope
-
     const lazyLoadingToggle = document.getElementById('lazyLoadingToggle');
     if (lazyLoadingToggle) {
         lazyLoadingToggle.checked = isLazyLoadingEnabled;
         lazyLoadingToggle.addEventListener('change', (e) => {
             preserveScrollPosition(() => {
                 isLazyLoadingEnabled = e.target.checked;
-                // When toggling lazy loading, we need to re-evaluate how messages are shown.
-                // If turning on, we might need to load more. If turning off, show all.
-                showMessages(currentSortOrder); 
+                showMessages(currentSortOrder);
             });
         });
     }
 
-    // Initial setup for scroll listener based on lazy loading state
-    if (isLazyLoadingEnabled) {
-        setupScrollListener();
-    }
-
-    // Initial call to show messages
-    showMessages(); 
+    // Initialize the scroll listener
+    setupScrollListener();
 });
 
-/**
- * Fetches and displays messages based on sort order and lazy loading settings.
- * @param {string} [newSortOrder='desc'] - The new sort order for messages.
- */
-export function showMessages(newSortOrder = 'desc') {
-    const isSortChange = newSortOrder !== currentSortOrder;
-    const messagesList = document.getElementById('messagesList');
-    const loader = document.getElementById('notme');
+export function showMessages(sortOrder = 'desc') {
+    // Track if this is a sort change rather than initial load
+    const isSortChange = sortOrder !== currentSortOrder && currentDisplayedCount > 0;
 
-    if (!messagesList) return;
+    // Only allow scrolling on initial load, not when changing sort
+    const shouldScrollToMessage = !isSortChange && window.scrollToMessageAfterLoad;
+
+    // If this is a sort change, we don't want to scroll again
+    if (isSortChange) {
+        window.scrollToMessageAfterLoad = null;
+    }
 
     preserveScrollPosition(() => {
-        if (loader) loader.style.display = 'block';
+        const messagesList = document.getElementById('messagesList');
 
-        if (isSortChange || !isLazyLoadingEnabled) {
-            messagesList.innerHTML = '';
-            currentDisplayedCount = 0;
-            allMessages = []; // Reset messages if sort order changes or lazy loading is off
+        // Show loading indicator
+        const loader = document.getElementById('notme');
+        if (loader) {
+            loader.style.display = 'block';
+            setTimeout(() => {
+                loader.style.display = 'none';
+            }, 100);
         }
-        currentSortOrder = newSortOrder;
-        updateSortButtons(currentSortOrder);
 
-        const db = firebase.database();
-        const messagesRef = db.ref(dbConfig.messagesPath);
+        if (messagesList) {
+            // Update sort buttons
+            updateSortButtons(sortOrder);
 
-        messagesRef.once('value', snapshot => {
-            if (loader) loader.style.display = 'none'; // Hide loader once data is fetched
+            // Update current sort order for lazy loading
+            currentSortOrder = sortOrder;
 
-            if (!snapshot.exists()) {
-                messagesList.innerHTML = '<p>No messages yet.</p>';
-                updateUIElements();
-                updateSearchResultsDisplay();
-                return;
-            }
+            const messagesRef = db.ref(dbConfig.messagesPath);
+            messagesRef.off('value'); // Detach any existing listener
 
-            if (allMessages.length === 0) { // Fetch all messages only if not already loaded
-                const fetchedMessages = [];
-                snapshot.forEach(childSnapshot => {
-                    fetchedMessages.push({ id: childSnapshot.key, ...childSnapshot.val() });
+            messagesRef.on('value', (snapshot) => {
+                // Clear the list for every snapshot update
+                messagesList.innerHTML = '';
+
+                const messages = [];
+                snapshot.forEach((childSnapshot) => {
+                    const messageData = childSnapshot.val();
+                    messages.push({ id: childSnapshot.key, ...messageData });
                 });
-                allMessages = sortMessages(fetchedMessages, currentSortOrder);
-            } else if (isSortChange) {
-                // Re-sort existing messages if only sort order changed
-                allMessages = sortMessages([...allMessages], currentSortOrder);
-            }
 
-            const messagesToLoad = isLazyLoadingEnabled 
-                ? allMessages.slice(currentDisplayedCount, currentDisplayedCount + MESSAGES_PER_LOAD)
-                : allMessages.slice(0); // Get a copy if not lazy loading to avoid modifying original `allMessages` if it's used elsewhere
-            
-            displayMessages(messagesToLoad);
-            currentDisplayedCount += messagesToLoad.length;
+                // Store all messages for lazy loading
+                allMessages = messages;
 
-            updateUIElements();
-            updateSearchResultsDisplay();
+                // Sort messages based on the selected sort order
+                const sortedMessages = sortMessages(messages, sortOrder);
 
-            // Handle scrolling to a specific message if `window.scrollToMessageAfterLoad` is set
-            if (window.scrollToMessageAfterLoad) {
-                const messageIdToScroll = window.scrollToMessageAfterLoad;
-                // Ensure this only happens once per load or sort change for that specific message
-                if (!isSortChange || (isSortChange && newSortOrder === currentSortOrder)) { 
-                    const messageElement = document.querySelector(`li[data-id="${messageIdToScroll}"]`);
-                    if (messageElement) {
-                        messageElement.scrollIntoView({ behavior: 'smooth' });
-                    }
+                // Reset the displayed count
+                currentDisplayedCount = 0;
+
+                // If lazy loading is disabled, show all messages at once
+                if (!isLazyLoadingEnabled) {
+                    currentDisplayedCount = sortedMessages.length;
+                    displayMessages(sortedMessages);
+                } else {
+                    // Only display the first batch of messages
+                    const initialMessages = sortedMessages.slice(0, MESSAGES_PER_LOAD);
+                    currentDisplayedCount = initialMessages.length;
+                    displayMessages(initialMessages);
                 }
-                // Reset only if we scrolled or it was a sort change that would negate the previous scroll target
-                if (document.querySelector(`li[data-id="${messageIdToScroll}"]`) || isSortChange) {
-                    window.scrollToMessageAfterLoad = null;
-                }
-            }
 
-        }).catch(error => {
-            console.error("Error fetching messages: ", error);
-            if (loader) loader.style.display = 'none';
-            messagesList.innerHTML = '<p>Error loading messages.</p>';
-        });
+                // Update UI elements
+                updateUIElements();
+
+                // Dispatch a custom event to indicate messages have been loaded
+                document.dispatchEvent(new CustomEvent('messagesLoaded', {
+                    detail: { messageCount: allMessages.length }
+                }));
+
+                // Only scroll to message if this is not a sort change
+                if (shouldScrollToMessage) {
+                    const messageIdToScrollTo = window.scrollToMessageAfterLoad;
+                    window.scrollToMessageAfterLoad = null; // Clear the flag
+
+                    console.log(`Messages loaded, attempting to scroll to: ${messageIdToScrollTo}`);
+
+                    // Give time for the messages to render
+                    setTimeout(() => {
+                        if (typeof window.scrollToMessage === 'function') {
+                            window.scrollToMessage(messageIdToScrollTo);
+                        } else {
+                            console.error('scrollToMessage function not available');
+                        }
+                    }, 1000); // Increased delay to ensure DOM is ready
+                }
+            });
+        }
     });
 }
 

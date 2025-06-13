@@ -7,5 +7,8 @@ export const adminRoles = {
     exclusive: [
         "a2IXqghZe3TN7f38EnYoC5y4oxs1",
         "6a4fV7tvKxUEyl5TFwq4gVSWkbp2"
+    ],
+    owner: [
+        "y3FYZSmXAQV6mNdXcZ3yqXqXdC93"
     ]
 };

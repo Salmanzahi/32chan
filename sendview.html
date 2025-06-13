@@ -201,7 +201,7 @@
 
             <!-- View Messages Section -->
 
-            <div id="messagesContainer" class="messages-container" style="display: none;">
+            <div id="messagesContainer" class="messages-container w-full lg:max-w-3xl lg:mx-auto" style="display: none;">
                 <!-- Messages Header -->
                 <div class="messages-header">
                     <h2>Community Posts</h2>
@@ -289,5 +289,34 @@
         })
         .catch(error => console.error('Error loading footer:', error));
 </script> -->
+<!-- Scroll to Top Button -->
+<button id="scrollToTopBtn" title="Go to top" class="fixed bottom-5 right-5 z-50 hidden p-3 bg-red-500 text-white rounded-full shadow-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 transition-all duration-300 ease-in-out transform hover:scale-110">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+    </svg>
+</button>
+
+<script>
+    const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+
+    // Show or hide the button based on scroll position
+    window.onscroll = function() {
+        if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+            scrollToTopBtn.style.display = "block"; // Use display block for visibility
+            scrollToTopBtn.classList.add('opacity-100');
+        } else {
+            scrollToTopBtn.style.display = "none"; // Use display none to hide
+            scrollToTopBtn.classList.remove('opacity-100');
+        }
+    };
+
+    // Scroll to the top when the button is clicked
+    scrollToTopBtn.onclick = function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    };
+</script>
 </body>
 </html>
